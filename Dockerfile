@@ -3,9 +3,9 @@ FROM php:8.2-cli
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
+    curl \
     libzip-dev \
-    zip \
-    curl
+    zip
 
 RUN docker-php-ext-install zip
 
@@ -17,7 +17,7 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
-RUN php artisan config:cache
+RUN php artisan key:generate
 
 EXPOSE 10000
 
