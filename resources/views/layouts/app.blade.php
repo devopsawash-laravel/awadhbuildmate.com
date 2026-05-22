@@ -315,6 +315,7 @@
         .badge-fitter  { background: #EFF6FF; color: #1D4ED8; }
         .badge-helper  { background: #ECFDF5; color: #065F46; }
         .badge-rigger  { background: #FDF4FF; color: #7E22CE; }
+        .badge-assistant  { background: #EFF6FF; color: #1E40AF; }
         .badge-success { background: #ECFDF5; color: #065F46; }
         .badge-danger  { background: #FEF2F2; color: #991B1B; }
         .badge-warning { background: #FFFBEB; color: #92400E; }
@@ -377,6 +378,97 @@
             .main { margin-left: 0; }
             .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; }
         }
+        
+/* Dropdown Colour CSS */
+        /* Full width */
+.select2-container {
+    width: 100% !important;
+}
+
+/* Main box */
+.select2-container .select2-selection--single {
+    height: 35px !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 10px !important;
+    padding-left: 12px !important;
+
+    display: flex !important;
+    align-items: center !important;
+
+    background: #fff !important;
+}
+
+/* Selected text */
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 48px !important;
+    color: #111827 !important;
+    padding-left: 0 !important;
+}
+
+/* Arrow */
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 48px !important;
+    right: 10px !important;
+}
+
+/* ORANGE BORDER WHEN CLICKED */
+.select2-container--default.select2-container--open .select2-selection--single {
+    border-color: #c2410c !important;
+    box-shadow: 0 0 0 3px rgba(249,115,22,0.2) !important;
+}
+
+/* Dropdown option hover */
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #c2410c !important;
+    color: white !important;
+}
+
+/* Selected option */
+.select2-container--default .select2-results__option[aria-selected=true] {
+    background-color: #f97416db !important;
+    color: #111827 !important;
+}
+/* select 2 (STABLE VERSION) */
+
+
+.select2-container{
+    width:220px !important;
+}
+
+.select2-dropdown{
+    overflow:hidden !important;
+    border-radius:10px !important;
+    border:1px solid #f97316 !important;
+}
+
+.select2-results{
+    overflow-x:hidden !important;
+}
+
+.select2-results__options{
+    max-height:220px !important;
+    overflow-y:auto !important;
+    overflow-x:hidden !important;
+}
+
+.select2-search--dropdown{
+    padding:8px !important;
+}
+
+.select2-search__field{
+    border:1px solid #d1d5db !important;
+    border-radius:8px !important;
+    padding:6px 10px !important;
+    outline:none !important;
+}
+
+.select2-search__field:focus{
+    border-color:#f97316 !important;
+    box-shadow:none !important;
+}
+/* select3 */
+
+
     </style>
     @stack('styles')
 </head>
@@ -393,11 +485,14 @@
         <a href="{{ route('dashboard') }}" class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <i class="fas fa-chart-pie"></i> Dashboard
         </a>
-
-        <div class="nav-label" style="margin-top:8px;">Labour</div>
+        
+        <div class="nav-label" style="margin-top:8px;">Staff and Labours</div>
         <a href="{{ route('labours.index') }}" class="nav-item {{ request()->routeIs('labours.*') ? 'active' : '' }}">
             <i class="fas fa-users"></i> Labour Registry
         </a>
+        <a href="{{ route('staff.create') }}" class="nav-item {{ request()->routeIs('Staff.create') ? 'active' : '' }}">
+            <i class="fas fa-users"></i> Staff Registry
+        </a>    
         <a href="{{ route('attendance.index') }}" class="nav-item {{ request()->routeIs('attendance.index') ? 'active' : '' }}">
             <i class="fas fa-calendar-check"></i> Daily Attendance
         </a>
@@ -406,10 +501,26 @@
         </a>
 
         <div class="nav-label" style="margin-top:8px;">Finance</div>
-        <a href="{{ route('salary.index') }}" class="nav-item {{ request()->routeIs('salary.*') ? 'active' : '' }}">
+        <a href="{{ route('salary.index') }}" class="nav-item {{ request()->routeIs('salary.index') ? 'active' : '' }}">
             <i class="fas fa-file-invoice-dollar"></i> Salary Slips
         </a>
-    </div>
+        <div class="nav-label" style="margin-top:8px;">Bank Statement</div>
+        <a href="{{ route('salary.bankstatement') }}" class="nav-item {{ request()->routeIs('salary.bankstatement') ? 'active' : '' }}">
+            <i class="fas fa-building-columns"></i>
+            Bank Statement  
+        </a>
+        
+        <a href="{{ route('salary.wages-sheet') }}" class="nav-item {{ request()->routeIs('salary.wages-sheet') ? 'active' : '' }}">
+            <i class="fas fa-sheet-plastic"></i>
+            Wages Sheet  
+        </a>
+        <div class="nav-label" style="margin-top:8px;">Site Management</div>
+        <a href="{{ route('sites.index') }}" class="nav-item {{ request()->routeIs('sites.*') ? 'active' : '' }}">
+            <i class="fas fa-building-columns"></i>
+            Site  
+        </a>
+        </div>
+        
 
     <div class="sidebar-footer">
         <i class="fas fa-building"></i> &nbsp;Construction Site v1.0

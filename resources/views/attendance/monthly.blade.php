@@ -15,27 +15,93 @@
 
 <div class="card mb-4">
     <div class="card-body" style="padding:14px 20px;">
-        <form method="GET" style="display:flex;gap:12px;align-items:flex-end;">
-            <div>
-                <label>Month</label>
-                <select name="month">
-                    @for($m = 1; $m <= 12; $m++)
-                    <option value="{{ $m }}" {{ $m == $month ? 'selected' : '' }}>{{ date('F', mktime(0,0,0,$m,1)) }}</option>
-                    @endfor
-                </select>
-            </div>
-            <div>
-                <label>Year</label>
-                <select name="year">
-                    @for($y = date('Y'); $y >= date('Y') - 3; $y--)
-                    <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>{{ $y }}</option>
-                    @endfor
-                </select>
-            </div>
-            <button type="submit" class="btn btn-secondary"><i class="fas fa-search"></i> View</button>
-        </form>
+        <form method="GET"
+      style="
+        display:flex;
+        gap:12px;
+        align-items:flex-end;
+        flex-wrap:wrap;
+      ">
+
+    {{-- Site --}}
+    <div>
+
+        <label>Site</label>
+
+        <select name="site_id" id="sitem">
+
+            <option value="">
+                All Sites
+            </option>
+
+            @foreach($sites as $site)
+
+            <option value="{{ $site->id }}"
+                {{ request('site_id') == $site->id ? 'selected' : '' }}>
+
+                {{ $site->name }}
+
+            </option>
+
+            @endforeach
+
+        </select>
+
     </div>
-</div>
+
+    {{-- Month --}}
+    <div>
+
+        <label>Month</label>
+
+        <select name="month">
+
+            @for($m = 1; $m <= 12; $m++)
+
+            <option value="{{ $m }}"
+                {{ $m == $month ? 'selected' : '' }}>
+
+                {{ date('F', mktime(0,0,0,$m,1)) }}
+
+            </option>
+
+            @endfor
+
+        </select>
+
+    </div>
+
+    {{-- Year --}}
+    <div>
+
+        <label>Year</label>
+
+        <select name="year">
+
+            @for($y = date('Y'); $y >= date('Y') - 3; $y--)
+
+            <option value="{{ $y }}"
+                {{ $y == $year ? 'selected' : '' }}>
+
+                {{ $y }}
+
+            </option>
+
+            @endfor
+
+        </select>
+
+    </div>
+
+    <button type="submit"
+            class="btn btn-secondary">
+
+        <i class="fas fa-search"></i>
+
+        Load
+
+    </button>
+            
 
 <div class="card">
     <div class="card-header">
@@ -65,6 +131,7 @@
                     $present  = $labour->attendances->where('status', 'present')->count();
                     $absent   = $labour->attendances->where('status', 'absent')->count();
                     $halfDay  = $labour->attendances->where('status', 'half_day')->count();
+                    $weekOff = $labour->attendances->where('status', 'week_off')->count();
                     $otHours  = $labour->attendances->sum('overtime_hours');
                 @endphp
                 <tr>
@@ -78,6 +145,8 @@
                                 <span style="color:var(--success);font-weight:700;">P</span>
                             @elseif($att->status === 'absent')
                                 <span style="color:var(--danger);font-weight:700;">A</span>
+                            @elseif($att->status === 'week_off')
+                                <span style="color:var(--info);font-weight:700;">W/O</span>
                             @else
                                 <span style="color:var(--warning);font-weight:700;">½</span>
                             @endif
@@ -89,6 +158,7 @@
                     <td style="font-weight:700;color:var(--success)">{{ $present }}</td>
                     <td style="font-weight:700;color:var(--danger)">{{ $absent }}</td>
                     <td style="font-weight:700;color:var(--warning)">{{ $halfDay }}</td>
+                    <td style="font-weight:700;color:var(--info)">{{ $weekOff }}</td>
                     <td style="font-weight:700;color:var(--info)">{{ $otHours > 0 ? $otHours : '—' }}</td>
                 </tr>
                 @empty

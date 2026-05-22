@@ -4,157 +4,510 @@
 @section('page-title', 'Salary Slip')
 
 @section('content')
-
-{{-- Salary slip section --}}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <div class="page-header">
     <div>
-        <div class="page-title">{{ $salary->labour->name }}</div>
-        <div class="page-subtitle">{{ $salary->labour->category }} — {{ $salary->getMonthName() }} {{ $salary->year }}</div>
+        <div class="page-title">Salary Slip</div>
+        <div class="page-subtitle">
+            {{ $salary->getMonthName() }} {{ $salary->year }}
+        </div>
     </div>
 
-    <div style="display:flex;gap:8px;">
-        <button onclick="window.print()" class="btn btn-secondary"><i class="fas fa-print"></i> Print</button>
-        <a href="{{ route('salary.index', ['month' => $salary->month, 'year' => $salary->year]) }}" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+    <div style="display:flex;gap:10px;">
+        <button onclick="window.print()" class="btn btn-secondary">
+            <i class="fas fa-print"></i> Print
+        </button>
+
+        <a href="{{ route('salary.index') }}" class="btn btn-outline">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
     </div>
 </div>
 
-<div class="card" style="max-width:720px;" id="slip-content">
-    <!-- Header -->
-    <div style="background:var(--secondary);color:#fff;padding:24px 28px;display:flex;justify-content:space-between;align-items:center;">
-        <div>
-            <div style="font-family:'Barlow Condensed',sans-serif;font-size:24px;font-weight:700;color:var(--primary);">
-                <i class="fas fa-hard-hat"></i> AwadhBuildmate
-            </div>
-            <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-top:3px;letter-spacing:2px;">SALARY SLIP</div>
+<div class="card" id="salary-slip" style="max-width:1100px;margin:auto;border:1px solid #dcdcdc;">
+
+    {{-- Company Header --}}
+    <div style="padding:25px 30px;border-bottom:2px solid #e5e7eb;text-align:center;background:#f9fafb;">
+
+        <div style="font-size:28px;font-weight:700;color:#f97316;font-family:'Barlow Condensed',sans-serif;">
+            AWADH BUILDMATE
         </div>
-        <div style="text-align:right;">
-            <div style="font-size:18px;font-weight:700;">{{ $salary->getMonthName() }} {{ $salary->year }}</div>
-            <div style="font-size:12px;color:rgba(255,255,255,0.5);">Generated: {{ $salary->created_at->format('d M Y') }}</div>
+
+        <div style="font-size:14px;color:#6b7280;margin-top:6px;">
+            Made for Quality and Trust
+        </div>
+
+        <div style="font-size:13px;color:#6b7280;">
+           
+        </div>
+
+        <div style="margin-top:12px;font-size:18px;font-weight:700;letter-spacing:1px;">
+            SALARY SLIP
+        </div>
+
+        <div style="font-size:13px;color:#6b7280;">
+            For the Month of {{ $salary->getMonthName() }} {{ $salary->year }}
         </div>
     </div>
 
-    <!-- Labour Info -->
-    <div style="padding:20px 28px;background:#F8F9FA;border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;">
-        <div>
-            <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Employee Name</div>
-            <div style="font-weight:700;font-size:16px;">{{ $salary->labour->name }}</div>
+    {{-- Employee Details --}}
+    <div style="padding:22px 30px;border-bottom:1px solid #e5e7eb;">
+
+        <div style="font-size:14px;font-weight:700;color:#111827;margin-bottom:14px;text-transform:uppercase;">
+            Employee Details
         </div>
-        <div>
-            <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Employee ID</div>
-            <div style="font-weight:600;">{{ $salary->labour->employee_id }}</div>
-        </div>
-        <div>
-            <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;">Category</div>
-            <span class="badge badge-{{ strtolower($salary->labour->category) }}">{{ $salary->labour->category }}</span>
+
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px;">
+
+            <div>
+                <div class="slip-label">Employee Name</div>
+                <div class="slip-value">{{ $salary->labour->name }}</div>
+            </div>
+
+            <div>
+                <div class="slip-label">Employee ID</div>
+                <div class="slip-value">{{ $salary->labour->employee_id }}</div>
+            </div>
+
+            <div>
+                <div class="slip-label">Category</div>
+                <div class="slip-value">{{ $salary->labour->category }}</div>
+            </div>
+
+            <div>
+                <div class="slip-label">Date Of Joining</div>
+                <div class="slip-value">
+                    {{ \Carbon\Carbon::parse($salary->labour->joining_date)->format('d M Y') }}
+                </div>
+            </div>
+
+            <div>
+                <div class="slip-label">UAN Number</div>
+                <div class="slip-value">{{ $salary->labour->UAN ?? '-' }}</div>
+            </div>
+
+            <div>
+                <div class="slip-label">ESIC Number</div>
+                <div class="slip-value">{{ $salary->labour->ESIC_Number ?? '-' }}</div>
+            </div>
+
+            <div>
+                <div class="slip-label">Bank Name</div>
+                <div class="slip-value">
+                    {{ $salary->labour->bank->bank_name ?? '-' }}
+                </div>
+            </div>
+
+            <div>
+                <div class="slip-label">Bank A/C No.</div>
+                <div class="slip-value">
+                    {{ $salary->labour->Account_Number ?? '-' }}
+                </div>
+            </div>
+
+            <div>
+                <div class="slip-label">IFSC Code</div>
+                <div class="slip-value">
+                    {{ $salary->labour->IFSC ?? '-' }}
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <!-- Attendance Summary -->
-    <div style="padding:20px 28px;border-bottom:1px solid var(--border);">
-        <div style="font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;color:var(--text-muted);">Attendance Summary</div>
-        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:12px;">
-            @foreach([
-                ['Total Days', $salary->total_days, '#6B7280'],
-                ['Present', $salary->present_days, 'var(--success)'],
-                ['Half Day', $salary->half_days, 'var(--warning)'],
-                ['Absent', $salary->absent_days, 'var(--danger)'],
-                ['OT Hours', $salary->overtime_hours, 'var(--info)'],
-            ] as [$label, $val, $color])
-            <div style="text-align:center;background:var(--bg);border-radius:8px;padding:12px;">
-                <div style="font-size:22px;font-weight:700;color:{{ $color }}">{{ $val }}</div>
-                <div style="font-size:11px;color:var(--text-muted)">{{ $label }}</div>
-            </div>
-            @endforeach
-        </div>
-    </div>
+    {{-- Working Details --}}
+    <div style="padding:22px 30px;border-bottom:1px solid #e5e7eb;">
 
-    <!-- Earnings & Deductions -->
-    <div style="padding:20px 28px;display:grid;grid-template-columns:1fr 1fr;gap:28px;border-bottom:1px solid var(--border);">
-        <!-- Earnings -->
-        <div>
-            <div style="font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;color:var(--success);">
-                <i class="fas fa-plus-circle"></i> Earnings
-            </div>
-            <table style="width:100%;font-size:14px;">
-                <tr>
-                    <td style="padding:7px 0;border-bottom:1px dashed var(--border);">Daily Wage</td>
-                    <td style="padding:7px 0;border-bottom:1px dashed var(--border);text-align:right;color:var(--text-muted);">₹{{ number_format($salary->daily_wage, 0) }} × {{ $salary->present_days + ($salary->half_days * 0.5) }} days</td>
+        <div style="font-size:14px;font-weight:700;color:#111827;margin-bottom:14px;text-transform:uppercase;">
+            Working Details
+        </div>
+
+        <table style="width:100%;border-collapse:collapse;">
+            <thead>
+                <tr style="background:#f3f4f6;">
+                    <th class="table-head">Present Days</th>
+                    <th class="table-head">W/OFF</th>
+                    <th class="table-head">Paid Days</th>
+                    <th class="table-head">OT Hours</th>
+                    <th class="table-head">Total Days</th>
                 </tr>
+            </thead>
+
+            <tbody>
+             @php
+                $paidDays =
+                    $salary->present_days + ($salary->half_days * 0.5);
+
+                    // Site working hours
+                    $workingHoursPerDay =  $salary->labour->working_hours_per_day ?? 8;
+
+                    // OT multiplier (2x, 1.5x etc.)
+                    $otMultiplier =
+                        $salary->labour->ot_rate_multiplier ?? 1;
+
+                    // Effective OT hours
+                    $effectiveOtHours = ($salary->overtime_hours ?? 0) * $otMultiplier;
+
+                    // Convert OT into payable days
+                    $otDays = round( $effectiveOtHours / $workingHoursPerDay,2 );
+
+                    // Final payable days
+                    $finalPayableDays = $paidDays + $otDays;
+
+                    // $finalothours = $salary->labour->overtime_hours  * $salary->labour->ot_rate_multiplier;
+                    $finalOtHours =
+                            ($salary->overtime_hours ?? 0) *
+                            ($salary->ot_rate_multiplier ?? 1);
+                    // Logic for calculating OT hours amount based on OT hours and OT rate multiplier
+                    $lastOT= ($finalOtHours * $salary->labour->ot_rate_multiplier);
+
+                @endphp
                 <tr>
-                    <td style="padding:7px 0;border-bottom:1px dashed var(--border);">Basic Salary</td>
-                    <td style="padding:7px 0;border-bottom:1px dashed var(--border);text-align:right;font-weight:600;">₹{{ number_format($salary->basic_salary, 2) }}</td>
-                </tr>
-                @if($salary->overtime_hours > 0)
-                <tr>
-                    <td style="padding:7px 0;border-bottom:1px dashed var(--border);">
-                        Overtime ({{ $salary->overtime_hours }}h × 2×)
-                        <div style="font-size:11px;color:var(--text-muted)">Base: ₹{{ number_format($salary->overtime_rate,0) }}/hr → Paid: ₹{{ number_format($salary->overtime_rate*2,0) }}/hr</div>
+                    <td class="table-data">{{ $salary->present_days }}</td>
+                    <td class="table-data">{{ $salary->week_off ?? 0 }}</td>
+                    <td class="table-data">
+                        {{ $paidDays }}
                     </td>
-                    <td style="padding:7px 0;border-bottom:1px dashed var(--border);text-align:right;font-weight:600;">₹{{ number_format($salary->overtime_amount, 2) }}</td>
-                </tr>
-                @endif
-                <tr style="background:#ECFDF5;">
-                    <td style="padding:9px 6px;font-weight:700;color:var(--success);">Gross Salary</td>
-                    <td style="padding:9px 6px;text-align:right;font-weight:700;font-size:16px;color:var(--success);">₹{{ number_format($salary->gross_salary, 2) }}</td>
-                </tr>
-            </table>
-        </div>
-
-        <!-- Deductions -->
-        <div>
-            <div style="font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;color:var(--danger);">
-                <i class="fas fa-minus-circle"></i> Deductions
-            </div>
-            <table style="width:100%;font-size:14px;">
-                <tr>
-                    <td style="padding:7px 0;border-bottom:1px dashed var(--border);">
-                        PF ({{ $salary->pf_percentage }}%)
-                        <div style="font-size:11px;color:var(--text-muted)">On basic salary</div>
+                    {{-- <td class="table-data">{{ $salary->finalothours }}</td> --}}
+                    <td class="table-data">
+                        {{ number_format($lastOT, 1) }}
                     </td>
-                    <td style="padding:7px 0;border-bottom:1px dashed var(--border);text-align:right;color:var(--danger);">-₹{{ number_format($salary->pf_deduction, 2) }}</td>
+                    {{-- <td class="table-data">{{ $salary->total_days }}</td> --}}
+                    <td class="table-data">{{ $finalPayableDays }}</td>
                 </tr>
-                @if($salary->advance_deduction > 0)
-                <tr>
-                    <td style="padding:7px 0;border-bottom:1px dashed var(--border);">Advance Deduction</td>
-                    <td style="padding:7px 0;border-bottom:1px dashed var(--border);text-align:right;color:var(--danger);">-₹{{ number_format($salary->advance_deduction, 2) }}</td>
-                </tr>
-                @endif
-                @if($salary->other_deduction > 0)
-                <tr>
-                    <td style="padding:7px 0;border-bottom:1px dashed var(--border);">Other Deductions</td>
-                    <td style="padding:7px 0;border-bottom:1px dashed var(--border);text-align:right;color:var(--danger);">-₹{{ number_format($salary->other_deduction, 2) }}</td>
-                </tr>
-                @endif
-                <tr style="background:#FEF2F2;">
-                    <td style="padding:9px 6px;font-weight:700;color:var(--danger);">Total Deductions</td>
-                    <td style="padding:9px 6px;text-align:right;font-weight:700;font-size:16px;color:var(--danger);">-₹{{ number_format($salary->total_deduction, 2) }}</td>
-                </tr>
-            </table>
+            </tbody>
+        </table>
+    </div>
+
+    {{-- Earnings + Deductions --}}
+    <div style="padding:22px 30px;">
+
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;">
+
+            {{-- Earnings --}}
+            <div>
+
+                <div style="font-size:14px;font-weight:700;color:#16a34a;margin-bottom:12px;text-transform:uppercase;">
+                    Earnings Details
+                </div>
+
+                <table style="width:100%;border-collapse:collapse;">
+
+                    <thead>
+                        <tr style="background:#f3f4f6;">
+                            <th class="table-head" style="text-align:left;">Earnings</th>
+                            <th class="table-head">Actual</th>
+                            <th class="table-head">Earned</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td class="table-data-left">Basic Salary</td>
+
+                            <td class="table-data">
+                                ₹{{ number_format($salary->labour->basic_salary ?? 0, 2) }}
+                            </td>
+
+                            <td class="table-data">
+                                {{-- ₹{{ number_format($salary->basic_salary ?? 0, 2) }} --}}
+                                {{-- ₹{{ number_format($salary->earned_salary ?? 0, 2) }} --}}
+                                {{-----Basic earned Updated----- --}}
+                                ₹{{ number_format($salary->earned_basic ?? 0, 2) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table-data-left">HRA</td>
+
+                            <td class="table-data">
+                                ₹{{ number_format($salary->labour->hra ?? 0, 2) }}
+                            </td>
+
+                            <td class="table-data">
+                                {{-- ₹{{ number_format($salary->hra ?? 0, 2) }} --}}
+                                {{-- ------Updated HRA--------- --}}
+                                ₹{{ number_format($salary->earned_hra ?? 0, 2) }} 
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="table-data-left">Other Allowance</td>
+
+                            <td class="table-data">
+                                ₹{{ number_format($salary->labour->other_allowance ?? 0, 2) }}
+                            </td>
+
+                            <td class="table-data">
+                                {{-- ₹{{ number_format($salary->other_allowance ?? 0, 2) }} --}}
+                                {{-- Updated Allowance --}}
+                                ₹{{ number_format($salary->earned_other_allowance ?? 0, 2) }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="table-data-left">OT Amount</td>
+
+                            <td class="table-data">
+                                {{-- ₹{{ number_format($salary->overtime_amount ?? 0, 2) }} --}}
+                            </td>
+
+                            <td class="table-data">
+                                ₹{{ number_format($salary->overtime_amount ?? 0, 2) }}
+                            </td>
+                        </tr>
+                    {{-- Updated Actual Earning Details --}}
+                    <tr style="background:#ecfdf5;font-weight:700;">
+                        <td class="table-data-left">Gross Income</td>
+
+                        <td class="table-data">
+                        ₹{{ number_format(
+                        ($salary->labour->basic_salary ?? 0) +
+                        ($salary->labour->hra ?? 0) +
+                        ($salary->labour->other_allowance ?? 0),2) }}
+                        </td>
+
+                        <td class="table-data">
+                                ₹{{ number_format(
+                                    ($salary->earned_basic ?? 0) +
+                                    ($salary->earned_hra ?? 0) +
+                                    ($salary->earned_other_allowance ?? 0) +
+                                    ($salary->overtime_amount ?? 0),
+                                2) }}
+</td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            {{-- Deductions --}}
+
+            <form action="{{ route('salary.updateDeductions', $salary->id) }}"
+            method="POST">
+
+            @csrf
+            @method('PUT')
+            <div>
+
+                <div style="font-size:14px;font-weight:700;color:#dc2626;margin-bottom:12px;text-transform:uppercase;">
+                    Deduction Details
+                </div>
+
+                <table style="width:100%;border-collapse:collapse;">
+
+                    <thead>
+                        <tr style="background:#fef2f2;">
+                            <th class="table-head" style="text-align:left;">Deduction</th>
+                            <th class="table-head">Amount</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                       <tr>
+                        <td class="table-data-left">PF</td>
+
+                        <td class="table-data">
+
+                            <input type="number"
+                                step="0.01"
+                                name="pf_deduction"
+                                {{-- value="{{ $salary->pf_deduction ?? 0 }}" --}}
+                                {{-- value="{{ old('pf_deduction', 0) }}" --}}
+                                value="{{ number_format($salary->pf_deduction ?? 0, 2) }}"
+                                style="width:100px;padding:5px;">
+
+                        </td>
+                        </tr>
+
+                        <tr>
+                            <td class="table-data-left">ESIC</td>
+
+                            <td class="table-data">
+
+                                <input type="number"
+                                    step="0.01"
+                                    name="esic_deduction"
+                                    value="{{ $salary->esic_deduction ?? 0 }}"
+                                    style="width:100px;padding:5px;">
+
+                            </td>
+                        </tr>
+
+                      <tr>
+                        <td class="table-data-left">Advance</td>
+
+                        <td class="table-data">
+
+                            <input type="number"
+                                step="0.01"
+                                name="advance_deduction"
+                                value="{{ $salary->advance_deduction ?? 0 }}"
+                                style="width:100px;padding:5px;">
+
+                        </td>
+                    </tr>
+                        <tr>
+                            <td class="table-data-left">PT</td>
+
+                            <td class="table-data">
+
+                                <input type="number"
+                                    step="0.01"
+                                    name="pt_deduction"
+                                    value="{{ $salary->pt_deduction ?? 0 }}"
+                                    style="width:100px;padding:5px;">
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="table-data-left">LWF</td>
+
+                            <td class="table-data">
+
+                                <input type="number"
+                                    step="0.01"
+                                    name="lwf_deduction"
+                                    value="{{ $salary->lwf_deduction ?? 0 }}"
+                                    style="width:100px;padding:5px;">
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="table-data-left">Other Deduction</td>
+
+                            <td class="table-data">
+
+                                <input type="number"
+                                    step="0.01"
+                                    name="other_deduction"
+                                    value="{{ $salary->other_deduction ?? 0 }}"
+                                    style="width:100px;padding:5px;">
+
+                            </td>
+                        </tr>
+                        <tr style="background:#FEF2F2;">
+                                    <td style="padding:10px 8px;font-weight:700;color:var(--danger);">
+                                        Total Deductions
+                                    </td>
+
+                                    <td style="padding:10px 8px;text-align:right;font-weight:700;color:var(--danger);">
+                                       {{-- ₹{{ number_format($salary->total_deduction ?? 0, 2) }} --}}
+                                       ₹{{ number_format($salary->total_deduction ?? 0, 2) }}
+                                    </td>
+                                </tr>
+
+                               <!-- Net Salary -->
+                                <tr style="background:#f9fafb;border-top:1px solid #e5e7eb;">
+                                    <td style="padding:12px 8px;font-weight:700;font-size:14px;color:#111827;">
+                                        Net Payable Salary
+                                    </td>
+
+                                    <td style="padding:12px 8px;text-align:right;font-weight:700;font-size:14px;color:#111827;">
+                                        {{-- ₹{{ number_format($salary->net_salary, 2) }} --}}
+                                        ₹{{ number_format($salary->net_salary ?? 0, 2) }}
+                                    </td>
+                                </tr>
+                    </tbody>
+                </table>
+                <div style="margin-top:15px;text-align:right;">
+
+                {{-- Button for updating all the deductions entered manually from earned salary --}}
+                {{-- <button type="button" class="btn btn-warning">
+                         <i class="fas fa-edit"></i> Update Deduction
+                </button> --}}
+                    {{-- Button for Generating PaySlip --}}
+                {{-- <button type="button" class="btn btn-success">
+                        <i class="fas fa-download"></i> Download PaySlip
+                </button> --}}
+
+                {{-- Updataed Blade --}}
+                <button type="submit" class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Update Deduction
+                </button>
+
+                {{-- Button for Generating PaySlip --}}
+                <a href="{{ route('salary.payslip', $salary->id) }}"
+                        class="btn btn-success"
+                        target="_blank">
+                        <i class="fas fa-download"></i> Download PaySlip
+                    </a>
+                </div>
+            </form>
+            </div>
+
         </div>
     </div>
-
-    <!-- Net Salary -->
-    <div style="padding:20px 28px;background:var(--secondary);display:flex;justify-content:space-between;align-items:center;">
-        <div style="color:rgba(255,255,255,0.7);font-size:14px;font-weight:600;text-transform:uppercase;letter-spacing:1px;">Net Salary Payable</div>
-        <div style="font-size:32px;font-weight:700;color:var(--accent);">₹{{ number_format($salary->net_salary, 2) }}</div>
-    </div>
-
-    @if($salary->remarks)
-    <div style="padding:14px 28px;font-size:13px;color:var(--text-muted);border-top:1px solid var(--border);">
-        <i class="fas fa-sticky-note"></i> {{ $salary->remarks }}
-    </div>
-    @endif
 </div>
 
-@push('styles')
 <style>
-@media print {
-    .sidebar, .topbar, .page-header .btn, .page-header .d-flex { display: none !important; }
-    .main { margin-left: 0 !important; }
-    .content { padding: 0 !important; }
-    .card { border: none !important; box-shadow: none; }
+
+.slip-label{
+    font-size:11px;
+    text-transform:uppercase;
+    color:#6b7280;
+    margin-bottom:4px;
+    letter-spacing:1px;
+    font-weight:600;
 }
+
+.slip-value{
+    font-size:14px;
+    font-weight:600;
+    color:#111827;
+}
+
+.table-head{
+    border:1px solid #d1d5db;
+    padding:10px;
+    font-size:12px;
+    text-transform:uppercase;
+    color:#374151;
+    font-weight:700;
+}
+
+.table-data{
+    border:1px solid #e5e7eb;
+    padding:10px;
+    text-align:center;
+    font-size:14px;
+    color:#111827;
+}
+
+.table-data-left{
+    border:1px solid #e5e7eb;
+    padding:10px;
+    font-size:14px;
+    color:#111827;
+    font-weight:600;
+}
+
+@media print {
+
+    .sidebar,
+    .topbar,
+    .page-header,
+    .btn {
+        display:none !important;
+    }
+
+    .main{
+        margin-left:0 !important;
+    }
+
+    .content{
+        padding:0 !important;
+    }
+
+    #salary-slip{
+        border:none !important;
+        box-shadow:none !important;
+    }
+    
+}
+
 </style>
-@endpush
 
 @endsection

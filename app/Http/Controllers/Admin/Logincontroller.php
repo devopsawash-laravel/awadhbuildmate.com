@@ -60,7 +60,7 @@ class Logincontroller extends Controller
         }
  
     // Set ADMIN_EMAIL=owner@awadhbuildmate.com in your .env file
-        $ownerEmail = env('ADMIN_EMAIL', 'owner@awadhbuildmate.com');
+        $ownerEmail = env('ADMIN_EMAIL', 'owner@gmail.com');
         $ownerEmail2 = env('ADMIN_EMAIL2', 'shivani30@gmail.com');
  
         if ($request->email !== $ownerEmail && $request->email !== $ownerEmail2) {

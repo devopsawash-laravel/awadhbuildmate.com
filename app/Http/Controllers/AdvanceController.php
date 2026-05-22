@@ -23,6 +23,25 @@ class AdvanceController extends Controller
             ->with('success', 'Advance of ₹' . number_format($request->amount, 2) . ' recorded.');
     }
 
+    public function update(Request $request, Advance $advance)
+{
+    $request->validate([
+        'amount' => 'required|numeric|min:1',
+        'given_date' => 'required|date',
+        'remarks' => 'nullable|string|max:255',
+    ]);
+
+    $advance->update([
+        'amount' => $request->amount,
+        'given_date' => $request->given_date,
+        'remarks' => $request->remarks,
+    ]);
+
+    return back()->with(
+        'success',
+        'Advance updated successfully.'
+    );
+}
     public function destroy(Advance $advance)
     {
         $labourId = $advance->labour_id;

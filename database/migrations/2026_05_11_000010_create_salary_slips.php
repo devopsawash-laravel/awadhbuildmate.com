@@ -10,6 +10,10 @@ return new class extends Migration
     {
         Schema::create('salary_slips', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('site_id')
+                ->nullable()
+                ->constrained()
+                ->onDelete('cascade');
             $table->foreignId('labour_id')->constrained()->onDelete('cascade');
             $table->integer('month');
             $table->integer('year');
@@ -38,6 +42,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('salary_slips');
+        // Schema::dropIfExists('salary_slips');
     }
 };

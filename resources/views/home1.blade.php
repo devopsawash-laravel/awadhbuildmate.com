@@ -67,22 +67,63 @@
             text-decoration: none;
         }
 
-        .nav-logo-icon {
+        /* .nav-logo-icon {
             width: 42px; height: 42px;
             background: var(--orange);
             display: flex; align-items: center; justify-content: center;
             clip-path: polygon(0 0, 88% 0, 100% 12%, 100% 100%, 12% 100%, 0 88%);
         }
 
-        .nav-logo-icon i { color: #fff; font-size: 18px; }
+        .nav-logo-icon i { color: #fff; font-size: 1px; } */
+/* Updated CSS for logo */
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+}
 
+.nav-logo-icon {
+    width: 56px;
+    height: 56px;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* optional shape */
+    clip-path: polygon(0 0, 88% 0, 100% 12%, 100% 100%, 12% 100%, 0 88%);
+}
+
+.nav-logo-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* or contain */
+    display: block;
+}
+
+.nav-brand {
+    color: #ff5a00;
+    font-size: 28px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.nav-tagline {
+    color: #ff5a00;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
         .nav-logo-text { line-height: 1; }
 
         .nav-brand {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 22px;
+            font-size: 26px;
             letter-spacing: 2px;
-            color: #fff;
+            color: #ff5a00;
         }
 
         .nav-tagline {
@@ -112,7 +153,7 @@
             transition: color 0.2s;
         }
 
-        .nav-links a:hover, .nav-links a.active { color: #fff; }
+        .nav-links a:hover, .nav-links a.active { color: #ff5a00; }
 
         .nav-cta {
             display: flex;
@@ -484,7 +525,7 @@
 
 <nav class="navbar" id="navbar">
     <a href="{{ route('home1') }}" class="nav-logo">
-        <div class="nav-logo-icon"><i class="fas fa-hard-hat"></i></div>
+        <div class="nav-logo-icon"><img src="{{ asset('images/projects/logo.png') }}" alt="Awadh Buildmate Logo"></div>
         <div class="nav-logo-text">
             <div class="nav-brand">Awadh Buildmate</div>
             <div class="nav-tagline">Build · Fabricate · Erect</div>

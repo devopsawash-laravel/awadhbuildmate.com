@@ -6,22 +6,58 @@ use App\Models\Attendance;
 use App\Models\Labour;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Models\Site;
 
 class AttendanceController extends Controller
 {
-    public function index(Request $request)
-    {
-        $date = $request->get('date', Carbon::today()->toDateString());
-        $labours = Labour::where('status', 'active')->orderBy('name')->get();
+           public function index(Request $request)
+{
+    $month = $request->month ?? now()->month;
 
-        $attendances = Attendance::where('date', $date)
-            ->pluck('status', 'labour_id');
-        $overtimes = Attendance::where('date', $date)
-            ->pluck('overtime_hours', 'labour_id');
+    $year = $request->year ?? now()->year;
 
-        return view('attendance.index', compact('labours', 'date', 'attendances', 'overtimes'));
+    $date = $request->date ?? now()->toDateString();
+
+    // Sites
+    $sites = Site::orderBy('name')->get();
+
+    // Labour Query
+    $query = Labour::where('status', 'active');
+
+    // Site Filter
+    if ($request->filled('site_id')) {
+
+        $query->where(
+            'site_id',
+            $request->site_id
+        );
     }
 
+    $labours = $query
+        ->orderBy('name')
+        ->get();
+
+    // Existing Attendance
+    $attendances = Attendance::where('date', $date)
+        ->pluck('status', 'labour_id');
+
+    // Existing OT
+    $overtimes = Attendance::where('date', $date)
+        ->pluck('overtime_hours', 'labour_id');
+
+    return view(
+        'attendance.index',
+        compact(
+            'labours',
+            'sites',
+            'month',
+            'year',
+            'date',
+            'attendances',
+            'overtimes'
+        )
+    );
+}
     public function store(Request $request)
     {
         $request->validate([
@@ -32,25 +68,68 @@ class AttendanceController extends Controller
         foreach ($request->attendance as $labourId => $status) {
             $overtimeHours = $request->overtime[$labourId] ?? 0;
             Attendance::updateOrCreate(
-                ['labour_id' => $labourId, 'date' => $request->date],
-                ['status' => $status, 'overtime_hours' => $overtimeHours]
-            );
+
+    [
+        'labour_id' => $labourId,
+        'date' => $request->date
+    ],
+
+    [
+        'site_id' => Labour::find($labourId)->site_id,
+
+        'status' => $status,
+
+        'overtime_hours' => $overtimeHours,
+    ]
+);
         }
 
         return redirect()->back()->with('success', 'Attendance saved for ' . Carbon::parse($request->date)->format('d M Y'));
     }
 
     public function monthlyReport(Request $request)
-    {
-        $month = $request->get('month', Carbon::now()->month);
-        $year  = $request->get('year', Carbon::now()->year);
+{
+    $month = $request->month ?? now()->month;
 
-        $labours = Labour::where('status', 'active')->with(['attendances' => function ($q) use ($month, $year) {
-            $q->whereMonth('date', $month)->whereYear('date', $year);
-        }])->orderBy('name')->get();
+    $year = $request->year ?? now()->year;
 
-        $daysInMonth = Carbon::createFromDate($year, $month, 1)->daysInMonth;
+    // Sites
+    $sites = Site::orderBy('name')->get();
 
-        return view('attendance.monthly', compact('labours', 'month', 'year', 'daysInMonth'));
+    // Labour Query
+    $query = Labour::where('status', 'active');
+
+    // Site Filter
+    if ($request->filled('site_id')) {
+
+        $query->where(
+            'site_id',
+            $request->site_id
+        );
     }
+
+    // Attendance Relation
+    $labours = $query
+        ->with([
+            'attendances' => function ($q) use ($month, $year) {
+
+                $q->whereMonth('date', $month)
+                  ->whereYear('date', $year);
+            }
+        ])
+        ->orderBy('name')
+        ->get();
+
+    $daysInMonth = Carbon::createFromDate(
+        $year,
+        $month,
+        1
+    )->daysInMonth;
+
+    return view(
+        'attendance.monthly',
+        compact('labours','month','year','daysInMonth','sites'
+        )
+    );
+}
 }

@@ -9,10 +9,10 @@ class Labour extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name', 'employee_id', 'category', 'phone', 'address',
-        'daily_wage', 'overtime_rate', 'pf_percentage', 'joining_date', 'status'
-    ];
+   protected $fillable = ['name', 'employee_id', 'category', 'phone', 'address', 'total_salary', 'daily_wage', 
+   'basic_salary', 'hra', 'other_allowance', 'working_days', 'working_hours_per_day', 'overtime_hours', 'overtime_rate', 
+   'joining_date', 'status', 'bank_id', 'Account_Number', 'IFSC', 'Pan_Card', 'ESIC_Number', 'UAN','Aadhar_Number','Nominee_details',
+   'relation','ot_rate_multiplier','site_id'];
 
     protected $casts = [
         'joining_date' => 'date',
@@ -56,7 +56,17 @@ class Labour extends Model
             'Fitter'  => 'badge-fitter',
             'Helper'  => 'badge-helper',
             'Rigger'  => 'badge-rigger',
+            'Assistant'  => 'badge-info',
             default   => 'badge-secondary',
         };
+    }
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class, 'bank_id');
+    }
+
+    public function site()
+    {
+         return $this->belongsTo(Site::class);
     }
 }

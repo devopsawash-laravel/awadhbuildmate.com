@@ -11,7 +11,203 @@
         <div class="page-subtitle">Generate and manage monthly salary slips</div>
     </div>
 </div>
+<div>
 
+    <label>Site</label>
+
+    <select name="site_id">
+
+        <option value="">
+            All Sites
+        </option>
+
+        @foreach($sites as $site)
+
+        <option value="{{ $site->id }}"
+            {{ request('site_id') == $site->id ? 'selected' : '' }}>
+
+            {{ $site->name }}
+
+        </option>
+
+        @endforeach
+
+    </select>
+
+</div>
+<div class="card">
+
+    <div class="card-header">
+
+        <span>
+
+            <i class="fas fa-file-invoice-dollar"
+               style="color:var(--primary)"></i>
+
+            Salary Slips —
+            {{ date('F', mktime(0,0,0,$month,1)) }}
+            {{ $year }}
+
+        </span>
+
+    </div>
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>#</th>
+
+                    <th>Employee</th>
+
+                    <th>Site</th>
+
+                    <th>Category</th>
+
+                    <th>Status</th>
+
+                    <th style="width:120px;">
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @forelse($labours as $i => $labour)
+
+                @php
+
+                    $generated =
+                        $salarySlips
+                            ->where('labour_id', $labour->id)
+                            ->first();
+
+                @endphp
+
+                <tr>
+
+                    <td>
+                        {{ $i + 1 }}
+                    </td>
+
+                    <td>
+
+                        <strong>
+                            {{ $labour->name }}
+                        </strong>
+
+                        <br>
+
+                        <small class="text-muted">
+                            {{ $labour->employee_id }}
+                        </small>
+
+                    </td>
+
+                    <td>
+                        {{ $labour->site->name ?? '-' }}
+                    </td>
+
+                    <td>
+                        {{ $labour->category }}
+                    </td>
+
+                    <td>
+
+                        @if($generated)
+
+                            <span class="badge badge-success">
+
+                                Generated
+
+                            </span>
+
+                        @else
+
+                            <span class="badge badge-warning">
+
+                                Pending
+
+                            </span>
+
+                        @endif
+
+                    </td>
+
+                    <td>
+
+                        @if($generated)
+
+                            <a href="{{ route('salary.show', $generated->id) }}"
+                               class="btn btn-sm btn-primary">
+
+                                <i class="fas fa-eye"></i>
+
+                            </a>
+
+                        @else
+
+                            <form method="POST"
+                                  action="{{ route('salary.generate') }}">
+
+                                @csrf
+
+                                <input type="hidden"
+                                       name="labour_id"
+                                       value="{{ $labour->id }}">
+
+                                <input type="hidden"
+                                       name="month"
+                                       value="{{ $month }}">
+
+                                <input type="hidden"
+                                       name="year"
+                                       value="{{ $year }}">
+
+                                <button type="submit"
+                                        class="btn btn-sm btn-success">
+
+                                    <i class="fas fa-file-invoice"></i>
+
+                                </button>
+
+                            </form>
+
+                        @endif
+
+                    </td>
+
+                </tr>
+
+                @empty
+
+                <tr>
+
+                    <td colspan="6"
+                        style="text-align:center;padding:40px;">
+
+                        No labours found for selected site.
+
+                    </td>
+
+                </tr>
+
+                @endforelse
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
 <!-- Month Selector -->
 <div class="card mb-4">
     <div class="card-body" style="padding:14px 20px;">

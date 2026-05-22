@@ -77,7 +77,7 @@
             <span><i class="fas fa-chart-bar" style="color:var(--primary)"></i>&nbsp; Labour by Category</span>
         </div>
         <div class="card-body">
-            @foreach(['Welder','Fitter','Helper','Rigger'] as $cat)
+            @foreach(['Welder','Fitter','Helper','Rigger','Assistant'] as $cat)
             @php $count = $categoryStats[$cat] ?? 0; @endphp
             <div style="margin-bottom:12px;">
                 <div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px;font-weight:600;">

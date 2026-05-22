@@ -8,6 +8,8 @@ use App\Http\Controllers\AdvanceController;
 use Illuminate\Support\Facades\Route;
 // use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\admin\Logincontroller;
+use App\Http\Controllers\Sitecontroller;
+
 
 // Route::get('/login', function () {
 //     return view('auth.login');
@@ -20,6 +22,10 @@ Route::get('/test', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 // Labours
 Route::resource('labours', LabourController::class);
+
+Route::put('/labours/{labour}/toggle-status',
+    [LabourController::class, 'toggleStatus'])
+    ->name('labours.toggleStatus');
 
 // Attendance
 Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
@@ -36,6 +42,13 @@ Route::delete('/salary/{salary}', [SalaryController::class, 'destroy'])->name('s
 // Advances
 Route::post('/advances', [AdvanceController::class, 'store'])->name('advances.store');
 Route::delete('/advances/{advance}', [AdvanceController::class, 'destroy'])->name('advances.destroy');
+Route::put('/advances/{advance}',
+    [AdvanceController::class, 'update'])
+    ->name('advances.update');
+
+Route::delete('/advances/{advance}',
+    [AdvanceController::class, 'destroy'])
+    ->name('advances.destroy');
 // Auth::routes();
 
 //Admin Login Route
@@ -64,3 +77,29 @@ Route::get('/admin/enquiries', function() {
 //Mail Route for testing email notification
 Route::post('/magic-link',          [Logincontroller::class, 'sendMagicLink'  ])->name('magic.login');
 Route::get( '/magic-link/{token}',  [Logincontroller::class, 'verifyMagicLink'])->name('magic.login');
+
+//Site module route testing
+// Route::post('/admin/sites', [App\Http\Controllers\Admin\SiteController::class, 'index'])->name('admin.sites.index');
+// Route::get('/admin/sites', [App\Http\Controllers\Admin\SiteController::class, 'index'])->name('admin.sites.index');
+// Route::get('/admin/sites/{site}', [App\Http\Controllers\Admin\SiteController::class, 'show'])->name('admin.sites.show');
+
+// Staff module route testing
+// Route::POST('/admin/staff/create', [App\Http\Controllers\StaffController::class, 'create'])->name('Staff.create');
+Route::Resource('staff', App\Http\Controllers\StaffController::class);
+
+//Payslip modules
+Route::put('/salary/{salary}/deductions',
+    [SalaryController::class, 'updateDeductions'])
+    ->name('salary.updateDeductions');
+
+//Generating PaySlip in PDF
+Route::get('/salary/{salary}/payslip',
+    [SalaryController::class, 'payslip'])
+    ->name('salary.payslip');
+
+// Bank Statement
+// Route::get('/salary/bank-statement', [SalaryController::class, 'bankStatement'])->name('salary.bankStatement');
+Route::get('/testbankstatment', [SalaryController::class, 'test'])->name('salary.bankstatement');
+Route::get('/testwages',[SalaryController::class, 'testwages'])->name('salary.wages-sheet');
+
+Route::resource('sites', SiteController::class);

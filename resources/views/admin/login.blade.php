@@ -328,6 +328,7 @@
 <div class="left">
     <div class="left-top">
         <div class="brand-icon"><i class="fas fa-hard-hat"></i></div>
+        {{-- <div class="brand-icon"><img src="{{ asset('images/projects/logo.png') }}" alt="Awadh Buildmate Logo"></div> --}}
         <div class="brand-name">Awadh Buildmate</div>
         <div class="brand-sub">Build · Fabricate · Erect</div>
     </div>
