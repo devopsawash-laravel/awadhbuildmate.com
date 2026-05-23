@@ -121,7 +121,7 @@
                         <div style="font-weight:400;font-size:9px;color:var(--text-muted)">{{ $dayName }}</div>
                     </th>
                     @endfor
-                    <th>P</th><th>A</th><th>½</th><th>OT Hrs</th>
+                    <th>P</th><th>A</th><th>½</th><th>W/O</th><th>OT Hrs</th>
                 </tr>
             </thead>
             <tbody>
