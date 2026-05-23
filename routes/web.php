@@ -103,3 +103,12 @@ Route::get('/testbankstatment', [SalaryController::class, 'test'])->name('salary
 Route::get('/testwages',[SalaryController::class, 'testwages'])->name('salary.wages-sheet');
 
 Route::resource('sites', SiteController::class);
+Route::get(
+    '/sites/{site}',
+    [SiteController::class, 'show']
+)->name('sites.show');
+
+Route::get(
+    '/bank-statement/export',
+    [SalaryController::class, 'exportBankStatement']
+)->name('salary.bankstatement.export');

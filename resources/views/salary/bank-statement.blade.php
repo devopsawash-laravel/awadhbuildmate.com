@@ -3,14 +3,146 @@
 @section('title', 'Bank Statement')
 
 @section('content')
-<div class="page-header no-print">
-    <div>
+<div class="page-header no-print"
+     style="
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-start;
+        flex-wrap:wrap;
+        gap:20px;
+     ">
+
+    {{-- LEFT --}}
+    <div></div>
+
+    {{-- RIGHT --}}
+    <div style="
+        margin-left:auto;
+    ">
+
+        <form method="GET"
+              style="
+                display:flex;
+                gap:14px;
+                align-items:end;
+                flex-wrap:wrap;
+                justify-content:flex-end;
+              ">
+
+            {{-- Site --}}
+            <div style="min-width:240px;">
+
+                <label>Site</label>
+
+                <select name="site_id">
+
+                    <option value="">
+                        All Sites
+                    </option>
+
+                    @foreach($sites as $site)
+
+                    <option value="{{ $site->id }}"
+                        {{ request('site_id') == $site->id ? 'selected' : '' }}>
+
+                        {{ $site->name }}
+
+                    </option>
+
+                    @endforeach
+
+                </select>
+
+            </div>
+
+            {{-- Month --}}
+            <div>
+
+                <label>Month</label>
+
+                <select name="month">
+
+                    @for($m = 1; $m <= 12; $m++)
+
+                    <option value="{{ $m }}"
+                        {{ $m == $month ? 'selected' : '' }}>
+
+                        {{ date('F', mktime(0,0,0,$m,1)) }}
+
+                    </option>
+
+                    @endfor
+
+                </select>
+
+            </div>
+
+            {{-- Year --}}
+            <div>
+
+                <label>Year</label>
+
+                <select name="year">
+
+                    @for($y = date('Y'); $y >= date('Y') - 3; $y--)
+
+                    <option value="{{ $y }}"
+                        {{ $y == $year ? 'selected' : '' }}>
+
+                        {{ $y }}
+
+                    </option>
+
+                    @endfor
+
+                </select>
+
+            </div>
+
+            {{-- View --}}
+            <div>
+
+                <button type="submit"
+                        class="btn btn-secondary">
+
+                    <i class="fas fa-search"></i>
+
+                    View
+
+                </button>
+
+            </div>
+
+            {{-- Print --}}
+            <div>
+
+                <button type="button"
+                        onclick="window.print()"
+                        class="btn btn-primary">
+
+                    <i class="fas fa-print"></i>
+
+                    Print
+
+                </button>
+<a href="{{ route('salary.bankstatement.export', [
+        'site_id' => request('site_id'),
+        'month' => $month,
+        'year' => $year
+    ]) }}"
+   class="btn btn-success">
+
+    <i class="fas fa-file-excel"></i>
+
+    Export {{ date('F', mktime(0,0,0,$month,1)) }} Report
+
+</a>
+            </div>
+
+        </form>
 
     </div>
 
-    <button onclick="window.print()" class="btn btn-primary">
-        <i class="fas fa-print"></i> Print
-    </button>
 </div>
 
 <div class="company-header">

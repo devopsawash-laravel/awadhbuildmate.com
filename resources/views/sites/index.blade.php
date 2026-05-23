@@ -226,7 +226,18 @@
 
         <div class="site-card-body">
             <div class="site-client">{{ $site->client ?? 'Client TBD' }}</div>
-            <div class="site-name">{{ $site->name }}</div>
+            <div class="site-name">
+                <a href="{{ route('sites.show', $site) }}"
+   style="
+        color:var(--primary);
+        font-weight:600;
+        text-decoration:none;
+   ">
+
+    {{ $site->name }}
+
+</a>
+            </div>
             <div class="site-location">
                 <i class="fas fa-map-pin" style="color:var(--primary);font-size:11px"></i>
                 {{ $site->location }}
