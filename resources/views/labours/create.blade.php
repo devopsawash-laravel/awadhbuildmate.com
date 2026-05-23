@@ -214,133 +214,250 @@
 
 </div>
 
-            <div class="form-grid-2">
-                <div class="form-group">
-                    <label>Joining Date *</label>
-                    <input type="date" name="joining_date" value="{{ old('joining_date', date('Y-m-d')) }}" required>
-                </div>
-                <div class="form-group">
-                    <label>Status *</label>
-                    <select name="status" id="status" required>
-                        <option value="active" {{ old('status') == 'active' ? 'selected' : '' }}>Active</option>
-                        <option value="inactive" {{ old('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
-                    </select>
-                </div>
-                <div>
+            <div class="form-grid-3">
 
-                <div>
-                    <label>Site</label>
+    {{-- Joining Date --}}
+    <div class="form-group">
 
-                    <select name="site_id" id="site" required>
+        <label>Joining Date *</label>
 
-                        <option value="">
-                            Select Site
-                        </option>
+        <input type="date"
+               name="joining_date"
+               value="{{ old('joining_date', date('Y-m-d')) }}"
+               required>
 
-                        @foreach($sites as $site)
+    </div>
 
-                        <option value="{{ $site->id }}">
-                             {{ $site->name }}
-                         </option>
 
-                        @endforeach
+    {{-- Status --}}
+    <div class="form-group">
 
-                    </select>
+        <label>Status *</label>
 
-                </div>
-            </div>
-            </div>
+        <select name="status"
+                id="status"
+                required>
 
-            <div class="form-grid-2">
-                {{-- Bank lists --}}
-                <div class="form-group">
-                        <label>Bank Name</label>
+            <option value="active"
+                {{ old('status') == 'active' ? 'selected' : '' }}>
 
-                        <select name="bank_id" id="bank_name" required>
+                Active
 
-                            <option value="">Select Bank</option>
+            </option>
 
-                            @foreach($banks as $bank)
+            <option value="inactive"
+                {{ old('status') == 'inactive' ? 'selected' : '' }}>
 
-                                <option 
-                                    value="{{ $bank->id }}"
-                                    {{ old('bank_id') == $bank->id ? 'selected' : '' }}>
+                Inactive
 
-                                    {{ $bank->bank_name }}
+            </option>
 
-                                </option>
+        </select>
 
-                            @endforeach
+    </div>
 
-                        </select>
-                    </div>
-                <div class="form-group mb-0">
-                    <label>Aadhar Number</label>
-                    <input type="text" name="Aadhar_Number" value="{{ old('Aadhar_Number') }}" placeholder="Aadhar number"> 
-                </div>
-                    <div class="form-group mb-0">
-                    <label>Account Number</label>
-                    <input type="text" name="Account_Number" value="{{ old('Account_Number') }}" placeholder="Bank account number"> 
-                </div>
-                <div class="form-grid-2">
 
-                    {{-- Nominee Name --}}
-                    <div class="form-group">
-                        <label>Nominee Name</label>
+    {{-- Site --}}
+    <div class="form-group">
 
-                        <input
-                            type="text"
-                            name="Nominee_details"
-                            value="{{ old('Nominee_details') }}"
-                            placeholder="Enter nominee name">
-                    </div>
+        <label>Site</label>
 
-                    {{-- Nominee Relation --}}
-                    <div class="form-group">
-                        <label>Relation</label>
+        <select name="site_id"
+                id="site"
+                required>
 
-                        <select name="relation" id="nominee_relation">
+            <option value="">
+                Select Site
+            </option>
 
-                            <option value="">Select Relation</option>
+            @foreach($sites as $site)
 
-                            <option value="Father">Father</option>
-                            <option value="Mother">Mother</option>
-                            <option value="Spouse">Spouse</option>
-                            <option value="Son">Son</option>
-                            <option value="Daughter">Daughter</option>
-                            <option value="Brother">Brother</option>
-                            <option value="Sister">Sister</option>
-                            <option value="Guardian">Guardian</option>
+            <option value="{{ $site->id }}">
 
-                        </select>
-                    </div>
+                {{ $site->name }}
 
-                </div>
-                 <div class="form-group mb-0">
-                    <label>IFSC Code</label>
-                    <input type="text" name="IFSC" value="{{ old('IFSC_Code') }}" placeholder="IFSC code"> 
-                </div>
-                <div class="form-group mb-0">
-                    <label>Pan Card</label>
-                    <input type="text" name="Pan_Card" value="{{ old('Pan_Card') }}" placeholder="PAN card number"> 
-                </div>
-                <div class="form-group mb-0">
-                    <label>ESIC Number</label>
-                    <input type="text" name="ESIC_Number" value="{{ old('ESIC_Number') }}" placeholder="ESIC number"> 
-                </div>
-                <div class="form-group mb-0">
-                    <label>UAN Number</label>
-                    <input type="text" name="UAN" value="{{ old('UAN') }}" placeholder="Universal Account Number"> 
-                </div>
-            
-                    </div>
-                    <div style="display:flex;gap:10px;margin-top:8px;">
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Labour</button>
-                        <a href="{{ route('labours.index') }}" class="btn btn-secondary">Cancel</a>
-                    </div>
-                </form>
-            </div>
-        </div>
+            </option>
+
+            @endforeach
+
+        </select>
+
+    </div>
+
+
+    {{-- Bank --}}
+    <div class="form-group">
+
+        <label>Bank Name</label>
+
+        <select name="bank_id"
+                id="bank_name"
+                required>
+
+            <option value="">
+                Select Bank
+            </option>
+
+            @foreach($banks as $bank)
+
+            <option value="{{ $bank->id }}"
+                {{ old('bank_id') == $bank->id ? 'selected' : '' }}>
+
+                {{ $bank->bank_name }}
+
+            </option>
+
+            @endforeach
+
+        </select>
+
+    </div>
+
+
+    {{-- Aadhar --}}
+    <div class="form-group">
+
+        <label>Aadhar Number</label>
+
+        <input type="text"
+               name="Aadhar_Number"
+               value="{{ old('Aadhar_Number') }}"
+               placeholder="Aadhar number">
+
+    </div>
+
+
+    {{-- Account --}}
+    <div class="form-group">
+
+        <label>Account Number</label>
+
+        <input type="text"
+               name="Account_Number"
+               value="{{ old('Account_Number') }}"
+               placeholder="Bank account number">
+
+    </div>
+
+
+    {{-- Nominee --}}
+    <div class="form-group">
+
+        <label>Nominee Name</label>
+
+        <input type="text"
+               name="Nominee_details"
+               value="{{ old('Nominee_details') }}"
+               placeholder="Enter nominee name">
+
+    </div>
+
+
+    {{-- Relation --}}
+    <div class="form-group">
+
+        <label>Relation</label>
+
+        <select name="relation"
+                id="nominee_relation">
+
+            <option value="">
+                Select Relation
+            </option>
+
+            <option value="Father">Father</option>
+            <option value="Mother">Mother</option>
+            <option value="Spouse">Spouse</option>
+            <option value="Son">Son</option>
+            <option value="Daughter">Daughter</option>
+            <option value="Brother">Brother</option>
+            <option value="Sister">Sister</option>
+            <option value="Guardian">Guardian</option>
+
+        </select>
+
+    </div>
+
+
+    {{-- IFSC --}}
+    <div class="form-group">
+
+        <label>IFSC Code</label>
+
+        <input type="text"
+               name="IFSC"
+               value="{{ old('IFSC') }}"
+               placeholder="IFSC code">
+
+    </div>
+
+
+    {{-- PAN --}}
+    <div class="form-group">
+
+        <label>Pan Card</label>
+
+        <input type="text"
+               name="Pan_Card"
+               value="{{ old('Pan_Card') }}"
+               placeholder="PAN card number">
+
+    </div>
+
+
+    {{-- ESIC --}}
+    <div class="form-group">
+
+        <label>ESIC Number</label>
+
+        <input type="text"
+               name="ESIC_Number"
+               value="{{ old('ESIC_Number') }}"
+               placeholder="ESIC number">
+
+    </div>
+
+
+    {{-- UAN --}}
+    <div class="form-group">
+
+        <label>UAN Number</label>
+
+        <input type="text"
+               name="UAN"
+               value="{{ old('UAN') }}"
+               placeholder="Universal Account Number">
+
+    </div>
+
+</div>
+
+
+<div style="
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+    flex-wrap:wrap;
+">
+
+    <button type="submit"
+            class="btn btn-primary">
+
+        <i class="fas fa-save"></i>
+
+        Save Labour
+
+    </button>
+
+    <a href="{{ route('labours.index') }}"
+       class="btn btn-secondary">
+
+        Cancel
+
+    </a>
+
+</div>
+                    
 
 {{-- // Auto calculate daily wage based on total salary and working days --}}
 <script>

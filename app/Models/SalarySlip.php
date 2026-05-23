@@ -15,6 +15,7 @@ class SalarySlip extends Model
         'overtime_amount', 'gross_salary', 'pf_percentage', 'pf_deduction',
         'advance_deduction', 'other_deduction', 'total_deduction', 'net_salary', 'remarks',
         'earned_basic',  'earned_hra', 'earned_other_allowance', 'earned_salary', 'esic_deduction','pt_deduction','lwf_deduction','other_deduction',
+        'site_id','week_off_days'
     ];
 
     protected $casts = [

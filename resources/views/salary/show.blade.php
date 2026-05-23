@@ -135,8 +135,9 @@
 
             <tbody>
              @php
+
                 $paidDays =
-                    $salary->present_days + ($salary->half_days * 0.5);
+                    $salary->present_days + ($salary->half_days * 0.5) + $salary->week_off_days;
 
                     // Site working hours
                     $workingHoursPerDay =  $salary->labour->working_hours_per_day ?? 8;
@@ -151,6 +152,8 @@
                     // Convert OT into payable days
                     $otDays = round( $effectiveOtHours / $workingHoursPerDay,2 );
 
+                    // $weekOffDays = $salary->weekOffDays;
+
                     // Final payable days
                     $finalPayableDays = $paidDays + $otDays;
 
@@ -159,12 +162,13 @@
                             ($salary->overtime_hours ?? 0) *
                             ($salary->ot_rate_multiplier ?? 1);
                     // Logic for calculating OT hours amount based on OT hours and OT rate multiplier
+
                     $lastOT= ($finalOtHours * $salary->labour->ot_rate_multiplier);
 
                 @endphp
                 <tr>
                     <td class="table-data">{{ $salary->present_days }}</td>
-                    <td class="table-data">{{ $salary->week_off ?? 0 }}</td>
+                    <td class="table-data">{{ $salary->week_off_days }}</td>
                     <td class="table-data">
                         {{ $paidDays }}
                     </td>

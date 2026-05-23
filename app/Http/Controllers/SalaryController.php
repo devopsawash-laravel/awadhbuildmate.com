@@ -15,103 +15,59 @@ class SalaryController extends Controller
 {
     public function index(Request $request)
     {
-        $month = $request->get(
-            'month',
-            Carbon::now()->month
-        );
+        $month = $request->get("month", Carbon::now()->month);
 
-        $year = $request->get(
-            'year',
-            Carbon::now()->year
-        );
+        $year = $request->get("year", Carbon::now()->year);
 
         // Fetch Sites
-        $sites = Site::orderBy('name')->get();
+        $sites = Site::orderBy("name")->get();
 
         // Salary Slip Query
-        $salaryQuery = SalarySlip::with([
-            'labour.site',
-        ])
-        ->where('month', $month)
-        ->where('year', $year);
+        $salaryQuery = SalarySlip::with(["labour.site"])
+            ->where("month", $month)
+            ->where("year", $year);
 
         // Site Filter
-        if ($request->filled('site_id')) {
-            $salaryQuery->whereHas(
-                'labour',
-                function ($q) use ($request) {
-                    $q->where(
-                        'site_id',
-                        $request->site_id
-                    );
-                }
-            );
+        if ($request->filled("site_id")) {
+            $salaryQuery->whereHas("labour", function ($q) use ($request) {
+                $q->where("site_id", $request->site_id);
+            });
         }
 
-        $salarySlips = $salaryQuery
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $salarySlips = $salaryQuery->orderBy("created_at", "desc")->get();
 
         // Active Labour Query
-        $labourQuery = Labour::where(
-            'status',
-            'active'
-        );
+        $labourQuery = Labour::where("status", "active");
 
         // Site Filter for Labour List
-        if ($request->filled('site_id')) {
-            $labourQuery->where(
-                'site_id',
-                $request->site_id
-            );
+        if ($request->filled("site_id")) {
+            $labourQuery->where("site_id", $request->site_id);
         }
-$attendanceLabourIds = Attendance::whereMonth(
-        'date',
-        $month
-    )
-    ->whereYear(
-        'date',
-        $year
-    )
-    ->pluck('labour_id')
-    ->unique();
-        $labours = Labour::with('site')
-    ->where('status', 'active')
-    ->whereIn(
-        'id',
-        $attendanceLabourIds
-    )
-    ->when(
-        $request->site_id,
-        function ($q) use ($request) {
-
-            $q->where(
-                'site_id',
-                $request->site_id
-            );
-        }
-    )
-    ->orderBy('name')
-    ->get();
+        $attendanceLabourIds = Attendance::whereMonth("date", $month)
+            ->whereYear("date", $year)
+            ->pluck("labour_id")
+            ->unique();
+        $labours = Labour::with("site")
+            ->where("status", "active")
+            ->whereIn("id", $attendanceLabourIds)
+            ->when($request->site_id, function ($q) use ($request) {
+                $q->where("site_id", $request->site_id);
+            })
+            ->orderBy("name")
+            ->get();
 
         return view(
-            'salary.index',
-            compact(
-                'salarySlips',
-                'labours',
-                'month',
-                'year',
-                'sites'
-            )
+            "salary.index",
+            compact("salarySlips", "labours", "month", "year", "sites")
         );
     }
 
     public function generate(Request $request)
     {
         $request->validate([
-            'labour_id' => 'required|exists:labours,id',
-            'month' => 'required|integer|between:1,12',
-            'year' => 'required|integer|min:2000',
+            "labour_id" => "required|exists:labours,id",
+            "month" => "required|integer|between:1,12",
+            "year" => "required|integer|min:2000",
         ]);
 
         $labour = Labour::findOrFail($request->labour_id);
@@ -120,15 +76,15 @@ $attendanceLabourIds = Attendance::whereMonth(
         $year = $request->year;
 
         // Already generated check
-        $existing = SalarySlip::where('labour_id', $labour->id)
-            ->where('month', $month)
-            ->where('year', $year)
+        $existing = SalarySlip::where("labour_id", $labour->id)
+            ->where("month", $month)
+            ->where("year", $year)
             ->first();
 
         if ($existing) {
             return redirect()
-                ->route('salary.show', $existing)
-                ->with('info', 'Salary slip already exists.');
+                ->route("salary.show", $existing)
+                ->with("info", "Salary slip already exists.");
         }
 
         // Attendance
@@ -136,48 +92,32 @@ $attendanceLabourIds = Attendance::whereMonth(
         //     ->whereMonth('date', $month)
         //     ->whereYear('date', $year)
         //     ->get();
-        $attendances = Attendance::where(
-        'labour_id',
-        $labour->id
-    )
-    ->whereMonth(
-        'date',
-        $request->month
-    )
-    ->whereYear(
-        'date',
-        $request->year
-    )
-    ->when(
-        $request->site_id,
-        function ($q) use ($request) {
+        $attendances = Attendance::where("labour_id", $labour->id)
+            ->whereMonth("date", $request->month)
+            ->whereYear("date", $request->year)
+            ->when($request->site_id, function ($q) use ($request) {
+                $q->where(function ($qq) use ($request) {
+                    $qq->where("site_id", $request->site_id)
+                    ->orWhereNull("site_id");
+                });
+            })
+            ->get();
 
-            $q->where(function ($qq) use ($request) {
+        $presentDays = $attendances->where("status", "present")->count();
 
-                $qq->where(
-                    'site_id',
-                    $request->site_id
-                )
+        $halfDays = $attendances->where("status", "half_day")->count();
 
-                ->orWhereNull('site_id');
+        $absentDays = $attendances->where("status", "absent")->count();
 
-            });
-        }
-    )
-    ->get();
+        $weekOffDays = $attendances->where("status", "week_off")->count();
+        // dd( "{{$weekOffDays}} ");
 
-        $presentDays = $attendances->where('status', 'present')->count();
-
-        $halfDays = $attendances->where('status', 'half_day')->count();
-
-        $absentDays = $attendances->where('status', 'absent')->count();
-
-        $paidDays = $presentDays + ($halfDays * 0.5);
+        $paidDays = $presentDays + $halfDays * 0.5 + $weekOffDays;
 
         $daysInMonth = Carbon::createFromDate($year, $month, 1)->daysInMonth;
 
         // Overtime
-        $totalOvertimeHours = $attendances->sum('overtime_hours');
+        $totalOvertimeHours = $attendances->sum("overtime_hours");
 
         $overtimeRate = $labour->overtime_rate ?? 0;
 
@@ -197,10 +137,7 @@ $attendanceLabourIds = Attendance::whereMonth(
 
         $earnedOtherAllowance = ($otherAllowance / $daysInMonth) * $paidDays;
 
-        $earnedSalary =
-            $earnedBasic +
-            $earnedHra +
-            $earnedOtherAllowance;
+        $earnedSalary = $earnedBasic + $earnedHra + $earnedOtherAllowance;
 
         // Gross salary
         $grossSalary = $earnedSalary + $overtimeAmount;
@@ -211,89 +148,89 @@ $attendanceLabourIds = Attendance::whereMonth(
         $pfDeduction = 0;
 
         // Advance deduction
-        $pendingAdvances = Advance::where('labour_id', $labour->id)
-            ->where('is_deducted', false)
+        $pendingAdvances = Advance::where("labour_id", $labour->id)
+            ->where("is_deducted", false)
             ->get();
 
-        $advanceDeduction = $pendingAdvances->sum('amount');
+        $advanceDeduction = $pendingAdvances->sum("amount");
 
         // Total deduction
-        $totalDeduction =
-            $pfDeduction +
-            $advanceDeduction;
+        $totalDeduction = $pfDeduction + $advanceDeduction;
 
         // Net salary
-        $netSalary =
-            $grossSalary -
-            $totalDeduction;
+        $netSalary = $grossSalary - $totalDeduction;
 
         // Create Salary Slip
         $slip = SalarySlip::create([
+            "labour_id" => $labour->id,
 
-            'labour_id' => $labour->id,
+            "month" => $month,
+            "year" => $year,
 
-            'month' => $month,
-            'year' => $year,
+            "total_days" => $daysInMonth,
 
-            'total_days' => $daysInMonth,
+            "present_days" => $presentDays,
+            "half_days" => $halfDays,
+            "absent_days" => $absentDays,
+            "week_off_days" => $weekOffDays,
 
-            'present_days' => $presentDays,
-            'half_days' => $halfDays,
-            'absent_days' => $absentDays,
+            "daily_wage" => $labour->daily_wage,
 
-            'daily_wage' => $labour->daily_wage,
+            "basic_salary" => $basicSalary,
 
-            'basic_salary' => $basicSalary,
+            "overtime_hours" => $totalOvertimeHours,
+            "overtime_rate" => $overtimeRate,
+            "overtime_amount" => $overtimeAmount,
 
-            'overtime_hours' => $totalOvertimeHours,
-            'overtime_rate' => $overtimeRate,
-            'overtime_amount' => $overtimeAmount,
+            "gross_salary" => $grossSalary,
 
-            'gross_salary' => $grossSalary,
+            "pf_percentage" => $labour->pf_percentage,
+            "pf_deduction" => $pfDeduction,
 
-            'pf_percentage' => $labour->pf_percentage,
-            'pf_deduction' => $pfDeduction,
+            "advance_deduction" => $advanceDeduction,
 
-            'advance_deduction' => $advanceDeduction,
+            "other_deduction" => 0,
 
-            'other_deduction' => 0,
+            "total_deduction" => $totalDeduction,
 
-            'total_deduction' => $totalDeduction,
-
-            'net_salary' => $netSalary,
+            "net_salary" => $netSalary,
 
             // Earned fields
-            'earned_basic' => $earnedBasic,
+            "earned_basic" => $earnedBasic,
 
-            'earned_hra' => $earnedHra,
+            "earned_hra" => $earnedHra,
 
-            'earned_other_allowance' => $earnedOtherAllowance,
+            "earned_other_allowance" => $earnedOtherAllowance,
 
-            'earned_salary' => $earnedSalary,
+            "earned_salary" => $earnedSalary,
+
+            'site_id' => $labour->site_id,
+
+            // 'week_off_days' => $labour->
         ]);
 
         // Mark advances deducted
-        Advance::where('labour_id', $labour->id)
-            ->where('is_deducted', false)
+        Advance::where("labour_id", $labour->id)
+            ->where("is_deducted", false)
             ->update([
-                'is_deducted' => true,
+                "is_deducted" => true,
             ]);
 
         return redirect()
-            ->route('salary.show', $slip)
-            ->with('success', 'Salary slip generated successfully.');
+            ->route("salary.show", $slip)
+            ->with("success", "Salary slip generated successfully.");
     }
 
     public function show(SalarySlip $salary)
     {
-        $salary->load('labour');
+        $salary->load("labour");
 
-        return view('salary.show', compact('salary'));
+        return view("salary.show", compact("salary"));
     }
 
     public function pdf(SalarySlip $salary)
     {
-        $salary->load('labour');
+        $salary->load("labour");
         // $pdf = PDF::loadView('salary.pdf', compact('salary'));
         // return $pdf->download('salary-slip-' . $salary->labour->name . '-' . $salary->month . '-' . $salary->year . '.pdf');
     }
@@ -301,75 +238,59 @@ $attendanceLabourIds = Attendance::whereMonth(
     public function destroy(SalarySlip $salary)
     {
         // Unmark advances
-        Advance::where('labour_id', $salary->labour_id)
-            ->whereMonth('updated_at', $salary->month)
-            ->whereYear('updated_at', $salary->year)
-            ->update(['is_deducted' => false]);
+        Advance::where("labour_id", $salary->labour_id)
+            ->whereMonth("updated_at", $salary->month)
+            ->whereYear("updated_at", $salary->year)
+            ->update(["is_deducted" => false]);
 
         $salary->delete();
 
-        return redirect()->route('salary.index')->with('success', 'Salary slip deleted.');
+        return redirect()
+            ->route("salary.index")
+            ->with("success", "Salary slip deleted.");
     }
 
     public function payslip(SalarySlip $salary)
     {
-        $salary->load('labour');
+        $salary->load("labour");
 
-        return view('salary.payslip', compact('salary'));
+        return view("salary.payslip", compact("salary"));
     }
 
-       public function updateDeductions(Request $request, SalarySlip $salary)
-       {
-           // Manual deductions
-           $salary->pf_deduction =
-               $request->pf_deduction ?? 0;
+    public function updateDeductions(Request $request, SalarySlip $salary)
+    {
+        // Manual deductions
+        $salary->pf_deduction = $request->pf_deduction ?? 0;
 
-           $salary->esic_deduction =
-               $request->esic_deduction ?? 0;
+        $salary->esic_deduction = $request->esic_deduction ?? 0;
 
-           $salary->advance_deduction =
-               $request->advance_deduction ?? 0;
+        $salary->advance_deduction = $request->advance_deduction ?? 0;
 
-           $salary->pt_deduction =
-               $request->pt_deduction ?? 0;
+        $salary->pt_deduction = $request->pt_deduction ?? 0;
 
-           $salary->lwf_deduction =
-               $request->lwf_deduction ?? 0;
+        $salary->lwf_deduction = $request->lwf_deduction ?? 0;
 
-           $salary->other_deduction =
-               $request->other_deduction ?? 0;
+        $salary->other_deduction = $request->other_deduction ?? 0;
 
-           // Total deduction
-           $salary->total_deduction =
+        // Total deduction
+        $salary->total_deduction =
+            ($salary->pf_deduction ?? 0) +
+            ($salary->esic_deduction ?? 0) +
+            ($salary->advance_deduction ?? 0) +
+            ($salary->pt_deduction ?? 0) +
+            ($salary->lwf_deduction ?? 0) +
+            ($salary->other_deduction ?? 0);
 
-               ($salary->pf_deduction ?? 0) +
+        // Net salary
+        $salary->net_salary =
+            ($salary->gross_salary ?? 0) - ($salary->total_deduction ?? 0);
 
-               ($salary->esic_deduction ?? 0) +
+        $salary->save();
 
-               ($salary->advance_deduction ?? 0) +
-
-               ($salary->pt_deduction ?? 0) +
-
-               ($salary->lwf_deduction ?? 0) +
-
-               ($salary->other_deduction ?? 0);
-
-           // Net salary
-           $salary->net_salary =
-
-               ($salary->gross_salary ?? 0)
-
-               - ($salary->total_deduction ?? 0);
-
-           $salary->save();
-
-           return redirect()
-           ->route('salary.show', $salary->id)
-           ->with(
-               'success',
-               'Deductions updated successfully.'
-           );
-       }
+        return redirect()
+            ->route("salary.show", $salary->id)
+            ->with("success", "Deductions updated successfully.");
+    }
 
     public function bankStatement(Request $request)
     {
@@ -385,7 +306,7 @@ $attendanceLabourIds = Attendance::whereMonth(
         // $totalAmount = $salaries->sum('net_salary');
 
         // return view( 'salary.bank-statement', compact('salaries','totalAmount','month','year'));
-        dd('shiva');
+        dd("shiva");
     }
 
     public function test(Request $request)
@@ -395,217 +316,156 @@ $attendanceLabourIds = Attendance::whereMonth(
         $year = $request->year ?? now()->year;
 
         // Sites
-        $sites = Site::orderBy('name')->get();
+        $sites = Site::orderBy("name")->get();
 
         // Salary Query
-        $salaryQuery = SalarySlip::with([
-            'labour.site',
-        ])
-        ->where('month', $month)
-        ->where('year', $year);
+        $salaryQuery = SalarySlip::with(["labour.site"])
+            ->where("month", $month)
+            ->where("year", $year);
 
         // Site Filter
-        if ($request->filled('site_id')) {
-            $salaryQuery->whereHas(
-                'labour',
-                function ($q) use ($request) {
-                    $q->where(
-                        'site_id',
-                        $request->site_id
-                    );
-                }
-            );
+        if ($request->filled("site_id")) {
+            $salaryQuery->whereHas("labour", function ($q) use ($request) {
+                $q->where("site_id", $request->site_id);
+            });
         }
 
-        $salarySlips = $salaryQuery
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $salarySlips = $salaryQuery->orderBy("created_at", "desc")->get();
 
         $statement = [];
 
         $totalAmount = 0;
 
         foreach ($salarySlips as $salary) {
-
             $statement[] = [
+                "account_number" => $salary->labour->Account_Number,
 
-                'account_number' => $salary->labour->Account_Number,
+                "name" => $salary->labour->name,
+                "ifsc" => $salary->labour->IFSC,
 
-                'name' => $salary->labour->name,
-                'ifsc' => $salary->labour->IFSC,
-
-                'site' => $salary->labour->site->name ?? '-',
-                'amount' => round($salary->net_salary, 2),
-
+                "site" => $salary->labour->site->name ?? "-",
+                "amount" => round($salary->net_salary, 2),
             ];
 
             $totalAmount += $salary->net_salary;
         }
 
         return view(
-            'salary.bank-statement',
+            "salary.bank-statement",
             compact(
-                'statement',
-                'totalAmount',
-                'month',
-                'year',
-                'sites',
-                'salarySlips'
+                "statement",
+                "totalAmount",
+                "month",
+                "year",
+                "sites",
+                "salarySlips"
             )
         );
     }
 
-public function exportBankStatement(Request $request)
-{
-    $month = $request->month ?? now()->month;
+    public function exportBankStatement(Request $request)
+    {
+        $month = $request->month ?? now()->month;
 
-    $year = $request->year ?? now()->year;
+        $year = $request->year ?? now()->year;
 
-    $salaryQuery = SalarySlip::with([
-        'labour.site',
-    ])
-    ->where('month', $month)
-    ->where('year', $year);
+        $salaryQuery = SalarySlip::with(["labour.site"])
+            ->where("month", $month)
+            ->where("year", $year);
 
-    // Site Filter
-    if ($request->filled('site_id')) {
-        $salaryQuery->whereHas(
-            'labour',
-            function ($q) use ($request) {
-                $q->where(
-                    'site_id',
-                    $request->site_id
-                );
-            }
-        );
-    }
-
-    $salarySlips = $salaryQuery->get();
-
-    $filename =
-        'bank_statement_'.
-        $month.'_'.
-        $year.'.csv';
-
-    $headers = [
-
-        'Content-Type' => 'text/csv',
-
-        'Content-Disposition' => "attachment; filename=$filename",
-    ];
-
-    $callback = function () use ($salarySlips) {
-        $file = fopen('php://output', 'w');
-
-        // Heading
-        fputcsv($file, [
-
-            'Sr No',
-
-            'Type',
-
-            'Account Number',
-
-            'Employee Name',
-
-            'Site',
-
-            'IFSC',
-
-            'Amount',
-        ]);
-
-        $total = 0;
-
-        foreach ($salarySlips as $i => $salary) {
-            fputcsv($file, [
-
-                $i + 1,
-
-                'NEFT',
-
-                $salary->labour->Account_Number,
-
-                $salary->labour->name,
-
-                $salary->labour->site->name ?? '-',
-
-                $salary->labour->IFSC,
-
-                round($salary->net_salary, 2),
-            ]);
-
-            $total += $salary->net_salary;
+        // Site Filter
+        if ($request->filled("site_id")) {
+            $salaryQuery->whereHas("labour", function ($q) use ($request) {
+                $q->where("site_id", $request->site_id);
+            });
         }
 
-        // Total Row
-        fputcsv($file, [
+        $salarySlips = $salaryQuery->get();
 
-            '',
+        $filename = "bank_statement_" . $month . "_" . $year . ".csv";
 
-            '',
+        $headers = [
+            "Content-Type" => "text/csv",
 
-            '',
+            "Content-Disposition" => "attachment; filename=$filename",
+        ];
 
-            '',
+        $callback = function () use ($salarySlips) {
+            $file = fopen("php://output", "w");
 
-            '',
+            // Heading
+            fputcsv($file, [
+                "Sr No",
 
-            'TOTAL',
+                "Type",
 
-            round($total, 2),
-        ]);
+                "Account Number",
 
-        fclose($file);
-    };
+                "Employee Name",
 
-    return response()
-        ->stream($callback, 200, $headers);
-}
-public function testwages(Request $request)
-{
-    $month = $request->month ?? now()->month;
+                "Site",
 
-    $year = $request->year ?? now()->year;
+                "IFSC",
 
-    // Sites
-    $sites = Site::orderBy('name')->get();
+                "Amount",
+            ]);
 
-    // Salary Query
-    $salaryQuery = SalarySlip::with([
-        'labour.site'
-    ])
-    ->where('month', $month)
-    ->where('year', $year);
+            $total = 0;
 
-    // Site Filter
-    if ($request->filled('site_id')) {
+            foreach ($salarySlips as $i => $salary) {
+                fputcsv($file, [
+                    $i + 1,
 
-        $salaryQuery->whereHas(
-            'labour',
-            function ($q) use ($request) {
+                    "NEFT",
 
-                $q->where(
-                    'site_id',
-                    $request->site_id
-                );
+                    $salary->labour->Account_Number,
+
+                    $salary->labour->name,
+
+                    $salary->labour->site->name ?? "-",
+
+                    $salary->labour->IFSC,
+
+                    round($salary->net_salary, 2),
+                ]);
+
+                $total += $salary->net_salary;
             }
+
+            // Total Row
+            fputcsv($file, ["", "", "", "", "", "TOTAL", round($total, 2)]);
+
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+    public function testwages(Request $request)
+    {
+        $month = $request->month ?? now()->month;
+
+        $year = $request->year ?? now()->year;
+
+        // Sites
+        $sites = Site::orderBy("name")->get();
+
+        // Salary Query
+        $salaryQuery = SalarySlip::with(["labour.site"])
+            ->where("month", $month)
+            ->where("year", $year);
+
+        // Site Filter
+        if ($request->filled("site_id")) {
+            $salaryQuery->whereHas("labour", function ($q) use ($request) {
+                $q->where("site_id", $request->site_id);
+            });
+        }
+
+        $salarySlips = $salaryQuery->orderBy("created_at", "desc")->get();
+
+        return view(
+            "salary.wages-sheet",
+            compact("salarySlips", "month", "year", "sites")
         );
     }
-
-    $salarySlips = $salaryQuery
-        ->orderBy('created_at', 'desc')
-        ->get();
-
-    return view(
-        'salary.wages-sheet',
-        compact(
-            'salarySlips',
-            'month',
-            'year',
-            'sites'
-        )
-    );
-}
-
 }

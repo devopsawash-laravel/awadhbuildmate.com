@@ -430,7 +430,7 @@
 }
 /* select 2 (STABLE VERSION) */
 
-
+/* 
 .select2-container{
     width:220px !important;
 }
@@ -465,10 +465,128 @@
 .select2-search__field:focus{
     border-color:#f97316 !important;
     box-shadow:none !important;
+} */
+
+/* New addeed */
+/* =========================
+   SELECT2 FIXED ERP STYLE
+========================= */
+
+.select2-container{
+    width:100% !important;
+}
+
+
+/* Main Box */
+.select2-container .select2-selection--single{
+
+    height:44px !important;
+
+    border:1px solid #d1d5db !important;
+
+    border-radius:8px !important;
+
+    background:#fff !important;
+
+    display:flex !important;
+
+    align-items:center !important;
+
+    padding:0 14px !important;
+}
+
+
+/* Selected Text */
+.select2-container--default
+.select2-selection--single
+.select2-selection__rendered{
+
+    line-height:44px !important;
+
+    color:#111827 !important;
+
+    padding-left:0 !important;
+
+    font-size:14px !important;
+}
+
+
+/* Arrow */
+.select2-container--default
+.select2-selection--single
+.select2-selection__arrow{
+
+    height:44px !important;
+
+    right:10px !important;
+}
+
+
+/* Focus */
+.select2-container--default.select2-container--focus
+.select2-selection--single,
+
+.select2-container--default.select2-container--open
+.select2-selection--single{
+
+    border-color:#ea580c !important;
+
+    box-shadow:
+        0 0 0 3px rgba(234,88,12,.12) !important;
+}
+
+
+/* Dropdown */
+.select2-dropdown{
+
+    overflow:hidden !important;
+
+    border-radius:8px !important;
+
+    border:1px solid #ea580c !important;
+}
+
+
+/* Search */
+.select2-search--dropdown{
+
+    padding:10px !important;
+}
+
+
+.select2-search__field{
+
+    border:1px solid #d1d5db !important;
+
+    border-radius:8px !important;
+
+    padding:8px 10px !important;
+
+    outline:none !important;
+}
+
+
+/* Hover Option */
+.select2-container--default
+.select2-results__option--highlighted[aria-selected]{
+
+    background:#ea580c !important;
+
+    color:#fff !important;
+}
+
+
+/* Selected Option */
+.select2-container--default
+.select2-results__option[aria-selected=true]{
+
+    background:#fed7aa !important;
+
+    color:#111827 !important;
 }
 /* select3 */
 
-
+/* CREATE LABOUR CSS FOR PROPER ALIGHNMENT OF BOXES */
     </style>
     @stack('styles')
 </head>

@@ -220,7 +220,7 @@
 @else
 <form method="POST" action="{{ route('attendance.store') }}">
     @csrf
-    <input type="date" id="attendance_date" name="date" value="{{ $date }}">
+    <input type="hidden" id="attendance_date" name="date" value="{{ $date }}">
 
     <div class="card">
         <div class="card-header">

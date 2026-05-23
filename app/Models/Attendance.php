@@ -9,7 +9,7 @@ class Attendance extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['labour_id', 'date', 'status', 'overtime_hours', 'remarks'];
+    protected $fillable = ['labour_id', 'date', 'status', 'overtime_hours', 'remarks','site_id'];
 
     protected $casts = [
         'date' => 'date',

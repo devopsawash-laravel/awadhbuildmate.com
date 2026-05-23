@@ -342,7 +342,7 @@
 
                     <td>
 
-                        {{ $slip->present_days + ($slip->half_days * 0.5) }}
+                        {{ $slip->present_days + ($slip->half_days * 0.5) + ($slip->week_off_days)}}
 
                     </td>
 
