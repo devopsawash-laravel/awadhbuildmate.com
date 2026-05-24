@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\staff;
+use App\Models\Staff;
 use App\Models\Bank;
 
 class StaffController extends Controller
