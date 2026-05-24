@@ -34,6 +34,7 @@ class LabourSeeder extends Seeder
         'ESIC_Number' => 'ESIC10001',
         'UAN' => '100000000001',
         'bank_id' => 9,
+        'site_id' => 11,
     ],
 
     [
@@ -59,6 +60,7 @@ class LabourSeeder extends Seeder
         'ESIC_Number' => 'ESIC10002',
         'UAN' => '100000000002',
         'bank_id' => 10,
+        'site_id' => 10,
     ],
 
     [
@@ -84,6 +86,7 @@ class LabourSeeder extends Seeder
         'ESIC_Number' => 'ESIC10005',
         'UAN' => '100000000003',
         'bank_id' => 3,
+        'site_id' => 9,
     ],
 
     [
@@ -109,6 +112,7 @@ class LabourSeeder extends Seeder
         'ESIC_Number' => 'ESIC10006',
         'UAN' => '100000000004',
         'bank_id' => 4,
+        'site_id' => 8,
     ],
 
     // [
@@ -159,6 +163,7 @@ class LabourSeeder extends Seeder
         'ESIC_Number' => 'ESIC10008',
         'UAN' => '100000000006',
         'bank_id' => 6,
+        'site_id' => 6,
     ],
 
     [
@@ -184,6 +189,7 @@ class LabourSeeder extends Seeder
         'ESIC_Number' => 'ESIC10009',
         'UAN' => '100000000007',
         'bank_id' => 7,
+        'site_id' => 7,
     ]
 ];
 
