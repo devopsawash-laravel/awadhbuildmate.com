@@ -7,7 +7,8 @@ RUN apt-get update && apt-get install -y \
     curl \
     libpq-dev \
     libzip-dev \
-    && docker-php-ext-install pdo pdo_pgsql zip
+    sqlite3 \
+    && docker-php-ext-install pdo pdo_pgsql pdo_sqlite zip
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
@@ -20,8 +21,6 @@ RUN composer install --no-dev --optimize-autoloader
 RUN chmod -R 777 storage bootstrap/cache
 
 RUN touch database/database.sqlite
-
-RUN php artisan migrate --force
 
 EXPOSE 10000
 
