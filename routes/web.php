@@ -8,7 +8,7 @@ use App\Http\Controllers\AdvanceController;
 use Illuminate\Support\Facades\Route;
 // use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\admin\Logincontroller;
-use App\Http\Controllers\Sitecontroller;
+use App\Http\Controllers\SiteController;
 
 
 // Route::get('/login', function () {
