@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Attendance;
 use App\Models\Labour;
-use Illuminate\Http\Request;
+use Illuminate\Http\Request;    
 use Carbon\Carbon;
 use App\Models\Site;
 
