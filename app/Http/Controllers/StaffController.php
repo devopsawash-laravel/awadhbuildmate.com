@@ -15,7 +15,7 @@ class StaffController extends Controller
      */
     public function index(Request $request)
     {
-        $q = staff::query();
+        $q = Staff::query();
         if ($request->filled('category')) {
             $q->where('category', $request->category);
         }
