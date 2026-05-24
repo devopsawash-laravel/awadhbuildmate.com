@@ -208,7 +208,7 @@
                     {{-- <td>₹{{ number_format($labour->overtime_rate, 0) }}</td> --}}
                     <td> {{ $labour->site->name ?? '—' }}</td>
                     <!-- <td>{{ $labour->pf_percentage }}%</td> -->
-                     <td>{{ $overtime_hours }} hrs</td>
+                     <td>{{ $labour->overtime_hours }} hrs</td>
                     {{-- <td>{{ $labour->joining_date->format('d M Y') }}</td> --}}
                     <td>
                        <form method="POST"
