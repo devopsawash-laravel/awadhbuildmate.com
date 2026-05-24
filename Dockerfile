@@ -18,6 +18,7 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
 RUN chmod -R 777 storage bootstrap/cache
+RUN touch database/database.sqlite
 
 EXPOSE 10000
 
