@@ -61,7 +61,7 @@ Route::get('/testservices', [App\Http\Controllers\HomeController::class, 'test']
 Route::get('/testprojects', [App\Http\Controllers\HomeController::class, 'testproject'])->name('website.projects');
 Route::get('/testcontact', [App\Http\Controllers\HomeController::class, 'testcontact'])->name('website.contact');
 Route::get('/testabout', [App\Http\Controllers\HomeController::class, 'testabout'])->name('website.about');
-Route::get('/testdashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('admin.dashboard');
+// Route::get('/testdashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('admin.dashboard');
 
 // Testing route for dashboard links
 Route::get('/admin/labours/create', [LabourController::class, 'create'])->name('admin.labours.create');

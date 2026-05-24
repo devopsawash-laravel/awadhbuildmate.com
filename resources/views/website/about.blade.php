@@ -1,4 +1,4 @@
-@extends('layouts.public')
+@extends ('layouts.public')
 @section('title', 'About Us — Awadh Buildmate')
 
 @push('styles')

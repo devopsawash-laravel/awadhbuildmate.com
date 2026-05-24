@@ -305,6 +305,186 @@
             .footer-grid { grid-template-columns: 1fr 1fr; }
             .grid-2 { grid-template-columns: 1fr; }
         }
+
+        .mobile-menu-btn {
+    display: none;
+}
+
+/* =========================================
+   MOBILE NAVBAR
+========================================= */
+
+.mobile-menu-btn {
+    display: none;
+}
+
+.mobile-menu {
+    position: fixed;
+    top: 72px;
+    left: 0;
+    width: 100%;
+    background: rgba(10,10,10,0.98);
+    backdrop-filter: blur(16px);
+
+    padding: 24px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    transform: translateY(-120%);
+    transition: 0.4s ease;
+
+    z-index: 999;
+}
+
+.mobile-menu.active {
+    transform: translateY(0);
+}
+
+.mobile-menu a {
+    color: #fff;
+    text-decoration: none;
+
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.mobile-menu-buttons {
+    margin-top: 10px;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 992px) {
+
+    .nav-links {
+        gap: 20px;
+    }
+
+    .section-title {
+        font-size: 60px;
+    }
+
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    .navbar {
+
+        height: 78px;
+
+        padding: 0 16px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    /* HIDE DESKTOP MENU */
+
+    .nav-links {
+        display: none !important;
+    }
+
+    .btn-nav-contact {
+        display: none;
+    }
+
+    /* SHOW HAMBURGER */
+
+    .mobile-menu-btn {
+
+        display: flex;
+
+        width: 44px;
+        height: 44px;
+
+        align-items: center;
+        justify-content: center;
+
+        border: 1px solid rgba(255,255,255,0.12);
+
+        color: #fff;
+
+        font-size: 20px;
+
+        cursor: pointer;
+
+        flex-shrink: 0;
+    }
+
+    /* LOGO */
+
+    .nav-logo {
+        gap: 10px;
+        max-width: 80%;
+    }
+
+    .nav-logo-icon {
+        width: 42px;
+        height: 42px;
+        flex-shrink: 0;
+    }
+
+    .nav-brand {
+        font-size: 20px;
+        letter-spacing: 1px;
+    }
+
+    .nav-tagline {
+        font-size: 8px;
+        letter-spacing: 2px;
+    }
+
+    /* FOOTER */
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+}
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+
+    .nav-brand {
+        font-size: 18px;
+    }
+
+    .nav-tagline {
+        font-size: 7px;
+    }
+
+    .section-title {
+        font-size: 38px;
+    }
+
+}
     </style>
 
     @stack('styles')
@@ -336,20 +516,50 @@
             @endauth
             <a href="{{ route('contact') }}" class="btn-nav-contact">Get Quote</a>
         </div> --}}
-        @auth
+        {{-- @auth --}}
             {{-- Owner is logged in → show Admin Panel link --}}
-            <a href="{{ route('admin.dashboard') }}" class="btn-nav-login">
-                <i class="fas fa-th-large"></i> Admin Panel
-            </a>
-        @else
+            {{-- <a href="{{ route('admin.dashboard') }}" class="btn-nav-login"> --}}
+                {{-- <i class="fas fa-th-large"></i> Admin Panel --}}
+            {{-- </a> --}}
+        {{-- @else --}}
             {{-- Not logged in → go to login page first --}}
-            <a href="{{ route('admin.login') }}" class="btn-nav-login">
-                <i class="fas fa-lock"></i> Owner Login
-            </a>
-        @endauth
+            {{-- <a href="{{ route('admin.login') }}" class="btn-nav-login"> --}}
+                {{-- <i class="fas fa-lock"></i> Owner Login --}}
+            {{-- </a> --}}
+        {{-- @endauth --}}
  
     <a href="{{ route('website.contact') }}" class="btn-nav-contact">Get Quote</a>
+    <!-- MOBILE MENU BUTTON -->
+<div class="mobile-menu-btn" id="mobileMenuBtn">
+    <i class="fas fa-bars"></i>
+</div>
 </nav>
+<!-- MOBILE MENU -->
+
+<div class="mobile-menu" id="mobileMenu">
+
+    <a href="{{ route('home1') }}">Home</a>
+
+    <a href="{{ route('website.services') }}">Services</a>
+
+    <a href="{{ route('website.projects') }}">Projects</a>
+
+    <a href="{{ route('website.about') }}">About</a>
+
+    <a href="{{ route('website.contact') }}">Contact</a>
+
+    <div class="mobile-menu-buttons">
+
+        <a href="{{ route('website.contact') }}"
+           class="btn-nav-contact">
+
+           Get Quote
+
+        </a>
+
+    </div>
+
+</div>
 
 @yield('content')
 
@@ -401,10 +611,46 @@
 </footer>
 
 <script>
+    // const navbar = document.getElementById('navbar');
+    // window.addEventListener('scroll', () => {
+    //     navbar.classList.toggle('scrolled', window.scrollY > 40);
+    // });
+    
+
+    // NAVBAR SCROLL EFFECT
+
     const navbar = document.getElementById('navbar');
+
     window.addEventListener('scroll', () => {
+
         navbar.classList.toggle('scrolled', window.scrollY > 40);
+
     });
+
+    // MOBILE MENU
+
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    mobileBtn.addEventListener('click', () => {
+
+        mobileMenu.classList.toggle('active');
+
+        if (mobileMenu.classList.contains('active')) {
+
+            mobileBtn.innerHTML =
+                '<i class="fas fa-times"></i>';
+
+        } else {
+
+            mobileBtn.innerHTML =
+                '<i class="fas fa-bars"></i>';
+
+        }
+
+    });
+
 </script>
 
 @stack('scripts')

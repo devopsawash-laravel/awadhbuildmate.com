@@ -517,6 +517,255 @@
         font-size: 18px;
     }
 }
+
+
+/* =========================================
+   MOBILE RESPONSIVE DESIGN
+========================================= */
+
+.mobile-menu-btn {
+    display: none;
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(255,255,255,0.1);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #fff;
+    font-size: 18px;
+}
+
+.mobile-menu {
+    position: fixed;
+    top: 72px;
+    left: 0;
+    width: 100%;
+    background: rgba(10,10,10,0.98);
+    backdrop-filter: blur(16px);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    transform: translateY(-120%);
+    transition: 0.4s ease;
+
+    z-index: 999;
+}
+
+.mobile-menu.active {
+    transform: translateY(0);
+}
+
+.mobile-menu a {
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.mobile-menu-buttons {
+    margin-top: 10px;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1024px) {
+
+    .navbar {
+        padding: 0 20px;
+    }
+
+    .nav-links {
+        gap: 20px;
+    }
+
+    .section-title {
+        font-size: 60px;
+    }
+
+    .gallery-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    .navbar {
+        height: 70px;
+        padding: 0 16px;
+    }
+
+    .nav-links,
+    .nav-cta {
+        display: none;
+    }
+
+    .mobile-menu-btn {
+        display: flex;
+    }
+
+    .nav-brand {
+        font-size: 22px;
+    }
+
+    .nav-tagline {
+        font-size: 9px;
+        letter-spacing: 2px;
+    }
+
+    .nav-logo-icon {
+        width: 46px;
+        height: 46px;
+    }
+
+    .section-title {
+        font-size: 42px;
+        line-height: 1;
+    }
+
+    .section-subtitle {
+        font-size: 14px;
+        line-height: 1.8;
+    }
+
+    .container {
+        padding: 0 20px;
+    }
+
+    .grid-2 {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .btn-primary,
+    .btn-outline {
+        width: 100%;
+        justify-content: center;
+        padding: 15px 20px;
+    }
+
+    .footer {
+        padding: 60px 20px 30px;
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .marquee-section {
+        padding: 80px 0;
+    }
+
+    .marquee-item {
+        width: 260px;
+        height: 190px;
+        margin-right: 16px;
+    }
+
+    .marquee-item span {
+        font-size: 18px;
+        left: 16px;
+        bottom: 16px;
+    }
+
+    .section-tag {
+        font-size: 10px;
+        letter-spacing: 3px;
+    }
+}
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 480px) {
+
+    .nav-brand {
+        font-size: 18px;
+    }
+
+    .nav-tagline {
+        font-size: 8px;
+    }
+
+    .section-title {
+        font-size: 34px;
+    }
+
+    .section-subtitle {
+        font-size: 13px;
+    }
+
+    .btn-primary,
+    .btn-outline {
+        font-size: 13px;
+        letter-spacing: 1px;
+    }
+
+    .marquee-item {
+        width: 220px;
+        height: 160px;
+    }
+
+    .footer-brand {
+        font-size: 24px;
+    }
+}
+.gallery-card,
+.marquee-item {
+    transition: transform 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+}
+
+.gallery-card:hover,
+.marquee-item:hover {
+
+    transform: translateY(-6px);
+
+    border-color: rgba(232,80,10,0.4);
+
+    box-shadow:
+        0 20px 40px rgba(0,0,0,0.35);
+
+}
+.navbar.scrolled {
+
+    background: rgba(5,5,5,0.92);
+
+    backdrop-filter: blur(18px);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.35);
+
+}
+html,
+body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
     </style>
 
     @stack('styles')
@@ -540,14 +789,36 @@
         <li><a href="{{ route('website.contact') }}" class="{{ request()->routeIs('website.contact') ? 'active' : '' }}">Contact</a></li>
     </ul>
 
-    <div class="nav-cta">
+    {{-- <div class="nav-cta">
         @auth
             <a href="{{ route('admin.login') }}" class="btn-nav-login"><i class="fas fa-th-large"></i> Admin Panel</a>
         @else
             <a href="{{ route('admin.login.post') }}" class="btn-nav-login"><i class="fas fa-lock"></i> Owner Login</a>
         @endauth
         <a href="{{ route('website.contact') }}" class="btn-nav-contact">Get Quote</a>
+    </div> --}}
+    
+    <!-- MOBILE MENU BUTTON -->
+<div class="mobile-menu-btn" id="mobileMenuBtn">
+    <i class="fas fa-bars"></i>
+</div>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+
+    <a href="{{ route('home1') }}">Home</a>
+    <a href="{{ route('website.services') }}">Services</a>
+    <a href="{{ route('website.projects') }}">Projects</a>
+    <a href="{{ route('website.about') }}">About</a>
+    <a href="{{ route('website.contact') }}">Contact</a>
+
+    <div class="mobile-menu-buttons">
+        <a href="{{ route('website.contact') }}" class="btn-nav-contact">
+            Get Quote
+        </a>
     </div>
+
+</div>
 </nav>
 {{-- Project Gallery --}}
 {{-- <section class="project-gallery">
@@ -616,7 +887,7 @@
         </h2>
 
         <p class="section-subtitle" style="margin-bottom:60px;">
-            Showcasing fabrication, welding, erection and industrial construction excellence across India.
+            Build For Quality and Trust.
         </p>
 
     </div>
@@ -725,7 +996,7 @@
         <div class="footer-grid">
             <div>
                 <div class="footer-brand">Awadh <span class="orange">Buildmate</span></div>
-                <p class="footer-desc">Premier construction company specializing in structural fabrication, erection, and industrial construction across India.</p>
+                <p class="footer-desc">Building durable solutions with a focus on precision, strength, and performance, Trusted for delivering work that meets high standards and client expectations.</p>
                 <div style="display:flex;gap:12px;margin-top:20px;">
                     <a href="#" style="width:36px;height:36px;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--orange)';this.style.color='var(--orange)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)';this.style.color='var(--muted)'"><i class="fab fa-linkedin-in" style="font-size:14px"></i></a>
                     <a href="#" style="width:36px;height:36px;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--orange)';this.style.color='var(--orange)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)';this.style.color='var(--muted)'"><i class="fab fa-instagram" style="font-size:14px"></i></a>
@@ -753,9 +1024,9 @@
             <div>
                 <div class="footer-heading">Contact</div>
                 <ul class="footer-links">
-                    <li><a href="tel:+919876543210"><i class="fas fa-phone" style="color:var(--orange);margin-right:8px;font-size:12px"></i>+91 98765 43210</a></li>
-                    <li><a href="mailto:info@awadhbuildmate.com"><i class="fas fa-envelope" style="color:var(--orange);margin-right:8px;font-size:12px"></i>info@awadhbuildmate.com</a></li>
-                    <li style="color:var(--muted);font-size:14px;line-height:1.6;"><i class="fas fa-map-marker-alt" style="color:var(--orange);margin-right:8px;font-size:12px"></i>Ankleshwar, Gujarat, India</li>
+                    <li><a href="tel:+91 7275502405"><i class="fas fa-phone" style="color:var(--orange);margin-right:8px;font-size:12px"></i>+91 7275502405</a></li>
+                    <li><a href="mailto:awadhbuildmate@gmail.com"><i class="fas fa-envelope" style="color:var(--orange);margin-right:8px;font-size:12px"></i>awadhbuildmate@gmail.com</a></li>
+                    <li style="color:var(--muted);font-size:14px;line-height:1.6;"><i class="fas fa-map-marker-alt" style="color:var(--orange);margin-right:8px;font-size:12px"></i>Vadodara, Gujarat, India</li>
                 </ul>
             </div>
         </div>
@@ -768,10 +1039,30 @@
 </footer>
 
 <script>
+
     const navbar = document.getElementById('navbar');
+
     window.addEventListener('scroll', () => {
         navbar.classList.toggle('scrolled', window.scrollY > 40);
     });
+
+    // MOBILE MENU
+
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    mobileBtn.addEventListener('click', () => {
+
+        mobileMenu.classList.toggle('active');
+
+        if (mobileMenu.classList.contains('active')) {
+            mobileBtn.innerHTML = '<i class="fas fa-times"></i>';
+        } else {
+            mobileBtn.innerHTML = '<i class="fas fa-bars"></i>';
+        }
+
+    });
+
 </script>
 
 @stack('scripts')
