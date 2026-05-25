@@ -94,7 +94,7 @@
             <div>
                 <div class="slip-label">Bank Name</div>
                 <div class="slip-value">
-                    {{ $salary->labour->bank->bank_name ?? '-' }}
+                    {{ $salary->labour->bank->name ?? '-' }}
                 </div>
             </div>
 

@@ -291,7 +291,7 @@
         <label>Bank Name</label>
 
         <select name="bank_id"
-                id="bank_name"
+                id="name"
                 required>
 
             <option value="">
@@ -303,7 +303,7 @@
             <option value="{{ $bank->id }}"
                 {{ old('bank_id') == $bank->id ? 'selected' : '' }}>
 
-                {{ $bank->bank_name }}
+                {{ $bank->name }}
 
             </option>
 
@@ -506,7 +506,7 @@ $(document).ready(function () {
         placeholder: "Select Category"
     });
 
-    $('#bank_name').select2({
+    $('#name').select2({
         placeholder: "Select Bank",
         width: '100%'
     });

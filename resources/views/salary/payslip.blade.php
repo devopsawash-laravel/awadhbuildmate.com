@@ -87,7 +87,7 @@
 
             <tr>
                 <td><strong>Bank Name</strong></td>
-                <td>{{ $salary->labour->bank->bank_name ?? '-' }}</td>
+                <td>{{ $salary->labour->bank->name ?? '-' }}</td>
 
                 <td><strong>Account No.</strong></td>
                 <td>{{ $salary->labour->Account_Number ?? '-' }}</td>

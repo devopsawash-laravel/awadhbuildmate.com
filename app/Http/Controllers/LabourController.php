@@ -77,7 +77,7 @@ class LabourController extends Controller
     public function create()
     {
         // Fetch banks
-        $banks = Bank::orderBy('bank_name')->get();
+        $banks = Bank::orderBy('bank')->get();
         // Last labour
         $lastLabour = Labour::latest('id')->first();
         $nextNumber = 1;
