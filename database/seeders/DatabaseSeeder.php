@@ -12,9 +12,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
 
             BankSeeder::class,
-
             SiteSeeder::class,
-
             LabourSeeder::class,
 
         ]);
