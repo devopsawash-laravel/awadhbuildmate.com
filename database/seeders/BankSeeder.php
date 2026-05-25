@@ -49,7 +49,7 @@ class BankSeeder extends Seeder
         foreach ($banks as $bank) {
 
             Bank::firstOrCreate([
-                'bank_name' => $bank
+                'name' => $bank
             ]);
         }
     }
