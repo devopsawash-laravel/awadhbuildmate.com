@@ -4,6 +4,10 @@ echo "Waiting for PostgreSQL..."
 
 sleep 20
 
+echo "Clearing cache..."
+
+php artisan optimize:clear
+
 echo "Running migrations..."
 
 php artisan migrate --force
@@ -11,10 +15,6 @@ php artisan migrate --force
 echo "Running seeders..."
 
 php artisan db:seed --force
-
-echo "Clearing cache..."
-
-php artisan optimize:clear
 
 echo "Starting Laravel..."
 
