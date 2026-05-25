@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Staff;
 use App\Models\Bank;
+use App\Models\Site;
 
 class StaffController extends Controller
 {
@@ -58,8 +59,10 @@ class StaffController extends Controller
         // Generate Employee ID
         $employeeId = 'EMP-' . str_pad($nextNumber, 3, '0', STR_PAD_LEFT);
 
+        $sites = Site::orderby('name')->get();
+
         // Send to blade
-        return view('staff.create', compact('banks', 'employeeId'));
+        return view('staff.create', compact('banks', 'employeeId', 'sites'));
     }
 
     /**
@@ -95,6 +98,10 @@ class StaffController extends Controller
         'ESIC_Number' => 'nullable|string|max:50',
         'UAN' => 'nullable|string|max:50',
         'bank_id' => 'nullable|exists:banks,id', 
+        'education' => 'nullable|string|max:255',
+        // 'experience' => 'nullable|string|max:255',
+        'experience' => 'nullable|numeric|min:0|max:50',
+        'site_id' => 'nullable|exists:sites,id',
     ]);
 
     Staff::create($validated);

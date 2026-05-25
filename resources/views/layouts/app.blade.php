@@ -1,4 +1,7 @@
 <!DOCTYPE html>
+<button class="sidebar-toggle" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+</button>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -584,6 +587,9 @@
 
     color:#111827 !important;
 }
+
+
+
 /* select3 */
 
 /* CREATE LABOUR CSS FOR PROPER ALIGHNMENT OF BOXES */
@@ -712,5 +718,7 @@
 </div>
 
 @stack('scripts')
+
+<div class="sidebar-overlay" onclick="toggleSidebar()"></div>
 </body>
 </html>

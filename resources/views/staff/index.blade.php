@@ -50,78 +50,160 @@
     <div class="table-wrapper">
         <table>
             <thead>
-                <tr>
-                    <th>Employee ID</th>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Phone</th>
-                    <th>Daily Wage</th>
-                    {{-- <th>OT Rate/Hr</th> --}}
-                    <th>PF %</th>
-                    <th>Joining Date</th>
-                    <th>Status</th>
-                    <th>Account no</th>
-                    <th>Pan Card</th>
-                    <th>UAN</th>
-                    <th>Pending Adv.</th>
-                    <th>Actions</th>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>Name</th>
+                        <th>Designation</th>
+                        <th>Site</th>
+                        <th>Education</th>
+                        <th>Experience</th>
+                        <th>Salary</th>
+                        <th>Status</th>
+                        <th>Joining Date</th>
+                        <th>Actions</th>
+                    </tr>
+            </thead>
             </thead>
             <tbody>
-                @forelse($staff as $labour)
-                <tr>
-                    <td><span style="font-family:monospace;font-size:13px;color:var(--text-muted)">{{ $labour->employee_id }}</span></td>
-                    <td><strong>{{ $labour->name }}</strong></td>
-                    <td><span class="badge badge-{{ strtolower($labour->category) }}">{{ $labour->category }}</span></td>
-                    <td>{{ $labour->phone ?? '—' }}</td>
-                    <td>₹{{ number_format($labour->daily_wage, 0) }}</td>
-                    <td>{{ $labour->pf_percentage }}%</td>
-                    {{-- <td>{{ get_overtime_hours }} hrs</td> --}}
-                    <td>{{ $labour->joining_date->format('d M Y') }}</td>
-                    <td>
-                        <span class="badge {{ $labour->status === 'active' ? 'badge-success' : 'badge-danger' }}">
-                            {{ ucfirst($labour->status) }}
-                        </span>
-                    </td>
-                    <td>{{ $labour->Account_Number }}</td>
-                    <td>{{ $labour->Pan_Card }}</td>
-                    <td>{{ $labour->UAN }}</td>
-                    {{-- <td>
-                        @php $pending = $labour->getPendingAdvances(); @endphp
-                        @if($pending > 0)
-                            <span style="color:var(--danger);font-weight:600;">₹{{ number_format($pending, 0) }}</span>
-                        @else
-                            <span class="text-muted">—</span>
-                        @endif
-                    </td> --}}
-                    <td>
-                        <div style="display:flex;gap:5px;">
-                            <a href="{{ route('labours.show', $labour) }}" class="btn btn-sm btn-outline" title="View">
-                                <i class="fas fa-eye"></i>
-                            </a>
-                            <a href="{{ route('labours.edit', $labour) }}" class="btn btn-sm btn-secondary" title="Edit">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <form method="POST" action="{{ route('labours.destroy', $labour) }}" onsubmit="return confirm('Delete this labour?')">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger" title="Delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="11">
-                        <div class="empty-state">
-                            <i class="fas fa-users"></i>
-                            <p>No Staff Found<a href="{{ route('staff.create') }}">Add one</a>.</p>
-                        </div>
-                    </td>
-                </tr>
-                @endforelse
-            </tbody>
+
+@forelse($staff as $member)
+
+<tr>
+
+    {{-- Employee ID --}}
+    <td>
+        <span style="
+            font-family:monospace;
+            font-size:13px;
+            color:var(--text-muted);
+        ">
+            {{ $member->employee_id }}
+        </span>
+    </td>
+
+    {{-- Name --}}
+    <td>
+        <strong>{{ $member->name }}</strong>
+    </td>
+
+    {{-- Designation --}}
+    <td>
+        <span class="badge badge-primary">
+            {{ $member->category }}
+        </span>
+    </td>
+
+    {{-- Site --}}
+    <td>
+        {{ $member->site->name ?? '-' }}
+    </td>
+
+    {{-- Education --}}
+    <td>
+        {{ $member->education ?? '-' }}
+    </td>
+
+    {{-- Experience --}}
+    <td>
+        {{ $member->experience ?? '-' }}
+    </td>
+
+    {{-- Salary --}}
+    <td>
+        ₹{{ number_format($member->total_salary ?? 0, 0) }}
+    </td>
+
+    {{-- Status --}}
+    <td>
+
+        <span class="badge {{ $member->status === 'active'
+            ? 'badge-success'
+            : 'badge-danger' }}">
+
+            {{ ucfirst($member->status) }}
+
+        </span>
+
+    </td>
+
+    {{-- Joining Date --}}
+    <td>
+
+        {{ \Carbon\Carbon::parse($member->joining_date)->format('d M Y') }}
+
+    </td>
+
+    {{-- Actions --}}
+    <td>
+
+        <div style="display:flex;gap:5px;">
+
+            {{-- View --}}
+            <a href="{{ route('staff.show', $member) }}"
+               class="btn btn-sm btn-outline">
+
+                <i class="fas fa-eye"></i>
+
+            </a>
+
+            {{-- Edit --}}
+            <a href="{{ route('staff.edit', $member) }}"
+               class="btn btn-sm btn-secondary">
+
+                <i class="fas fa-edit"></i>
+
+            </a>
+
+            {{-- Delete --}}
+            <form method="POST"
+                  action="{{ route('staff.destroy', $member) }}"
+                  onsubmit="return confirm('Delete this staff member?')">
+
+                @csrf
+                @method('DELETE')
+
+                <button type="submit"
+                        class="btn btn-sm btn-danger">
+
+                    <i class="fas fa-trash"></i>
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </td>
+
+</tr>
+
+@empty
+
+<tr>
+
+    <td colspan="10">
+
+        <div class="empty-state">
+
+            <i class="fas fa-users"></i>
+
+            <p>
+                No Staff Found
+                <a href="{{ route('staff.create') }}">
+                    Add one
+                </a>
+            </p>
+
+        </div>
+
+    </td>
+
+</tr>
+
+@endforelse
+
+</tbody>
         </table>
     </div>
     {{-- @if($lastLabour->hasPages())

@@ -59,6 +59,28 @@
                         required>
                 </div>
 
+                <div class="form-group">
+                    <label>Education</label>
+
+                    <input
+                        type="text"
+                        name="education"
+                        value="{{ old('Education') }}"
+                        required
+                        placeholder="e.g. B.Tech">
+                </div>
+
+                <div class="form-group">
+                    <label>Experience</label>
+
+                    <input
+                        type="text"
+                        name="experience"
+                        value="{{old('Experience')}}"
+                        required
+                        placeholder="e.g. 5 Years">
+                </div>
+
             </div>
 
             {{-- Department & Phone --}}
@@ -133,7 +155,7 @@
                 <i class="fas fa-rupee-sign"></i> Salary Structure
             </div>
 
-            <div class="form-grid-3">
+            <div class="form-grid-4">
 
                  <div class="form-group">
                     <label>Salary (₹) *</label>
@@ -150,7 +172,7 @@
                 </div>
 
                 <!-- Working Days -->
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label>Working Days/Month *</label>
 
                     <select id="working_days" name="working_days" required>
@@ -160,7 +182,49 @@
                             <option value="{{ $i }}">{{ $i }} Days</option>
                         @endfor
                     </select>
-                </div>
+                </div> --}}
+
+                <div class="form-group">
+
+                <label>Salary Month *</label>
+
+                <select id="salary_month" name="salary_month" required>
+
+                    <option value="">Select Month</option>
+
+                    <option value="0">January</option>
+                    <option value="1">February</option>
+                    <option value="2">March</option>
+                    <option value="3">April</option>
+                    <option value="4">May</option>
+                    <option value="5">June</option>
+                    <option value="6">July</option>
+                    <option value="7">August</option>
+                    <option value="8">September</option>
+                    <option value="9">October</option>
+                    <option value="10">November</option>
+                    <option value="11">December</option>
+
+                </select>
+            </div>
+
+            <div class="form-group">
+
+            <label>Year *</label>
+
+            <select id="salary_year" name="salary_year">
+
+                @for($year = date('Y'); $year <= date('Y') + 5; $year++)
+
+                    <option value="{{ $year }}">
+                        {{ $year }}
+                    </option>
+
+                @endfor
+
+            </select>
+
+        </div>
 
                  <!-- Daily Wage -->
                 <div class="form-group">
@@ -205,15 +269,15 @@
                         step="0.01">
                 </div>
 
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label>PF Percentage</label>
 
                     <input
                         type="number"
                         name="pf_percentage"
                         value="{{ old('pf_percentage', 12) }}"
-                        step="0.01">
-                </div>
+                        step="0.01"> --}}
+                {{-- </div> --}}
 
                 <div class="form-group">
                     <label>Status *</label>
@@ -226,6 +290,29 @@
 
                     </select>
                 </div>
+
+               <div class="form-group">
+
+    <label>Site *</label>
+
+    <select name="site_id" id="site_id" required>
+
+        <option value="">Select Site</option>
+
+        @foreach($sites as $site)
+
+            <option value="{{ $site->id }}">
+
+                {{ $site->name }}
+
+            </option>
+
+        @endforeach
+
+    </select>
+
+</div>
+
 
             </div>
 
@@ -452,6 +539,70 @@ $(document).ready(function () {
 
 });
 
+$('#site_id').select2({
+        placeholder: "Select Site",
+        minimumResultsForSearch: Infinity,
+        width: '100%'
+    });
+
+$('#salary_month').select2({
+        placeholder: "Select Month",
+        minimumResultsForSearch: Infinity,
+        width: '100%'
+ });
+
+ $('#salary_year').select2({
+        placeholder: "Select Year",
+        minimumResultsForSearch: Infinity,
+        width: '100%'
+ });
+
+ 
+function calculateDailyWage() {
+
+    let salary =
+        parseFloat($('#total_salary').val()) || 0;
+
+    let month =
+        parseInt($('#salary_month').val());
+
+    let year =
+        parseInt($('#salary_year').val());
+
+    // Check month/year selected
+    if (isNaN(month) || isNaN(year)) {
+
+        $('#daily_wage').val('');
+
+        return;
+    }
+
+    // Get total days in month
+    let totalDays =
+        new Date(year, month + 1, 0).getDate();
+
+    // Calculate
+    let dailyWage = salary / totalDays;
+
+    $('#daily_wage').val(
+        dailyWage.toFixed(2)
+    );
+}
+
+// Events
+$('#total_salary').on('input', calculateDailyWage);
+
+$('#salary_month').on('change', calculateDailyWage);
+
+$('#salary_year').on('change', calculateDailyWage);
+
 </script>
+<style>
+    .form-grid-4{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:16px;
+}
+</style>
 
 @endsection
