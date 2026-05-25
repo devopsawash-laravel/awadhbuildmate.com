@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
             BankSeeder::class,
             SiteSeeder::class,
             LabourSeeder::class,
-
+            // StaffSeeder::class,
         ]);
     }   
 }

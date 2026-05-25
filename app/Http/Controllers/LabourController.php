@@ -77,9 +77,11 @@ class LabourController extends Controller
     public function create()
     {
         // Fetch banks
-        $banks = Bank::orderBy('bank')->get();
+        $banks = Bank::orderBy('name')->get();
+
         // Last labour
         $lastLabour = Labour::latest('id')->first();
+
         $nextNumber = 1;
         if ($lastLabour && $lastLabour->employee_id) {
             $number = (int) str_replace('EMP-', '', $lastLabour->employee_id);
