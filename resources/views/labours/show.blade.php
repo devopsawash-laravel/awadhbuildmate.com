@@ -27,8 +27,7 @@
                 <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Phone</td><td>{{ $labour->phone ?? '—' }}</td></tr>
                 <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Address</td><td>{{ $labour->address ?? '—' }}</td></tr>
                 <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Joining Date</td><td>{{ $labour->joining_date->format('d M Y') }}</td></tr>
-                <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Joining Date</td><td>{{ $labour->joining_date->format('d M Y') }}</td></tr>
-                <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Site</td><td><span class="badge {{ $labour->site->name ?? '-'  }}</span></td></tr>
+                <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Status</td><td><span class="badge {{ $labour->status === 'active' ? 'badge-success' : 'badge-danger' }}">{{ ucfirst($labour->status) }}</span></td></tr>
             </table>
         </div>
     </div>
