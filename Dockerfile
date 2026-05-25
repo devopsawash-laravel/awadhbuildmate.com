@@ -16,11 +16,7 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
-RUN php artisan optimize:clear || true
-
-RUN php artisan storage:link || true
-
-RUN chmod +x start.sh
+RUN chmod +x render-start.sh
 
 EXPOSE 10000
 

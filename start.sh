@@ -1,8 +1,8 @@
 #!/bin/sh
 
-echo "Waiting for database..."
+echo "Waiting for PostgreSQL..."
 
-sleep 15
+sleep 20
 
 echo "Running migrations..."
 
@@ -12,6 +12,10 @@ echo "Running seeders..."
 
 php artisan db:seed --force
 
-echo "Starting Laravel server..."
+echo "Clearing cache..."
+
+php artisan optimize:clear
+
+echo "Starting Laravel..."
 
 php artisan serve --host=0.0.0.0 --port=$PORT
