@@ -158,7 +158,7 @@ class SalaryController extends Controller
         $totalDeduction = $pfDeduction + $advanceDeduction;
 
         // Net salary
-        $netSalary = $grossSalary - $totalDeduction;
+        $netSalary = round($grossSalary - $totalDeduction);
 
         // Create Salary Slip
         $slip = SalarySlip::create([

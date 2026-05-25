@@ -155,7 +155,10 @@
                     // $weekOffDays = $salary->weekOffDays;
 
                     // Final payable days
-                    $finalPayableDays = $paidDays + $otDays;
+                    // $finalPayableDays = ($paidDays + $otDays);
+
+                    // Rounding up total days
+                    $finalPayableDays = floor(($paidDays + $otDays) * 10) / 10;
 
                     // $finalothours = $salary->labour->overtime_hours  * $salary->labour->ot_rate_multiplier;
                     $finalOtHours =
@@ -164,6 +167,8 @@
                     // Logic for calculating OT hours amount based on OT hours and OT rate multiplier
 
                     $lastOT= ($finalOtHours * $salary->labour->ot_rate_multiplier);
+
+                    // $finalDaysPay=($paidDays + $lastOT);
 
                 @endphp
                 <tr>
@@ -411,7 +416,7 @@
 
                                     <td style="padding:12px 8px;text-align:right;font-weight:700;font-size:14px;color:#111827;">
                                         {{-- ₹{{ number_format($salary->net_salary, 2) }} --}}
-                                        ₹{{ number_format($salary->net_salary ?? 0, 2) }}
+                                        ₹{{ number_format($salary->net_salary) }}
                                     </td>
                                 </tr>
                     </tbody>

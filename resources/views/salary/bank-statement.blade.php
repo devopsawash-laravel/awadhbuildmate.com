@@ -243,7 +243,7 @@
                     <td>{{ $item['ifsc'] ?? '-' }}</td>
 
                     <td>
-                        ₹{{ number_format($item['amount'], 2) }}
+                        ₹{{ number_format($item['amount']) }}
                     </td>
                 </tr>
 

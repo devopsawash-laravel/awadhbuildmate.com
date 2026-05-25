@@ -113,17 +113,39 @@
         @php
                 // Paid days
             $paidDays =
-            $salary->present_days + ($salary->half_days * 0.5);
+            $salary->present_days + ($salary->half_days * 0.5) + $salary->week_off_days;
 
-            // Every 6 OT hours = 1 day
-            $otDays = ($salary->overtime_hours ?? 0) / 6;
+            // Site working hours
+                    $workingHoursPerDay =  $salary->labour->working_hours_per_day ?? 8;
 
-            // Final total days
-            $totalDays = $paidDays + $otDays;
+                    // OT multiplier (2x, 1.5x etc.)
+                    $otMultiplier =
+                        $salary->labour->ot_rate_multiplier ?? 1;
 
-             $finalOtHours =
+                    // Effective OT hours
+                    $effectiveOtHours = ($salary->overtime_hours ?? 0) * $otMultiplier;
+
+                    // Convert OT into payable days
+                    // $otDays = round( $effectiveOtHours / $workingHoursPerDay,2 );
+                    
+                    // For removing unnecessory 0's.
+                    $otDays = rtrim(rtrim(number_format($effectiveOtHours / $workingHoursPerDay, 2, '.', ''), '0'), '.');
+
+                       $finalOtHours =
                             ($salary->overtime_hours ?? 0) *
                             ($salary->ot_rate_multiplier ?? 1);
+                    // Logic for calculating OT hours amount based on OT hours and OT rate multiplier
+
+                    $lastOT= ($finalOtHours * $salary->labour->ot_rate_multiplier);
+                    // Every 6 OT hours = 1 day
+                    // $otDays = ($salary->overtime_hours ?? 0) / 6;
+
+                    // Final total days
+                    $totalDays = $paidDays + $otDays;
+
+                    $finalOtHours =
+                                    ($salary->overtime_hours ?? 0) *    
+                                    ($salary->ot_rate_multiplier ?? 1);
                     // Logic for calculating OT hours amount based on OT hours and OT rate multiplier
                     $lastOT= ($finalOtHours * $salary->labour->ot_rate_multiplier);
 
@@ -135,7 +157,7 @@
             <td>{{ $salary->present_days }}</td>
 
             <td><strong>Week Off</strong></td>
-            <td>{{ $salary->week_off ?? 0 }}</td>
+            <td>{{ $salary->week_off_days }}</td>
         </tr>
 
         <tr>
@@ -148,7 +170,7 @@
 
         <tr>
             <td><strong>OT Days</strong></td>
-            <td>{{ number_format($otDays, 1) }}</td>
+            <td>{{ number_format($otDays) }}</td>
 
             <td><strong>Total Days</strong></td>
             <td>{{ number_format($totalDays, 1) }}</td>
@@ -328,7 +350,7 @@
 
                                 <td>
                                     <strong style="color:#16a34a;font-size:18px;">
-                                        ₹{{ number_format($salary->net_salary ?? 0, 2) }}
+                                        ₹{{ number_format($salary->net_salary) }}
                                     </strong>
                                 </td>
                             </tr>
