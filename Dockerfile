@@ -16,7 +16,7 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
-RUN chmod +x render-start.sh
+RUN chmod +x start.sh
 
 EXPOSE 10000
 
