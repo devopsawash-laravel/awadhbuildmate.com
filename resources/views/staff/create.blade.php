@@ -328,7 +328,7 @@
                 <div class="form-group">
                     <label>Bank Name</label>
 
-                    <select name="bank_id" id="bank_name">
+                    <select name="bank_id" id="bank">
 
                         <option value="">Select Bank</option>
 
@@ -481,7 +481,7 @@ $(document).ready(function () {
     });
 
     // Bank
-    $('#bank_name').select2({
+    $('#bank').select2({
         placeholder: "Select Bank",
         width: '100%'
     });
