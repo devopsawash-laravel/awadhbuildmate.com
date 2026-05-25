@@ -338,7 +338,7 @@
                                 value="{{ $bank->id }}"
                                 {{ old('bank_id') == $bank->id ? 'selected' : '' }}>
 
-                                {{ $bank->bank_name }}
+                                {{ $bank->name }}
 
                             </option>
 

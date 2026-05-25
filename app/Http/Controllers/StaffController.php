@@ -42,7 +42,7 @@ class StaffController extends Controller
     public function create()
     {
       // Fetch banks
-        $banks = Bank::orderBy('bank_name')->get();
+        $banks = Bank::orderBy('name')->get();
 
         // Last labour
         $lastLabour = Staff::latest('id')->first();

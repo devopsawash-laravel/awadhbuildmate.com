@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Bank extends Model
 {
     use HasFactory;
-    protected $fillable = ['bank_name'];
+    protected $fillable = ['name'];
 
     public function labours()
     {

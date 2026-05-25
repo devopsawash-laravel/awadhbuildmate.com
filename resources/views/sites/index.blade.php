@@ -207,84 +207,184 @@
 @endpush
 
 <div class="sites-grid">
-    @forelse($sites as $site)
-    @php
-        $totalProjects = $site->projects_count;
-        $totalLabours  = $site->labours_count;
-        $ongoingProj   = $site->projects->where('status', 'ongoing')->count();
-        $timeProgress  = $site->getProgressPercent();
-    @endphp
 
-    <a href="{{ route('sites.show', $site) }}" class="site-card">
-        <div class="site-card-top">
-            <div class="site-icon"><i class="fas fa-map-marker-alt"></i></div>
-            <span class="site-status {{ $site->status }}">
-                <span class="site-status-dot"></span>
-                {{ $site->getStatusLabel() }}
-            </span>
+@forelse($sites as $site)
+
+<a href="{{ route('sites.show', $site) }}" class="site-card">
+
+    {{-- Card Top --}}
+    <div class="site-card-top">
+
+        {{-- Icon --}}
+        <div class="site-icon">
+            <i class="fas fa-map-marker-alt"></i>
         </div>
 
-        <div class="site-card-body">
-            <div class="site-client">{{ $site->client ?? 'Client TBD' }}</div>
-            <div class="site-name">
-                <a href="{{ route('sites.show', $site) }}"
-   style="
-        color:var(--primary);
-        font-weight:600;
-        text-decoration:none;
-   ">
+        {{-- Status --}}
+        <div class="site-status {{ strtolower($site->status) }}">
 
-    {{ $site->name }}
+            <span class="site-status-dot"></span>
+
+            {{ ucfirst($site->status) }}
+
+        </div>
+
+    </div>
+
+    {{-- Card Body --}}
+    <div class="site-card-body">
+
+        {{-- Client --}}
+        <div class="site-client">
+
+            {{ $site->client_name ?? 'Client' }}
+
+        </div>
+
+        {{-- Site Name --}}
+        <div class="site-name">
+
+            {{ $site->name }}
+
+        </div>
+
+        {{-- Location --}}
+        <div class="site-location">
+
+            <i class="fas fa-map-marker-alt"></i>
+
+            {{ $site->location }}
+
+        </div>
+
+        {{-- Progress --}}
+        <div class="site-progress-wrap">
+
+            <div class="site-progress-top">
+
+                <span>
+
+                    <i class="fas fa-calendar-alt"></i>
+
+                    {{ \Carbon\Carbon::parse($site->start_date)->format('M Y') }}
+
+                </span>
+
+                <span>
+
+                    {{ $site->progress ?? 0 }}% time elapsed
+
+                </span>
+
+                <span>
+
+                    {{ \Carbon\Carbon::parse($site->end_date)->format('M Y') }}
+
+                </span>
+
+            </div>
+
+            <div class="site-progress-track">
+
+                <div class="site-progress-fill"
+                     style="width:{{ $site->progress ?? 0 }}%">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {{-- Stats --}}
+    <div class="site-stats">
+
+        {{-- Projects --}}
+        <div class="site-stat">
+
+            <div class="ss-num">
+
+                {{ $site->projects_count ?? 0 }}
+
+            </div>
+
+            <div class="ss-label">
+
+                Projects
+
+            </div>
+
+        </div>
+
+        {{-- Ongoing --}}
+        <div class="site-stat">
+
+            <div class="ss-num">
+
+                {{ $site->ongoing_projects ?? 0 }}
+
+            </div>
+
+            <div class="ss-label">
+
+                Ongoing
+
+            </div>
+
+        </div>
+
+        {{-- Labours --}}
+        <div class="site-stat">
+
+            <div class="ss-num">
+
+                {{ $site->labours_count ?? 0 }}
+
+            </div>
+
+            <div class="ss-label">
+
+                Labours
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {{-- Arrow --}}
+    <div class="site-arrow">
+
+        <i class="fas fa-arrow-right"></i>
+
+    </div>
 
 </a>
-            </div>
-            <div class="site-location">
-                <i class="fas fa-map-pin" style="color:var(--primary);font-size:11px"></i>
-                {{ $site->location }}
-            </div>
 
-            @if($site->start_date && $site->expected_end_date)
-            <div class="site-progress-wrap">
-                <div class="site-progress-top">
-                    <span>
-                        <i class="fas fa-calendar-alt" style="margin-right:3px"></i>
-                        {{ $site->start_date->format('M Y') }}
-                    </span>
-                    <span>{{ $timeProgress }}% time elapsed</span>
-                    <span>{{ $site->expected_end_date->format('M Y') }}</span>
-                </div>
-                <div class="site-progress-track">
-                    <div class="site-progress-fill" style="width:{{ $timeProgress }}%"></div>
-                </div>
-            </div>
-            @endif
-        </div>
+@empty
 
-        <div class="site-stats">
-            <div class="site-stat">
-                <div class="ss-num">{{ $totalProjects }}</div>
-                <div class="ss-label">Projects</div>
-            </div>
-            <div class="site-stat">
-                <div class="ss-num" style="color:{{ $ongoingProj > 0 ? '#10B981' : '#9CA3AF' }}">{{ $ongoingProj }}</div>
-                <div class="ss-label">Ongoing</div>
-            </div>
-            <div class="site-stat">
-                <div class="ss-num">{{ $totalLabours }}</div>
-                <div class="ss-label">Labours</div>
-            </div>
-        </div>
+<div class="empty-sites">
 
-        <div class="site-arrow"><i class="fas fa-arrow-right"></i></div>
-    </a>
-    @empty
+    <i class="fas fa-map-marked-alt"></i>
+
+    <h3>No Sites Found</h3>
+
+    <p>
+        Create your first site to start managing projects.
+    </p>
+
+</div>
+
+@endforelse
+
+</div>
+
     <div class="empty-sites">
         <i class="fas fa-map-marked-alt"></i>
         <p style="font-size:16px;font-weight:600;margin-bottom:8px">No sites added yet</p>
         <p style="font-size:13px;margin-bottom:20px">Add your first construction site to get started.</p>
         <a href="{{ route('sites.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Add First Site</a>
     </div>
-    @endforelse
 </div>
 
 @endsection
