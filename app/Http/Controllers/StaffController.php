@@ -14,26 +14,35 @@ class StaffController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
-        $q = Staff::query();
-        if ($request->filled('category')) {
-            $q->where('category', $request->category);
-        }
-        if ($request->filled('status')) {
-            $q->where('status', $request->status);
-        }
-        if ($request->filled('search')) {
-            $q->where(function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->search . '%')
-                  ->orWhere('employee_id', 'like', '%' . $request->search . '%');
-            });
-        }
+   public function index(Request $request)
+{
+    $q = Staff::with('site');
 
-        $staff = $q->orderBy('name')->paginate(15);
-        return view('staff.index', compact('staff'));
+    if ($request->filled('category')) {
+        $q->where('category', $request->category);
     }
 
+    if ($request->filled('status')) {
+        $q->where('status', $request->status);
+    }
+
+    if ($request->filled('site_id')) {
+        $q->where('site_id', $request->site_id);
+    }
+
+    if ($request->filled('search')) {
+        $q->where(function ($q) use ($request) {
+            $q->where('name', 'like', '%' . $request->search . '%')
+              ->orWhere('employee_id', 'like', '%' . $request->search . '%');
+        });
+    }
+
+    $staff = $q->orderBy('name')->paginate(15);
+
+    $sites = Site::orderBy('name')->get();
+
+    return view('staff.index', compact('staff', 'sites'));
+}
     /**
      * Show the form for creating a new resource.
      *
@@ -153,5 +162,15 @@ class StaffController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function generateStaffSalary()
+    {
+        return view('salary.staff-salary.index');
+    }
+
+    public function salarydashboard()
+    {
+        return view('salary.salarydashboard');
     }
 }

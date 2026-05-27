@@ -5,6 +5,13 @@
 
 @section('content')
 
+@section('content')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <div class="page-header">
     <div>
         <div class="page-title">Daily Attendance</div>
@@ -48,17 +55,17 @@
       ">
 
     {{-- Site --}}
-    <div>
+{{-- <div style="min-width:220px;"> --}}
+<div style="min-width:220px;flex:1;">
+    <label>Site</label>
 
-        <label>Site</label>
+    <select name="site_id" id="site">
 
-        <select name="site_id">
+        <option value="">
+            All Sites
+        </option>
 
-            <option value="">
-                All Sites
-            </option>
-
-            @foreach($sites as $site)
+        @foreach($sites as $site)
 
             <option value="{{ $site->id }}"
                 {{ request('site_id') == $site->id ? 'selected' : '' }}>
@@ -67,14 +74,14 @@
 
             </option>
 
-            @endforeach
+        @endforeach
 
-        </select>
+    </select>
 
-    </div>
+</div>
 
     {{-- Month --}}
-    <div>
+    <div style="min-width:220px;flex:1;">
 
         <label>Month</label>
 
@@ -96,12 +103,12 @@
     </div>
 
     {{-- Year --}}
-    <div>
+    <div style="min-width:110px;flex:1;">
 
         <label>Year</label>
 
         <select name="year" id="year_select">
-
+            <option value=""></option>
             @for($y = date('Y'); $y >= date('Y') - 3; $y--)
 
             <option value="{{ $y }}"
@@ -130,13 +137,9 @@
 
     </div>
 
-    <button type="submit"
-            class="btn btn-secondary">
-
+    <button type="submit" class="btn btn-secondary" id="load">
         <i class="fas fa-search"></i>
-
         Load
-
     </button>
 
 
@@ -494,6 +497,42 @@ document.getElementById('labourSearch')
 
 });
 
+$(document).ready(function(){
+
+    $('#site').select2({
+        placeholder: "Select Site",
+        minimumResultsForSearch: Infinity,
+        allowClear: true,
+        width: '100%'
+    });
+});
+
+// $(document).ready(function(){
+
+//     $('#month_select').select2({
+//         placeholder: "Select Month",
+//         minimumResultsForSearch: Infinity,
+//         // allowClear: true,
+//         width: '100%'
+//     });
+// });
+
+
+// $('#year_select').select2({
+//     placeholder: "Select Year",
+//     minimumResultsForSearch: Infinity,
+//     // allowClear: true,
+//     width: '100%'
+// });
+
+
+
+// $('#attendance_date').select2({
+//     placeholder: "Select Year",
+//     minimumResultsForSearch: Infinity,
+//     // allowClear: true,
+//     width: '100%'
+// });
 </script>
 @endpush
 

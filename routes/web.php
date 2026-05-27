@@ -4,6 +4,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LabourController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\SalaryController;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\StaffSalaryController;
 use App\Http\Controllers\AdvanceController;
 use Illuminate\Support\Facades\Route;
 // use Illuminate\Support\Facades\Auth;
@@ -32,23 +34,30 @@ Route::get('/attendance', [AttendanceController::class, 'index'])->name('attenda
 Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
 Route::get('/attendance/monthly', [AttendanceController::class, 'monthlyReport'])->name('attendance.monthly');
 
-// Salary
+//-------------------------lABOUR SALARY MODULE---------------------------------------------------------------//
+
 Route::get('/salary', [SalaryController::class, 'index'])->name('salary.index');
 Route::post('/salary/generate', [SalaryController::class, 'generate'])->name('salary.generate');
 Route::get('/salary/{salary}', [SalaryController::class, 'show'])->name('salary.show');
 Route::get('/salary/{salary}/pdf', [SalaryController::class, 'pdf'])->name('salary.pdf');
 Route::delete('/salary/{salary}', [SalaryController::class, 'destroy'])->name('salary.destroy');
 
-// Advances
+//------------------------STAFF SALARY MODULE------------------------------------------------------------------//
+
+Route::get('/staff-salary', [StaffController::class, 'generateStaffSalary'])->name('salary.staff-salary.index');
+Route::get('/getdashboard', [StaffSalaryController::class, 'getsalarydashboard'])->name('salarydashboard');
+Route::resource('staff-salary', StaffSalaryController::class);
+Route::post('staff-salary/generate',[StaffSalaryController::class, 'generate'])->name('staff-salary.generate');
+Route::get('staff-salary/{salary}/payslip',[StaffSalaryController::class, 'payslip'])->name('staff-salary.payslip');
+
+
+
+// -------------------------------ADVANCE----------------------------------------------------------------------------//
 Route::post('/advances', [AdvanceController::class, 'store'])->name('advances.store');
 Route::delete('/advances/{advance}', [AdvanceController::class, 'destroy'])->name('advances.destroy');
-Route::put('/advances/{advance}',
-    [AdvanceController::class, 'update'])
-    ->name('advances.update');
+Route::put('/advances/{advance}',[AdvanceController::class, 'update'])->name('advances.update');
+Route::delete('/advances/{advance}',[AdvanceController::class, 'destroy'])->name('advances.destroy');
 
-Route::delete('/advances/{advance}',
-    [AdvanceController::class, 'destroy'])
-    ->name('advances.destroy');
 // Auth::routes();
 
 //Admin Login Route

@@ -17,7 +17,7 @@
         <div class="page-subtitle">Register office and site staff</div>
     </div>
 
-    <a href="{{ route('staff.create') }}" class="btn btn-outline">
+    <a href="{{ route('staff.index') }}" class="btn btn-outline">
         <i class="fas fa-arrow-left"></i> Back
     </a>
 </div>
@@ -112,6 +112,7 @@
                     </select>
                 </div>
 
+                
                 <div class="form-group">
                     <label>Phone</label>
 

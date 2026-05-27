@@ -11,6 +11,177 @@
     <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
+
+.nav-item {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Sliding background animation on hover */
+.nav-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--primary);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-item:hover::before {
+    transform: scaleY(1);
+}
+
+/* Smooth icon rotation on active */
+.nav-item i {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-item.active i {
+    transform: scale(1.1);
+}
+
+/* Text slide animation on active */
+.nav-item {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-item.active {
+    padding-left: 22px;
+}
+
+/* Add subtle pulse to active item */
+@keyframes activePulse {
+    0% {
+        box-shadow: inset 0 0 0 2px rgba(232, 80, 10, 0);
+    }
+    50% {
+        box-shadow: inset 0 0 0 2px rgba(232, 80, 10, 0.3);
+    }
+    100% {
+        box-shadow: inset 0 0 0 2px rgba(232, 80, 10, 0);
+    }
+}
+
+.nav-item.active {
+    animation: activePulse 2s ease-in-out infinite;
+}
+
+/* ==================== PAGE TRANSITION ANIMATION ==================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.content {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* ==================== STAT CARD ANIMATION ==================== */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.stat-card {
+    animation: scaleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.stat-card:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.stat-card:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+.stat-card:nth-child(5) {
+    animation-delay: 0.4s;
+}
+
+/* ==================== BUTTON CLICK ANIMATION ==================== */
+@keyframes buttonPress {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.btn:active {
+    animation: buttonPress 0.2s ease-out;
+}
+
+/* ==================== TABLE ROW ANIMATION ==================== */
+@keyframes slideInRow {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+tbody tr {
+    animation: slideInRow 0.4s ease-out;
+}
+
+tbody tr:nth-child(1) { animation-delay: 0s; }
+tbody tr:nth-child(2) { animation-delay: 0.05s; }
+tbody tr:nth-child(3) { animation-delay: 0.1s; }
+tbody tr:nth-child(4) { animation-delay: 0.15s; }
+tbody tr:nth-child(5) { animation-delay: 0.2s; }
+
+/* ==================== CARD ENTRANCE ANIMATION ==================== */
+@keyframes cardSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: cardSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==================== SMOOTH TRANSITIONS ==================== */
+* {
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+button, a, input, select {
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
         :root {
             --primary: #E8500A;
             --primary-dark: #C2400A;
@@ -588,12 +759,60 @@
     color:#111827 !important;
 }
 
+.site-dropdown{
+    width:100%;
+}
 
+.select2-container{
+    width:100% !important;
+}
+
+
+.select2-container .select2-selection--single{
+    height:42px !important;
+    border:1px solid #f97316 !important;
+    border-radius:10px !important;
+    background:#fff7ed !important;
+
+    display:flex !important;
+    align-items:center !important;
+
+    padding:0 12px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered{
+    color:#9a3412 !important;
+    line-height:40px !important;
+    font-weight:500 !important;
+    padding-left:0 !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow{
+    height:40px !important;
+    right:10px !important;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--single,
+.select2-container--default.select2-container--open .select2-selection--single{
+    border-color:#ea580c !important;
+    box-shadow:0 0 0 3px rgba(249,115,22,0.20) !important;
+}
+
+.select2-dropdown{
+    border:1px solid #f97316 !important;
+    border-radius:10px !important;
+    overflow:hidden !important;
+}
+
+.select2-results__option--highlighted[aria-selected]{
+    background:#f97316 !important;
+    color:#fff !important;
+}
 
 /* select3 */
 
 /* CREATE LABOUR CSS FOR PROPER ALIGHNMENT OF BOXES */
-    </style>
+</style>
     @stack('styles')
 </head>
 <body>
@@ -625,7 +844,7 @@
         </a>
 
         <div class="nav-label" style="margin-top:8px;">Finance</div>
-        <a href="{{ route('salary.index') }}" class="nav-item {{ request()->routeIs('salary.index') ? 'active' : '' }}">
+        <a href="{{ route('salarydashboard') }}" class="nav-item {{ request()->routeIs('salarydashboard.blade') ? 'active' : '' }}">
             <i class="fas fa-file-invoice-dollar"></i> Salary Slips
         </a>
         <div class="nav-label" style="margin-top:8px;">Bank Statement</div>

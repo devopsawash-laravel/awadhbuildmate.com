@@ -169,4 +169,31 @@
     </div>
 </div>
 
+<script>
+
+$(document).ready(function(){
+    $('#site_staff').select2({
+       placeholder: "Select Site",
+        allowClear: true,
+        width: '220px'
+    });
+});
+
+$(document).ready(function(){
+    $('#category_staff').select2({
+       placeholder: "Select Category",
+        allowClear: true,
+        width: '220px'
+    });
+});
+
+$(document).ready(function(){
+    $('#status').select2({
+       placeholder: "Status",
+        allowClear: true,
+        width: '220px'
+    });
+});
+</script>
+
 @endsection

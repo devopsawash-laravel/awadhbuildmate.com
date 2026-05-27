@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'Generate Labour Salary Slip')
-@section('page-title', 'Generate Labour Salary Slip')
+@section('title', 'Generate Staff Salary Slip')
+@section('page-title', 'Generate Staff Salary Slip')
 
 @section('content')
 
 {{-- ───────── PAGE HEADER ───────── --}}
 <div class="ss-page-header">
     <div>
-        <div class="ss-page-subtitle">Labour Payroll</div>
-        <div class="ss-page-title">GENERATE <span class="ss-accent">LABOUR SALARY SLIP</span></div>
+        <div class="ss-page-subtitle">Staff Payroll</div>
+        <div class="ss-page-title">GENERATE <span class="ss-accent">STAFF SALARY SLIP</span></div>
     </div>
     <div class="ss-header-date">
         <i class="fas fa-calendar-alt"></i>
@@ -19,7 +19,7 @@
 
 {{-- ───────── COMBINED FILTER + GENERATE BAR ───────── --}}
 <div class="ss-bar-card">
-    <form method="GET" action="{{ route('salary.index') }}" class="ss-bar-form">
+    <form method="GET" action="{{ route('staff-salary.index') }}" class="ss-bar-form" id="filterForm">
 
         {{-- SITE --}}
         <div class="ss-bar-group">
@@ -42,8 +42,9 @@
             <label class="ss-bar-label">MONTH</label>
             <select name="month" class="ss-bar-select">
                 @for($m = 1; $m <= 12; $m++)
-                    <option value="{{ $m }}" {{ $m == $month ? 'selected' : '' }}>
-                        {{ date('F', mktime(0,0,0,$m,1)) }}
+                    <option value="{{ $m }}"
+                        {{ request('month', now()->month) == $m ? 'selected' : '' }}>
+                        {{ \Carbon\Carbon::create()->month($m)->format('F') }}
                     </option>
                 @endfor
             </select>
@@ -55,8 +56,9 @@
         <div class="ss-bar-group">
             <label class="ss-bar-label">YEAR</label>
             <select name="year" class="ss-bar-select">
-                @for($y = date('Y'); $y >= date('Y') - 3; $y--)
-                    <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>
+                @for($y = now()->year; $y >= 2024; $y--)
+                    <option value="{{ $y }}"
+                        {{ request('year', now()->year) == $y ? 'selected' : '' }}>
                         {{ $y }}
                     </option>
                 @endfor
@@ -74,24 +76,22 @@
 
     </form>
 
-    @if($labours->isNotEmpty())
     <div class="ss-bar-separator"></div>
 
-    {{-- GENERATE (separate POST form, inline) --}}
-    <form action="{{ route('salary.generate') }}" method="POST" class="ss-bar-form ss-gen-form">
+    {{-- GENERATE SLIP (separate POST form, inline) --}}
+    <form action="{{ route('staff-salary.generate') }}" method="POST" class="ss-bar-form ss-gen-form">
         @csrf
-        <input type="hidden" name="month"   value="{{ $month }}">
-        <input type="hidden" name="year"    value="{{ $year }}">
-        <input type="hidden" name="site_id" value="{{ request('site_id') }}">
+        <input type="hidden" name="month" value="{{ request('month', now()->month) }}">
+        <input type="hidden" name="year"  value="{{ request('year',  now()->year)  }}">
 
-        {{-- LABOUR --}}
+        {{-- STAFF --}}
         <div class="ss-bar-group ss-bar-staff">
-            <label class="ss-bar-label">SELECT LABOUR</label>
-            <select name="labour_id" class="ss-bar-select" required>
-                <option value="">— Choose Labour —</option>
-                @foreach($labours as $labour)
-                    <option value="{{ $labour->id }}">
-                        {{ $labour->name }} — {{ $labour->employee_id }} — {{ $labour->site->name ?? 'No Site' }}
+            <label class="ss-bar-label">SELECT STAFF</label>
+            <select name="staff_id" class="ss-bar-select" required>
+                <option value="">— Choose Staff —</option>
+                @foreach($staffs as $staff)
+                    <option value="{{ $staff->id }}">
+                        {{ $staff->name }} ({{ $staff->employee_id }})
                     </option>
                 @endforeach
             </select>
@@ -105,7 +105,6 @@
         </div>
 
     </form>
-    @endif
 </div>
 
 {{-- FORMULA NOTE --}}
@@ -124,23 +123,22 @@
             </div>
             <div class="ss-slips-title">
                 SALARY SLIPS &mdash;
-                {{ date('F', mktime(0,0,0,$month,1)) }} {{ $year }}
+                {{ \Carbon\Carbon::create()->month(request('month', now()->month))->format('F') }}
+                {{ request('year', now()->year) }}
             </div>
         </div>
-        @if($salarySlips->isNotEmpty())
         <div class="ss-total-net">
             TOTAL NET: ₹{{ number_format($salarySlips->sum('net_salary'), 0) }}
         </div>
-        @endif
     </div>
 
     <div class="ss-table-wrap">
         <table class="ss-table">
             <thead>
                 <tr>
-                    <th>LABOUR</th>
+                    <th>STAFF</th>
                     <th>SITE</th>
-                    <th>CATEGORY</th>
+                    <th>DEPARTMENT</th>
                     <th class="col-center">DAYS WORKED</th>
                     <th class="col-num">GROSS</th>
                     <th class="col-num">PF</th>
@@ -150,53 +148,51 @@
                 </tr>
             </thead>
             <tbody>
-                @forelse($salarySlips as $slip)
+                @forelse($salarySlips as $salary)
                 <tr>
 
                     <td>
-                        <div class="ss-emp-name">{{ $slip->labour->name }}</div>
-                        <div class="ss-emp-id">{{ $slip->labour->employee_id }}</div>
+                        <div class="ss-emp-name">{{ $salary->staff->name }}</div>
+                        <div class="ss-emp-id">{{ $salary->staff->employee_id }}</div>
                     </td>
 
-                    <td>{{ $slip->labour->site->name ?? '—' }}</td>
+                    <td>{{ $salary->staff->site->site_name ?? '—' }}</td>
 
-                    <td>{{ $slip->labour->category }}</td>
+                    <td>{{ $salary->staff->department ?? '—' }}</td>
 
-                    <td class="col-center">
-                        {{ $slip->present_days + ($slip->half_days * 0.5) + $slip->week_off_days }}
-                    </td>
+                    <td class="col-center">{{ $salary->present_days }}</td>
 
-                    <td class="col-num">₹{{ number_format($slip->gross_salary, 0) }}</td>
+                    <td class="col-num">₹{{ number_format($salary->gross_salary, 0) }}</td>
 
-                    <td class="col-num ss-deduction">−₹{{ number_format($slip->pf_deduction, 0) }}</td>
+                    <td class="col-num ss-deduction">-₹{{ number_format($salary->pf_deduction, 0) }}</td>
 
-                    <td class="col-num ss-deduction">−₹{{ number_format($slip->advance_deduction, 0) }}</td>
+                    <td class="col-num ss-deduction">-₹{{ number_format($salary->advance_deduction, 0) }}</td>
 
                     <td class="col-num">
-                        <span class="ss-net-badge">₹{{ number_format($slip->net_salary, 0) }}</span>
+                        <span class="ss-net-badge">₹{{ number_format($salary->net_salary, 0) }}</span>
                     </td>
 
                     <td>
                         <div class="ss-actions">
 
-                            <a href="{{ route('salary.show', $slip) }}"
+                            <a href="{{ route('staff-salary.show', $salary->id) }}"
                                class="ss-action-btn ss-btn-view" title="View">
                                 <i class="fas fa-eye"></i>
                             </a>
 
-                            <a href="{{ route('salary.pdf', $slip) }}"
+                            <a href="{{ route('staff-salary.payslip', $salary->id) }}"
                                class="ss-action-btn ss-btn-pdf" title="Download PDF" target="_blank">
                                 <i class="fas fa-file-pdf"></i>
                             </a>
 
-                            <form action="{{ route('salary.destroy', $slip) }}"
-                                  method="POST" style="display:inline;"
-                                  onsubmit="return confirm('Delete this salary slip?')">
+                            <form action="{{ route('staff-salary.destroy', $salary->id) }}"
+                                  method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
                                         class="ss-action-btn ss-btn-delete"
-                                        title="Delete">
+                                        title="Delete"
+                                        onclick="return confirm('Delete this salary slip?')">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </form>
@@ -208,8 +204,8 @@
                 @empty
                 <tr>
                     <td colspan="9" class="ss-empty">
-                        <i class="fas fa-file-invoice"></i>
-                        No salary slips generated for this period.
+                        <i class="fas fa-inbox"></i>
+                        No salary slips generated yet for this period.
                     </td>
                 </tr>
                 @endforelse
@@ -252,7 +248,7 @@
     color: #0f172a;
 }
 
-.ss-accent { color: #ea580c; }
+.ss-accent { color: #2563eb; }
 
 .ss-header-date {
     display: inline-flex;
@@ -271,29 +267,32 @@
     display: flex;
     align-items: flex-end;
     flex-wrap: wrap;
+    gap: 0;
     background: #fff;
     border: 1px solid #e2e8f0;
     border-radius: 10px;
     padding: 16px 20px;
     margin-bottom: 12px;
     box-shadow: 0 1px 3px rgba(0,0,0,.04);
+    column-gap: 0;
     row-gap: 12px;
 }
 
 .ss-bar-form {
     display: flex;
     align-items: flex-end;
-    flex-wrap: wrap;
     gap: 0;
+    flex-wrap: wrap;
 }
 
 .ss-gen-form {
     display: flex;
     align-items: flex-end;
-    flex-wrap: wrap;
     gap: 0;
+    flex-wrap: wrap;
 }
 
+/* vertical separator between the two forms */
 .ss-bar-separator {
     width: 1px;
     height: 48px;
@@ -308,10 +307,14 @@
     flex-direction: column;
     gap: 5px;
     padding: 0 14px;
+    position: relative;
 }
 
+/* first group in each form — no left padding */
 .ss-bar-form .ss-bar-group:first-child,
-.ss-gen-form .ss-bar-group:first-child { padding-left: 0; }
+.ss-gen-form .ss-bar-group:first-child {
+    padding-left: 0;
+}
 
 .ss-bar-group-btn {
     justify-content: flex-end;
@@ -341,12 +344,13 @@
     width: auto;
 }
 .ss-bar-select:focus {
-    border-color: #ea580c;
-    box-shadow: 0 0 0 3px rgba(234,88,12,.1);
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.1);
     background: #fff;
 }
 
-.ss-bar-staff .ss-bar-select { min-width: 260px; }
+/* site dropdown slightly wider since site names can be long */
+.ss-bar-staff .ss-bar-select { min-width: 200px; }
 
 .ss-bar-divider {
     width: 1px;
@@ -354,6 +358,7 @@
     background: #e2e8f0;
     align-self: flex-end;
     flex-shrink: 0;
+    margin-bottom: 0;
 }
 
 /* ─── BAR BUTTONS ─── */
@@ -382,11 +387,11 @@
 .ss-bar-btn-view:hover { background: #f1f5f9; border-color: #94a3b8; }
 
 .ss-bar-btn-generate {
-    background: #ea580c;
+    background: #2563eb;
     color: #fff;
-    border-color: #ea580c;
+    border-color: #2563eb;
 }
-.ss-bar-btn-generate:hover { background: #c2410c; border-color: #c2410c; }
+.ss-bar-btn-generate:hover { background: #1d4ed8; border-color: #1d4ed8; }
 
 /* ─── FORMULA BOX ─── */
 .ss-formula-box {
@@ -394,21 +399,20 @@
     align-items: center;
     gap: 10px;
     padding: 10px 16px;
-    background: #fef0e8;
-    border: 1px solid #fddcc9;
-    border-left: 4px solid #ea580c;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-left: 4px solid #2563eb;
     border-radius: 8px;
     font-size: 12px;
-    color: #a3400f;
+    color: #1e40af;
     margin-bottom: 18px;
 }
-.ss-formula-box i { color: #ea580c; flex-shrink: 0; }
+.ss-formula-box i { color: #2563eb; flex-shrink: 0; }
 
 /* ─── CARD ─── */
 .ss-card {
     background: #fff;
     border: 1px solid #e2e8f0;
-    border-top: 3px solid #ea580c;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 1px 3px rgba(0,0,0,.04);
@@ -419,8 +423,8 @@
     width: 34px;
     height: 34px;
     border-radius: 8px;
-    background: #fef0e8;
-    color: #ea580c;
+    background: #dbeafe;
+    color: #2563eb;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -552,7 +556,7 @@
     color: #94a3b8;
     font-size: 14px;
 }
-.ss-empty i { font-size: 28px; margin-bottom: 10px; display: block; opacity: 0.4; }
+.ss-empty i { font-size: 28px; margin-bottom: 10px; display: block; }
 
 </style>
 @endpush
