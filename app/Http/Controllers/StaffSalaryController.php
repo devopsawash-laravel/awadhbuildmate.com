@@ -77,6 +77,7 @@ class StaffSalaryController extends Controller
     ]);
 
     $staff = Staff::findOrFail($request->staff_id);
+    // dd($staff);
 
     $month = $request->month;
 
