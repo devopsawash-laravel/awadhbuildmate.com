@@ -7,7 +7,7 @@
 
 <div class="page-header">
     <div>
-        <div class="page-title">Staff Registry</div>
+        {{-- <div class="page-title">Staff Registry</div> --}}
         <div class="page-subtitle">Manage all site staff records</div>
     </div>
     <a href="{{ route('staff.create')}}" class="btn btn-primary">
@@ -57,7 +57,7 @@
                         <th>Designation</th>
                         <th>Site</th>
                         <th>Education</th>
-                        <th>Experience</th>
+                        <th>Experience/Y</th>
                         <th>Salary</th>
                         <th>Status</th>
                         <th>Joining Date</th>

@@ -614,7 +614,7 @@
         <a href="{{ route('labours.index') }}" class="nav-item {{ request()->routeIs('labours.*') ? 'active' : '' }}">
             <i class="fas fa-users"></i> Labour Registry
         </a>
-        <a href="{{ route('staff.create') }}" class="nav-item {{ request()->routeIs('Staff.create') ? 'active' : '' }}">
+        <a href="{{ route('staff.index') }}" class="nav-item {{ request()->routeIs('Staff.create') ? 'active' : '' }}">
             <i class="fas fa-users"></i> Staff Registry
         </a>    
         <a href="{{ route('attendance.index') }}" class="nav-item {{ request()->routeIs('attendance.index') ? 'active' : '' }}">

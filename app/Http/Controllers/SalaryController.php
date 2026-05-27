@@ -86,6 +86,7 @@ class SalaryController extends Controller
                 ->route("salary.show", $existing)
                 ->with("info", "Salary slip already exists.");
         }
+        
 
         // Attendance
         // $attendances = Attendance::where('labour_id', $labour->id)

@@ -367,7 +367,9 @@
 
             <option value="Father">Father</option>
             <option value="Mother">Mother</option>
-            <option value="Spouse">Spouse</option>
+            {{-- <option value="Spouse">Spouse</option> --}}
+            <option value="Wife">Wife</option>
+            <option value="Husband">Husband</option>    
             <option value="Son">Son</option>
             <option value="Daughter">Daughter</option>
             <option value="Brother">Brother</option>

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('labours', function (Blueprint $table) {
             $table->String('Nominee_details')->nullable()->after('IFSC');
-            $table->enum('relation', ['Father', 'Mother', 'Spouse', 'Son', 'Daughter', 'Brother', 'Sister', 'Guardian'])->nullable()->after('Nominee_details');
+            $table->enum('relation', ['Father', 'Mother', 'Wife','Husband', 'Son', 'Daughter', 'Brother', 'Sister', 'Guardian'])->nullable()->after('Nominee_details');
         });
     }
 
