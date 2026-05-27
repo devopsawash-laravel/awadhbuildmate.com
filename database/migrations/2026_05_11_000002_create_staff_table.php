@@ -37,7 +37,6 @@ return new class extends Migration
             $table->string('Aadhar_Number')->unique()->nullable();
             $table->string('Pan_Card')->unique()->nullable();
             $table->string('IFSC')->nullable();
-            $table->string('UAN')->unique()->nullable();
             $table->string('ESIC_Number')->unique()->nullable();
             $table->timestamps();
         });
