@@ -21,6 +21,7 @@
 <div class="ss-bar-card">
     <form method="GET" action="{{ route('staff-salary.index') }}" class="ss-bar-form" id="filterForm">
 
+        
         {{-- SITE --}}
         <div class="ss-bar-group">
             <label class="ss-bar-label">SITE</label>
@@ -85,17 +86,74 @@
         <input type="hidden" name="year"  value="{{ request('year',  now()->year)  }}">
 
         {{-- STAFF --}}
-        <div class="ss-bar-group ss-bar-staff">
-            <label class="ss-bar-label">SELECT STAFF</label>
-            <select name="staff_id" class="ss-bar-select" required>
-                <option value="">— Choose Staff —</option>
-                @foreach($staffs as $staff)
-                    <option value="{{ $staff->id }}">
-                        {{ $staff->name }} ({{ $staff->employee_id }})
-                    </option>
-                @endforeach
-            </select>
-        </div>
+{{-- STAFF --}}
+<div class="ss-bar-group ss-bar-staff">
+
+    <label class="ss-bar-label">
+        SELECT STAFF
+    </label>
+
+    <select name="staff_id"
+            id="staff_id"
+            class="ss-bar-select"
+            required>
+
+        <option value="">
+            — Choose Staff —
+        </option>
+
+        @foreach($staffs as $staff)
+
+            <option value="{{ $staff->id }}"
+                    data-working-days="{{ $staff->working_days ?? 30 }}"
+                    data-total-salary="{{ $staff->total_salary ?? 0 }}">
+
+                {{ $staff->name }}
+                ({{ $staff->employee_id }})
+
+            </option>
+
+        @endforeach
+
+    </select>
+
+</div>
+
+<div class="ss-bar-divider"></div>
+
+{{-- PRESENT DAYS --}}
+<div class="ss-bar-group">
+
+    <label class="ss-bar-label">
+        PRESENT DAYS
+    </label>
+
+    <input type="number"
+           name="present_days"
+           id="present_days"
+           class="ss-days-input"
+           min="0"
+           max="31"
+           placeholder="Days"
+           required>
+
+</div>
+
+<div class="ss-bar-divider"></div>
+
+{{-- ESTIMATED SALARY --}}
+<div class="ss-bar-group">
+
+    <label class="ss-bar-label">
+        ESTIMATED SALARY
+    </label>
+
+    <input type="text"
+           id="estimated_salary"
+           class="ss-days-input ss-readonly"
+           readonly>
+
+</div>
 
         {{-- GENERATE --}}
         <div class="ss-bar-group ss-bar-group-btn">
@@ -185,7 +243,8 @@
                                 <i class="fas fa-file-pdf"></i>
                             </a>
 
-                            <form action="{{ route('staff-salary.destroy', $salary->id) }}"
+                            {{-- <form action="{{ route('staff-salary.destroy', $salary->id) }}" --}}
+                                <form action="{{ route('staff-salary.destroy', $salary->id) }}"
                                   method="POST" style="display:inline;">
                                 @csrf
                                 @method('DELETE')
@@ -558,5 +617,108 @@
 }
 .ss-empty i { font-size: 28px; margin-bottom: 10px; display: block; }
 
+.ss-days-input{
+    height:36px;
+    padding:0 10px;
+    border:1px solid #e2e8f0;
+    border-radius:7px;
+    background:#f8fafc;
+    font-size:13px;
+    color:#0f172a;
+    min-width:110px;
+}
+
+.ss-readonly{
+    background:#eff6ff !important;
+    color:#2563eb;
+    font-weight:700;
+}
 </style>
+@push('scripts')
+
+<script>
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const staffSelect =
+        document.getElementById('staff_id');
+
+    const presentDaysInput =
+        document.getElementById('present_days');
+
+    const estimatedSalaryInput =
+        document.getElementById('estimated_salary');
+
+    function calculateEstimatedSalary() {
+
+        let selectedOption =
+            staffSelect.options[
+                staffSelect.selectedIndex
+            ];
+
+        // Monthly Salary
+        let monthlySalary =
+            parseFloat(
+                selectedOption.dataset.totalSalary || 0
+            );
+
+        // Selected Month
+        let selectedMonth =
+            parseInt(
+                document.querySelector(
+                    'select[name="month"]'
+                ).value
+            );
+
+        // Selected Year
+        let selectedYear =
+            parseInt(
+                document.querySelector(
+                    'select[name="year"]'
+                ).value
+            );
+
+        // Total Days In Selected Month
+        let totalDaysInMonth =
+            new Date(
+                selectedYear,
+                selectedMonth,
+                0
+            ).getDate();
+
+        // Present Days
+        let presentDays =
+            parseFloat(
+                presentDaysInput.value || 0
+            );
+
+        // Daily Wage
+        let dailyWage =
+            monthlySalary / totalDaysInMonth;
+
+        // Estimated Salary
+        let estimatedSalary =
+            dailyWage * presentDays;
+
+        // Show Estimated Salary
+        estimatedSalaryInput.value =
+            '₹ ' + estimatedSalary.toFixed(2);
+
+    }
+
+    // Staff change
+    staffSelect.addEventListener(
+        'change',
+        calculateEstimatedSalary
+    );
+
+    // Present days change
+    presentDaysInput.addEventListener(
+        'input',
+        calculateEstimatedSalary
+    );
+
+});
+
+</script>
 @endpush

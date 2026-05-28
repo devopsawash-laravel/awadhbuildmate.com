@@ -111,11 +111,18 @@ class SalaryController extends Controller
         $absentDays = $attendances->where("status", "absent")->count();
 
         $weekOffDays = $attendances->where("status", "week_off")->count();
+
+        $total_sal = $labour->total_salary;
+        $totalworkingdays = $labour->working_days;
+        // dd($total_sal);
+
         // dd( "{{$weekOffDays}} ");
 
         $paidDays = $presentDays + $halfDays * 0.5 + $weekOffDays;
 
-        $daysInMonth = Carbon::createFromDate($year, $month, 1)->daysInMonth;
+        // $daysInMonth = Carbon::createFromDate($year, $month, 1)->daysInMonth;
+        $daysInMonth = $labour->working_days;
+        // dd($presentDays);
 
         // Overtime
         $totalOvertimeHours = $attendances->sum("overtime_hours");
@@ -133,16 +140,19 @@ class SalaryController extends Controller
 
         // Earned salary calculations
         $earnedBasic = ($basicSalary / $daysInMonth) * $paidDays;
+        // $earnedBasic = ($total_sal / $totalworkingdays ) * $paidDays;
 
+        // Grossincome =  total_salary/working_days in month
         $earnedHra = ($hra / $daysInMonth) * $paidDays;
 
         $earnedOtherAllowance = ($otherAllowance / $daysInMonth) * $paidDays;
 
         $earnedSalary = $earnedBasic + $earnedHra + $earnedOtherAllowance;
+        // dd($earnedSalary);
 
         // Gross salary
         $grossSalary = $earnedSalary + $overtimeAmount;
-
+        // dd($grossSalary);
         // PF deduction
         // $pfDeduction =
         //     ($earnedBasic * ($labour->pf_percentage ?? 0)) / 100;

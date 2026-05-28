@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Advance;
-use App\Models\Attendance;
 use App\Models\Staff;
 use App\Models\StaffSalarySlip;
 use App\Models\Site;
@@ -19,120 +18,312 @@ class StaffSalaryController extends Controller
         return view('salary.salarydashboard');
     }
     public function index(Request $request)
-    {
-        $month = $request->get("month", Carbon::now()->month);
+{
+    $month = $request->get('month', now()->month);
 
-        $year = $request->get("year", Carbon::now()->year);
+    $year = $request->get('year', now()->year);
 
-        // Fetch Sites
-        $sites = Site::orderBy("name")->get();
-        // dd($sites);
+    // $siteId = $request->get('site_id');
+    $siteId = $request->filled('site_id') ? $request->site_id : null;
 
-        // Salary Slip Query
-        $salaryQuery = StaffSalarySlip::with(["staff.site"])
-            ->where("month", $month)
-            ->where("year", $year);
+    /*
+    |--------------------------------------------------------------------------
+    | Salary Slips
+    |--------------------------------------------------------------------------
+    */
 
-        // Site Filter
-        if ($request->filled("site_id")) {
-            $salaryQuery->whereHas("staff", function ($q) use ($request) {
-                $q->where("site_id", $request->site_id);
+    $salarySlips = StaffSalarySlip::with(['staff.site'])
+
+        ->when($siteId, function ($query) use ($siteId) {
+
+            $query->whereHas('staff', function ($q) use ($siteId) {
+
+                $q->where('site_id', $siteId);
+
             });
-        }
 
-        $salarySlips = $salaryQuery->orderBy("created_at", "desc")->get();
+        })
 
-        // Active staff Query
-        $labourQuery = Staff::where("status", "active");
+        ->where('month', $month)
 
-        // Site Filter for staff List
-        if ($request->filled("site_id")) {
-            $labourQuery->where("site_id", $request->site_id);
-        }
-        $attendanceLabourIds = Attendance::whereMonth("date", $month)
-            ->whereYear("date", $year)
-            ->pluck("labour_id")
-            ->unique();
-        $staffs = Staff::with("site")
-            ->where("status", "active")
-            ->whereIn("id", $attendanceLabourIds)
-            ->when($request->site_id, function ($q) use ($request) {
-                $q->where("site_id", $request->site_id);
-            })
-            ->orderBy("name")
-            ->get();
+        ->where('year', $year)
 
-        return view(
-            "salary.staff-salary.index",
-            compact("salarySlips", "staffs", "month", "year", "sites")
-        );
-    }
+        ->latest()
 
-    public function generate(Request $request)
+        ->get();
+
+    $staffs = Staff::where('status', 'active')
+
+        ->when($siteId, function ($query) use ($siteId) {
+
+            $query->where('site_id', $siteId);
+
+        })
+
+        // Optional:
+        // Hide already generated staff salary
+        ->whereNotIn('id',
+
+            StaffSalarySlip::where('month', $month)
+
+                ->where('year', $year)
+
+                ->pluck('staff_id')
+
+        )
+
+        ->orderBy('name')
+
+        ->get();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Sites
+    |--------------------------------------------------------------------------
+    */
+
+    $sites = Site::orderBy('name')->get();
+
+    return view(
+        'salary.staff-salary.index',
+        compact(
+            'salarySlips',
+            'staffs',
+            'sites',
+            'month',
+            'year',
+            'siteId'
+        )
+    );
+}
+   public function generate(Request $request)
 {
     $request->validate([
+
         'staff_id' => 'required|exists:staff,id',
+
         'month' => 'required|integer|between:1,12',
+
         'year' => 'required|integer|min:2000',
+
+        'present_days' => 'required|numeric|min:0|max:31',
+
     ]);
 
+    /*
+    |--------------------------------------------------------------------------
+    | Staff Details
+    |--------------------------------------------------------------------------
+    */
+
     $staff = Staff::findOrFail($request->staff_id);
-    // dd($staff);
 
     $month = $request->month;
 
     $year = $request->year;
 
+    $presentDays = $request->present_days;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Existing Salary Check
+    |--------------------------------------------------------------------------
+    */
+
     $existing = StaffSalarySlip::where('staff_id', $staff->id)
+
         ->where('month', $month)
+
         ->where('year', $year)
+
         ->first();
 
     if ($existing) {
+
         return redirect()
+
             ->route('staff-salary.show', $existing)
-            ->with('info', 'Salary slip already exists.');
+
+            ->with(
+                'info',
+                'Salary slip already exists.'
+            );
     }
 
-    $basicSalary = $staff->basic_salary ?? 0;
+    /*
+    |--------------------------------------------------------------------------
+    | Salary Components
+    |--------------------------------------------------------------------------
+    */
 
-    $hra = $staff->hra ?? 0;
+    $basicSalary =
+        $staff->basic_salary ?? 0;
 
-    $otherAllowance = $staff->other_allowance ?? 0;
+    $hra =
+        $staff->hra ?? 0;
 
-    $grossSalary = $basicSalary + $hra + $otherAllowance;
+    $otherAllowance =
+        $staff->other_allowance ?? 0;
 
-    $pfDeduction = ($basicSalary * ($staff->pf_percentage ?? 0)) / 100;
+    /*
+    |--------------------------------------------------------------------------
+    | Monthly Salary
+    |--------------------------------------------------------------------------
+    */
+
+    $monthlySalary =
+        $staff->total_salary ?? (
+            $basicSalary +
+            $hra +
+            $otherAllowance
+        );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Total Days In Selected Month
+    |--------------------------------------------------------------------------
+    */
+
+    $totalDaysInMonth =
+        Carbon::create(
+            $year,
+            $month,
+            1
+        )->daysInMonth;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Daily Wage
+    |--------------------------------------------------------------------------
+    */
+
+    $dailyWage =
+        round(
+            $monthlySalary / $totalDaysInMonth,
+            2
+        );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Gross Salary
+    |--------------------------------------------------------------------------
+    */
+
+    $grossSalary =
+        round(
+            $dailyWage * $presentDays,
+            2
+        );
+
+    /*
+    |--------------------------------------------------------------------------
+    | PF Deduction
+    |--------------------------------------------------------------------------
+    */
+
+    $pfDeduction =
+        round(
+            ($basicSalary * ($staff->pf_percentage ?? 0)) / 100,
+            2
+        );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Other Deductions
+    |--------------------------------------------------------------------------
+    */
+
+    $advanceDeduction = 0;
 
     $otherDeduction = 0;
 
-    $totalDeduction = $pfDeduction + $otherDeduction;
+    $totalDeduction =
+        $pfDeduction +
+        $advanceDeduction +
+        $otherDeduction;
 
-    $netSalary = round($grossSalary - $totalDeduction);
+    /*
+    |--------------------------------------------------------------------------
+    | Net Salary
+    |--------------------------------------------------------------------------
+    */
+
+    $netSalary =
+        round(
+            $grossSalary - $totalDeduction,
+            2
+        );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Create Salary Slip
+    |--------------------------------------------------------------------------
+    */
 
     $slip = StaffSalarySlip::create([
+
         'staff_id' => $staff->id,
-        'month' => $month,
-        'year' => $year,
-        'working_days' => $staff->working_days ?? 26,
-        'paid_days' => $staff->working_days ?? 26,
-        'basic_salary' => $basicSalary,
-        'hra' => $hra,
-        'other_allowance' => $otherAllowance,
-        'gross_salary' => $grossSalary,
-        'pf_deduction' => $pfDeduction,
-        'advance_deduction' => 0,
-        'other_deduction' => $otherDeduction,
-        'total_deduction' => $totalDeduction,
-        'net_salary' => $netSalary,
+
         'site_id' => $staff->site_id,
+
+        'month' => $month,
+
+        'year' => $year,
+
+        'working_days' => $totalDaysInMonth,
+
+        'paid_days' => $presentDays,
+
+        // 'daily_wage' => $dailyWage,
+
+        'basic_salary' => $basicSalary,
+
+        'hra' => $hra,
+
+        'other_allowance' => $otherAllowance,
+
+        'gross_salary' => $grossSalary,
+
+        'pf_deduction' => $pfDeduction,
+
+        'advance_deduction' => $advanceDeduction,
+
+        'other_deduction' => $otherDeduction,
+
+        'total_deduction' => $totalDeduction,
+
+        'net_salary' => $netSalary,
+
     ]);
 
+    /*
+    |--------------------------------------------------------------------------
+    | Redirect
+    |--------------------------------------------------------------------------
+    */
+
     return redirect()
+
         ->route('staff-salary.show', $slip)
-        ->with('success', 'Staff salary generated successfully.');
+
+        ->with(
+            'success',
+            'Staff salary generated successfully.'
+        );
 }
 
+public function show(StaffSalarySlip $salary)
+{
+    $salary->load([
+        'staff',
+        'staff.site'
+    ]);
+
+    return view(
+        'salary.staff-salary.show',
+        compact('salary')
+    );
+}
     public function pdf(StaffSalarySlip $salary)
     {
         $salary->load("staff");
@@ -140,20 +331,20 @@ class StaffSalaryController extends Controller
         // return $pdf->download('salary-slip-' . $salary->staff->name . '-' . $salary->month . '-' . $salary->year . '.pdf');
     }
 
-    public function destroy(StaffSalarySlip $salary)
-    {
-        // Unmark advances
-        Advance::where("labour_id", $salary->labour_id)
-            ->whereMonth("updated_at", $salary->month)
-            ->whereYear("updated_at", $salary->year)
-            ->update(["is_deducted" => false]);
+   public function destroy(int $id)
+{
+    $salary = StaffSalarySlip::findOrFail($id);
 
-        $salary->delete();
+    $salary->delete();
 
-        return redirect()
-            ->route("salary.index")
-            ->with("success", "Salary slip deleted.");
-    }
+    return redirect()
+        ->route('staff-salary.index')
+        ->with(
+            'success',
+            'Salary slip deleted successfully.'
+        );
+}
+
 
     public function payslip(StaffSalarySlip $salary)
     {

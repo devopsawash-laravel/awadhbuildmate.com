@@ -129,9 +129,14 @@
                     // $otDays = round( $effectiveOtHours / $workingHoursPerDay,2 );
                     
                     // For removing unnecessory 0's.
-                    $otDays = rtrim(rtrim(number_format($effectiveOtHours / $workingHoursPerDay, 2, '.', ''), '0'), '.');
+                    // $otDays = rtrim(rtrim(number_format($effectiveOtHours / $workingHoursPerDay, 2, '.', ''), ''), '.');
+                    $otDays = $effectiveOtHours / $workingHoursPerDay;
+                    // dd($otDays);
 
-                       $finalOtHours =
+// $otDays = rtrim(rtrim(sprintf('%.2f', $otDays), '0'), '.');
+                    // $otDays = 
+
+                    $finalOtHours =
                             ($salary->overtime_hours ?? 0) *
                             ($salary->ot_rate_multiplier ?? 1);
                     // Logic for calculating OT hours amount based on OT hours and OT rate multiplier
@@ -170,7 +175,7 @@
 
         <tr>
             <td><strong>OT Days</strong></td>
-            <td>{{ number_format($otDays) }}</td>
+            <td>{{ ($otDays) }}</td>
 
             <td><strong>Total Days</strong></td>
             <td>{{ number_format($totalDays, 1) }}</td>

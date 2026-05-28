@@ -809,7 +809,119 @@ button, a, input, select {
     color:#fff !important;
 }
 
-/* select3 */
+/* =========================================
+   STAFF FORM BLUE SELECT2 THEME
+   (ONLY FOR STAFF MODULE)
+========================================= */
+
+.form-group .select2-container--default
+.select2-selection--single{
+
+    border:1px solid #2563eb !important;
+
+    background:#eff6ff !important;
+}
+
+/* Selected Text */
+.form-group .select2-container--default
+.select2-selection--single
+.select2-selection__rendered{
+
+    color:#1e3a8a !important;
+}
+
+/* Arrow */
+.form-group .select2-container--default
+.select2-selection--single
+.select2-selection__arrow{
+
+    height:42px !important;
+
+    right:10px !important;
+}
+
+/* Focus/Open */
+.form-group .select2-container--default.select2-container--focus
+.select2-selection--single,
+
+.form-group .select2-container--default.select2-container--open
+.select2-selection--single{
+
+    border-color:#2563eb !important;
+
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,.18) !important;
+}
+
+/* Dropdown */
+.form-group .select2-dropdown{
+
+    border:1px solid #2563eb !important;
+
+    border-radius:10px !important;
+}
+
+/* Search Field */
+.form-group .select2-search__field{
+
+    border:1px solid #bfdbfe !important;
+}
+
+/* Hover Option */
+.form-group .select2-results__option--highlighted[aria-selected]{
+
+    background:#2563eb !important;
+
+    color:#fff !important;
+}
+
+/* Selected Option */
+.form-group .select2-results__option[aria-selected=true]{
+
+    background:#dbeafe !important;
+
+    color:#1e3a8a !important;
+}
+
+/* =========================================
+   STAFF FORM SELECT2 BLUE DROPDOWN
+========================================= */
+
+.form-group .select2-container--default .select2-dropdown{
+
+    border:1px solid #2563eb !important;
+
+    border-radius:10px !important;
+
+    overflow:hidden !important;
+}
+
+/* Normal Option */
+.form-group .select2-container--default .select2-results__option{
+
+    background:#fff !important;
+
+    color:#1e293b !important;
+}
+
+/* Hover Option */
+.form-group .select2-container--default
+.select2-results__option--highlighted[aria-selected]{
+
+    background:#2563eb !important;
+
+    color:#fff !important;
+}
+
+/* Selected Option */
+.form-group .select2-container--default
+.select2-results__option[aria-selected=true]{
+
+    background:#dbeafe !important;
+
+    color:#1e3a8a !important;
+}
+
 
 /* CREATE LABOUR CSS FOR PROPER ALIGHNMENT OF BOXES */
 </style>

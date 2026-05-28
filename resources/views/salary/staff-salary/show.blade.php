@@ -61,54 +61,55 @@
 
             <div>
                 <div class="slip-label">Employee Name</div>
-                <div class="slip-value">{{ $salary->labour->name }}</div>
+                <div class="slip-value">{{ $salary->staff->site->name ?? 'N/A' }}</div>
             </div>
 
             <div>
                 <div class="slip-label">Employee ID</div>
-                <div class="slip-value">{{ $salary->labour->employee_id }}</div>
+                <div class="slip-value">{{ $salary->staff->employee_id ?? 'N/A'}}</div>
             </div>
 
             <div>
                 <div class="slip-label">Category</div>
-                <div class="slip-value">{{ $salary->labour->category }}</div>
+                <div class="slip-value">{{ $salary->staff->category ?? 'N/A'}}</div>
             </div>
 
             <div>
                 <div class="slip-label">Date Of Joining</div>
                 <div class="slip-value">
-                    {{ \Carbon\Carbon::parse($salary->labour->joining_date)->format('d M Y') }}
+                    {{ $salary->staff?->joining_date ? \Carbon\Carbon::parse($salary->staff->joining_date)->format('d M Y') : 'N/A'
+}}
                 </div>
             </div>
 
             <div>
                 <div class="slip-label">UAN Number</div>
-                <div class="slip-value">{{ $salary->labour->UAN ?? '-' }}</div>
+                <div class="slip-value">{{ $salary->staff->UAN ?? '-' }}</div>
             </div>
 
             <div>
                 <div class="slip-label">ESIC Number</div>
-                <div class="slip-value">{{ $salary->labour->ESIC_Number ?? '-' }}</div>
+                <div class="slip-value">{{ $salary->staff->ESIC_Number ?? '-' }}</div>
             </div>
 
             <div>
                 <div class="slip-label">Bank Name</div>
                 <div class="slip-value">
-                    {{ $salary->labour->bank->name ?? '-' }}
+                    {{ $salary->staff->bank->name ?? '-' }}
                 </div>
             </div>
 
             <div>
                 <div class="slip-label">Bank A/C No.</div>
                 <div class="slip-value">
-                    {{ $salary->labour->Account_Number ?? '-' }}
+                    {{ $salary->staff->Account_Number ?? '-' }}
                 </div>
             </div>
 
             <div>
                 <div class="slip-label">IFSC Code</div>
                 <div class="slip-value">
-                    {{ $salary->labour->IFSC ?? '-' }}
+                    {{ $salary->staff->IFSC ?? '-' }}
                 </div>
             </div>
 
@@ -136,41 +137,22 @@
             <tbody>
              @php
 
-                $paidDays =
-                    $salary->present_days + ($salary->half_days * 0.5) + $salary->week_off_days;
+                $totalDaysInMonth =
+                    \Carbon\Carbon::create(
+                        $salary->year,
+                        $salary->month,
+                        1
+                    )->daysInMonth;
 
-                    // Site working hours
-                    $workingHoursPerDay =  $salary->labour->working_hours_per_day ?? 8;
+                $monthlySalary = $salary->staff->total_salary ?? 0;
 
-                    // OT multiplier (2x, 1.5x etc.)
-                    $otMultiplier =
-                        $salary->labour->ot_rate_multiplier ?? 1;
+                $dailyWage = $monthlySalary / $totalDaysInMonth;
 
-                    // Effective OT hours
-                    $effectiveOtHours = ($salary->overtime_hours ?? 0) * $otMultiplier;
+                $presentDays = $salary->paid_days ?? 0;
 
-                    // Convert OT into payable days
-                    $otDays = round( $effectiveOtHours / $workingHoursPerDay,2 );
+                $earnedSalary = round( $dailyWage * $presentDays,2);
 
-                    // $weekOffDays = $salary->weekOffDays;
-
-                    // Final payable days
-                    // $finalPayableDays = ($paidDays + $otDays);
-
-                    // Rounding up total days
-                    $finalPayableDays = floor(($paidDays + $otDays) * 10) / 10;
-
-                    // $finalothours = $salary->labour->overtime_hours  * $salary->labour->ot_rate_multiplier;
-                    $finalOtHours =
-                            ($salary->overtime_hours ?? 0) *
-                            ($salary->ot_rate_multiplier ?? 1);
-                    // Logic for calculating OT hours amount based on OT hours and OT rate multiplier
-
-                    $lastOT= ($finalOtHours * $salary->labour->ot_rate_multiplier);
-
-                    // $finalDaysPay=($paidDays + $lastOT);
-
-                @endphp
+            @endphp
                 <tr>
                     <td class="table-data">{{ $salary->present_days }}</td>
                     <td class="table-data">{{ $salary->week_off_days }}</td>
@@ -213,67 +195,83 @@
                     <tbody>
 
                         <tr>
-                            <td class="table-data-left">Basic Salary</td>
+    <td class="table-data-left">Basic Salary</td>
 
-                            <td class="table-data">
-                                ₹{{ number_format($salary->labour->basic_salary ?? 0, 2) }}
-                            </td>
+    <td class="table-data">
+        ₹{{ number_format($salary->staff->basic_salary ?? 0, 2) }}
+    </td>
 
-                            <td class="table-data">
-                                {{-- ₹{{ number_format($salary->basic_salary ?? 0, 2) }} --}}
-                                {{-- ₹{{ number_format($salary->earned_salary ?? 0, 2) }} --}}
-                                {{-----Basic earned Updated----- --}}
-                                ₹{{ number_format($salary->earned_basic ?? 0, 2) }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="table-data-left">HRA</td>
+    <td class="table-data">
+        ₹{{ number_format($salary->earned_basic ?? 0, 2) }}
+    </td>
+</tr>
 
-                            <td class="table-data">
-                                ₹{{ number_format($salary->labour->hra ?? 0, 2) }}
-                            </td>
+<tr>
+    <td class="table-data-left">HRA</td>
 
-                            <td class="table-data">
-                                {{-- ₹{{ number_format($salary->hra ?? 0, 2) }} --}}
-                                {{-- ------Updated HRA--------- --}}
-                                ₹{{ number_format($salary->earned_hra ?? 0, 2) }} 
-                            </td>
-                        </tr>
+    <td class="table-data">
+        ₹{{ number_format($salary->staff->hra ?? 0, 2) }}
+    </td>
 
-                        <tr>
-                            <td class="table-data-left">Other Allowance</td>
+    <td class="table-data">
+        ₹{{ number_format($salary->earned_hra ?? 0, 2) }}
+    </td>
+</tr>
 
-                            <td class="table-data">
-                                ₹{{ number_format($salary->labour->other_allowance ?? 0, 2) }}
-                            </td>
+<tr>
+    <td class="table-data-left">Other Allowance</td>
 
-                            <td class="table-data">
-                                {{-- ₹{{ number_format($salary->other_allowance ?? 0, 2) }} --}}
-                                {{-- Updated Allowance --}}
-                                ₹{{ number_format($salary->earned_other_allowance ?? 0, 2) }}
-                            </td>
-                        </tr>
+    <td class="table-data">
+        ₹{{ number_format($salary->staff->other_allowance ?? 0, 2) }}
+    </td>
 
-                        <tr>
-                            <td class="table-data-left">OT Amount</td>
+    <td class="table-data">
+        ₹{{ number_format($salary->earned_other_allowance ?? 0, 2) }}
+    </td>
+</tr>
 
-                            <td class="table-data">
-                                {{-- ₹{{ number_format($salary->overtime_amount ?? 0, 2) }} --}}
-                            </td>
+<tr>
+    <td class="table-data-left">Present Days</td>
 
-                            <td class="table-data">
-                                ₹{{ number_format($salary->overtime_amount ?? 0, 2) }}
-                            </td>
-                        </tr>
-                    {{-- Updated Actual Earning Details --}}
-                    <tr style="background:#ecfdf5;font-weight:700;">
+    <td class="table-data">
+        {{ $salary->paid_days ?? 0 }}
+    </td>
+
+    <td class="table-data">
+        {{ $salary->paid_days ?? 0 }}
+    </td>
+</tr>
+
+<tr>
+    <td class="table-data-left">Daily Wage</td>
+
+    <td class="table-data">
+        ₹{{ number_format($salary->daily_wage ?? 0, 2) }}
+    </td>
+
+    <td class="table-data">
+        ₹{{ number_format($salary->daily_wage ?? 0, 2) }}
+    </td>
+</tr>
+
+<tr style="background:#ecfdf5;font-weight:700;">
+    <td class="table-data-left">Gross Income</td>
+
+    <td class="table-data">
+        ₹{{ number_format($salary->staff->total_salary ?? 0, 2) }}
+    </td>
+
+    <td class="table-data">
+        ₹{{ number_format($salary->gross_salary ?? 0, 2) }}
+    </td>
+</tr>
                         <td class="table-data-left">Gross Income</td>
 
                         <td class="table-data">
                         ₹{{ number_format(
-                        ($salary->labour->basic_salary ?? 0) +
-                        ($salary->labour->hra ?? 0) +
-                        ($salary->labour->other_allowance ?? 0),2) }}
+                        ($salary->staff->basic_salary ?? 0) +
+                        ($salary->staff->hra ?? 0) +
+                        ($salary->staff->other_allowance ?? 0),2) }}
                         </td>
 
                         <td class="table-data">

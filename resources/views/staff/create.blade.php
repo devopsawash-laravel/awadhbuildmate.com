@@ -457,8 +457,9 @@
 
             <div style="display:flex;gap:10px;margin-top:20px;">
 
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save"></i> Save Staff
+                <button type="submit" class="btn btn-staff">
+                        <i class="fas fa-save"></i>
+                            Save Staff
                 </button>
 
                 <a href="{{ route('staff.create') }}" class="btn btn-secondary">
@@ -478,34 +479,40 @@
 $(document).ready(function () {
 
     // Category
-    $('#category').select2({
-        placeholder: "Select Category",
-        width: '100%'
-    });
+$('#category').select2({
+    placeholder: "Select Category",
+    width: '100%',
+    // dropdownParent: $('.staff-form')
+    dropdownParent: $('#category').parent()
+});
 
     // Bank
-    $('#bank').select2({
-        placeholder: "Select Bank",
-        width: '100%'
-    });
+  $('#bank').select2({
+    placeholder: "Select Bank",
+    width: '100%',
+    dropdownParent: $('#bank').parent()
+});
 
     // Status
-    $('#status').select2({
-        minimumResultsForSearch: Infinity,
-        width: '100%'
-    });
+   $('#status').select2({
+    width: '100%',
+    minimumResultsForSearch: Infinity,
+    dropdownParent: $('#status').parent()
+});
 
-    // Working Days
-    $('#working_days').select2({
-        minimumResultsForSearch: Infinity,
-        width: '100%'
-    });
+// Working Days
+$('#working_days').select2({
+    minimumResultsForSearch: Infinity,
+    width: '100%',
+    dropdownParent: $('#working_days').parent()
+});
 
-    // Nominee Relation
-    $('#nominee_relation').select2({
-        placeholder: "Select Relation",
-        width: '100%'
-    });
+// Nominee Relation
+$('#nominee_relation').select2({
+    placeholder: "Select Relation",
+    width: '100%',
+    dropdownParent: $('#nominee_relation').parent()
+});
 
     // Auto Calculate Daily Wage
     function calculateRates() {
@@ -542,23 +549,29 @@ $(document).ready(function () {
 
 });
 
+// Site
 $('#site_id').select2({
-        placeholder: "Select Site",
-        minimumResultsForSearch: Infinity,
-        width: '100%'
-    });
+    placeholder: "Select Site",
+    minimumResultsForSearch: Infinity,
+    width: '100%',
+    dropdownParent: $('#site_id').parent()
+});
 
+// Salary Month
 $('#salary_month').select2({
-        placeholder: "Select Month",
-        minimumResultsForSearch: Infinity,
-        width: '100%'
- });
+    placeholder: "Select Month",
+    minimumResultsForSearch: Infinity,
+    width: '100%',
+    dropdownParent: $('#salary_month').parent()
+});
 
- $('#salary_year').select2({
-        placeholder: "Select Year",
-        minimumResultsForSearch: Infinity,
-        width: '100%'
- });
+// Salary Year
+$('#salary_year').select2({
+    placeholder: "Select Year",
+    minimumResultsForSearch: Infinity,
+    width: '100%',
+    dropdownParent: $('#salary_year').parent()
+});
 
  
 function calculateDailyWage() {
@@ -605,6 +618,36 @@ $('#salary_year').on('change', calculateDailyWage);
     display:grid;
     grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
     gap:16px;
+}
+
+/* =========================================
+   STAFF BLUE BUTTON
+========================================= */
+
+.btn-staff{
+
+    background:#2563eb;
+
+    color:#fff;
+
+    border:none;
+
+    transition:0.2s ease;
+}
+
+.btn-staff:hover{
+
+    background:#1d4ed8;
+
+    color:#fff;
+
+    transform:translateY(-1px);
+}
+
+.btn-staff:focus{
+
+    box-shadow:
+        0 0 0 3px rgba(37,99,235,.25);
 }
 </style>
 

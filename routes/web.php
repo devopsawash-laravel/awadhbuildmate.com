@@ -49,7 +49,7 @@ Route::get('/getdashboard', [StaffSalaryController::class, 'getsalarydashboard']
 Route::resource('staff-salary', StaffSalaryController::class);
 Route::post('staff-salary/generate',[StaffSalaryController::class, 'generate'])->name('staff-salary.generate');
 Route::get('staff-salary/{salary}/payslip',[StaffSalaryController::class, 'payslip'])->name('staff-salary.payslip');
-
+Route::delete('/staff-salary/{id}',[StaffSalaryController::class, 'destroy'])->name('staff-salary.destroy');
 
 
 // -------------------------------ADVANCE----------------------------------------------------------------------------//
