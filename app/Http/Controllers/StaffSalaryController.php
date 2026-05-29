@@ -138,6 +138,7 @@ class StaffSalaryController extends Controller
     $dailyWage = round($monthlySalary / $totalDaysInMonth,2);
 
     $weekOff = $request->week_off ?? 0;
+    $pf_deduction = $request->pf_deduction ?? 0;
 
     $presentSalary = round($presentDays * $dailyWage,2);
 
@@ -151,17 +152,18 @@ class StaffSalaryController extends Controller
 
     $earnedOtherAllowance = round((($staff->other_allowance ?? 0) / $totalDaysInMonth) * ($presentDays + $weekOff),2);
 
-    $pfDeduction =
-        round(
-            ($basicSalary * ($staff->pf_percentage ?? 0)) / 100,
-            2
-        );
+    // $pfDeduction =
+    //     round(
+    //         ($basicSalary * ($staff->pf_percentage ?? 0)) / 100,
+    //         2
+    //     );
 
     /*
     |--------------------------------------------------------------------------
     | Other Deductions
     |--------------------------------------------------------------------------
     */
+
 
     $advanceDeduction = 0;
 
@@ -200,7 +202,7 @@ class StaffSalaryController extends Controller
         'hra' => $hra,
         'other_allowance' => $otherAllowance,
         'gross_salary' => $grossSalary,
-        'pf_deduction' => $pfDeduction,
+        'pf_deduction' => $pf_deduction,
         'advance_deduction' => $advanceDeduction,
         'other_deduction' => $otherDeduction,
         'total_deduction' => $totalDeduction,
@@ -258,7 +260,6 @@ class StaffSalaryController extends Controller
     
     public function updateDeductions(Request $request, StaffSalarySlip $salary)
     {
-        // dd($request->all());
         // Manual deductions
         $salary->pf_deduction = $request->pf_deduction ?? 0;
         $salary->esic_deduction = $request->esic_deduction ?? 0;
@@ -283,6 +284,7 @@ class StaffSalaryController extends Controller
         $salary->net_salary = $grossEarned - $salary->total_deduction;
 
         $salary->save();
+        // dd($salary);
 
 return back()->with('success','Deductions updated successfully.');
 
