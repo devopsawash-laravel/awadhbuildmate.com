@@ -552,7 +552,7 @@
             <div>
                 <div class="section-title red">Deduction Details</div>
 
-                <form action="{{ route('salary.updateDeductions', $salary->id) }}" method="POST">
+                <form action="{{ route('staff-salary.updateDeductions', $salary->id) }}" method="POST">
                     @csrf
                     @method('PUT')
 
@@ -589,8 +589,17 @@
 
                             <tr class="row-total-red">
                                 <td>Total Deductions</td>
-                                <td>{{ number_format($salary->total_deduction ?? 0, 2) }}</td>
-                            </tr>
+                                    <td>
+                                        ₹{{ number_format(
+                                            ($salary->pf_deduction ?? 0) +
+                                            ($salary->esic_deduction ?? 0) +
+                                            ($salary->advance_deduction ?? 0) +
+                                            ($salary->pt_deduction ?? 0) +
+                                            ($salary->lwf_deduction ?? 0) +
+                                            ($salary->other_deduction ?? 0),
+                                        2) }}
+                                    </td>
+                                </tr>
 
                         </tbody>
                     </table>
@@ -613,19 +622,30 @@
     </div>
 
     {{-- Net Payable Banner --}}
-    <div class="net-banner">
-        <div>
-            <div class="nb-label">Net Payable Salary</div>
-            <div class="nb-amount">₹{{ number_format($salary->net_salary ?? 0, 2) }}</div>
-            <div class="nb-words">
-                {{ $salary->getMonthName() }} {{ $salary->year }} — {{ $salary->staff->name ?? '' }}
-            </div>
+<div class="net-banner">
+    <div>
+        <div class="nb-label">
+            Net Payable Salary
         </div>
-        <div class="nb-badge">
-            <i class="fas fa-check-circle"></i>
-            Salary Processed
+
+        <div class="nb-amount">
+             ₹{{ number_format($salary->net_salary ?? 0,2) }}
         </div>
+
+        <div class="nb-words">
+            Employee: {{ $salary->staff->name ?? 'N/A' }} |
+            Month: {{ $salary->getMonthName() }} {{ $salary->year }} |
+            Paid Days: {{ ($salary->paid_days ?? 0) + ($salary->week_off ?? 0) }} |
+            Total Deductions: ₹{{ number_format($salary->total_deduction ?? 0,2) }}
+        </div>
+
     </div>
 
+    <div class="nb-badge">
+        <i class="fas fa-check-circle"></i>
+        Salary Processed
+    </div>
+
+</div>
 </div>
 @endsection

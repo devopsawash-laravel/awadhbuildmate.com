@@ -168,9 +168,12 @@ class StaffSalaryController extends Controller
     $otherDeduction = 0;
 
     $totalDeduction =
-        $pfDeduction +
-        $advanceDeduction +
-        $otherDeduction;
+    ($salary->pf_deduction ?? 0) +
+    ($salary->esic_deduction ?? 0) +
+    ($salary->advance_deduction ?? 0) +
+    ($salary->pt_deduction ?? 0) +
+    ($salary->lwf_deduction ?? 0) +
+    ($salary->other_deduction ?? 0);
 
     /*
     |--------------------------------------------------------------------------
@@ -252,39 +255,39 @@ class StaffSalaryController extends Controller
 
         return view("salary.payslip", compact("salary"));
     }
-
+    
     public function updateDeductions(Request $request, StaffSalarySlip $salary)
     {
+        // dd($request->all());
         // Manual deductions
         $salary->pf_deduction = $request->pf_deduction ?? 0;
-
         $salary->esic_deduction = $request->esic_deduction ?? 0;
-
         $salary->advance_deduction = $request->advance_deduction ?? 0;
-
         $salary->pt_deduction = $request->pt_deduction ?? 0;
-
         $salary->lwf_deduction = $request->lwf_deduction ?? 0;
-
         $salary->other_deduction = $request->other_deduction ?? 0;
 
-        // Total deduction
         $salary->total_deduction =
-            ($salary->pf_deduction ?? 0) +
-            ($salary->esic_deduction ?? 0) +
-            ($salary->advance_deduction ?? 0) +
-            ($salary->pt_deduction ?? 0) +
-            ($salary->lwf_deduction ?? 0) +
-            ($salary->other_deduction ?? 0);
+            $salary->pf_deduction +
+            $salary->esic_deduction +
+            $salary->advance_deduction +
+            $salary->pt_deduction +
+            $salary->lwf_deduction +
+            $salary->other_deduction;
 
-        // Net salary
-        $salary->net_salary =
-            ($salary->gross_salary ?? 0) - ($salary->total_deduction ?? 0);
+        $grossEarned =
+            ($salary->earned_basic ?? 0) +
+            ($salary->earned_hra ?? 0) +
+            ($salary->earned_other_allowance ?? 0);
+
+        $salary->net_salary = $grossEarned - $salary->total_deduction;
 
         $salary->save();
 
+return back()->with('success','Deductions updated successfully.');
+
         return redirect()
-            ->route("salary.show", $salary->id)
+            ->route("staff-salary.show", $salary->id)
             ->with("success", "Deductions updated successfully.");
     }
 
