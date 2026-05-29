@@ -39,6 +39,7 @@ return new class extends Migration
             $table->string('IFSC')->nullable();
             $table->string('UAN')->unique()->nullable();
             $table->string('ESIC_Number')->unique()->nullable();
+            $table->string('relation')->nullable();
             $table->timestamps();
         });
     }
