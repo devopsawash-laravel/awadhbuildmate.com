@@ -10,11 +10,13 @@ class StaffSalarySlip extends Model
     use HasFactory;
     protected $fillable = ['name', 'employee_id', 'category', 'phone', 'working_days', 'total_salary', 'address', 'daily_wage', 
     'basic_salary', 'hra', 'other_allowance', 'pf_percentage','joining_date', 'status', 'Account_Number', 'Aadhar_Number', 
-    'Pan_Card', 'IFSC', 'UAN', 'ESIC_Number','Nominee_details', 'relation','bank_id','site_id','education','experience','staff_id','month','year'];
+    'Pan_Card', 'IFSC', 'UAN', 'ESIC_Number','Nominee_details', 'relation','bank_id','site_id','education','experience','staff_id',
+    'month','year','week_off','paid_days' ,'earned_basic','earned_hra','earned_other_allowance','daily_wage'];
 
     public function staff()
     {
-        return $this->belongsTo(Staff::class);
+        // return $this->belongsTo(Staff::class);
+        return $this->belongsTo(Staff::class, 'staff_id');
     }
 
     public function getMonthName()

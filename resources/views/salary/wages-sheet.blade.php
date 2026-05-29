@@ -158,7 +158,7 @@
                 </div>
 
                 <div class="company-tagline">
-                    Build with Quality and Trust
+                    Made For Quality and Trust
                 </div>
 
                 <div class="company-subtitle">
@@ -455,77 +455,245 @@
 
 <style>
 
-.wages-container{
-    background:#fff;
-    border:1px solid #d1d5db;
-    padding:16px;
+
+:root{
+    --primary:#ea580c;
+    --primary-dark:#c2410c;
+    --primary-light:#fff7ed;
+
+    --text:#1f2937;
+    --muted:#6b7280;
+
+    --border:#d1d5db;
+    --header-bg:#fffaf5;
+    --table-head:#fff3e8;
+
+    --total-bg:#fff7ed;
 }
+
+/* PAGE */
+
+.wages-container{
+    background:#ffffff;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:22px;
+    box-shadow:0 4px 18px rgba(0,0,0,0.06);
+}
+
+/* HEADER */
 
 .company-header{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    margin-bottom:18px;
-    border-bottom:1px solid #d1d5db;
-    padding-bottom:12px;
+    flex-wrap:wrap;
+    gap:20px;
+
+    margin-bottom:22px;
+    padding-bottom:16px;
+
+    border-bottom:2px solid var(--primary-light);
 }
 
 .company-name{
-    font-size:28px;
+    font-size:30px;
     font-weight:800;
-    color:#ea580c;
+    letter-spacing:0.5px;
+    color:var(--primary);
+    line-height:1.1;
 }
 
 .company-tagline{
     font-size:13px;
-    color:#374151;
-    margin-top:2px;
+    color:var(--text);
+    margin-top:4px;
+    font-weight:600;
 }
 
 .company-subtitle{
-    font-size:11px;
-    color:#6b7280;
-    margin-top:4px;
+    font-size:12px;
+    color:var(--muted);
+    margin-top:5px;
+    letter-spacing:0.3px;
 }
 
 .sheet-title{
-    font-size:18px;
-    font-weight:700;
+    font-size:20px;
+    font-weight:800;
+    color:var(--text);
 }
 
 .sheet-month{
-    font-size:12px;
-    color:#6b7280;
-    margin-top:4px;
+    font-size:13px;
+    color:var(--primary-dark);
+    margin-top:6px;
+    font-weight:600;
 }
+
+/* TABLE */
 
 .table-wrapper{
     overflow:auto;
+    border-radius:10px;
 }
 
 .wages-table{
     width:100%;
     border-collapse:collapse;
     font-size:11px;
+    min-width:1500px;
 }
 
-.wages-table th,
+/* TABLE HEADER */
+
+.wages-table thead th{
+    background:var(--table-head);
+    color:var(--text);
+    font-weight:700;
+    border:1px solid #d6d3d1;
+    padding:8px 6px;
+    text-transform:uppercase;
+    letter-spacing:0.3px;
+}
+
+/* TABLE BODY */
+
 .wages-table td{
-    border:1px solid #6b7280;
-    padding:5px;
+    border:1px solid #e5e7eb;
+    padding:7px 6px;
     text-align:center;
     vertical-align:middle;
+    color:#111827;
+    background:#ffffff;
 }
 
-.wages-table th{
-    background:#f3f4f6;
-    font-weight:700;
+/* ROW HOVER */
+
+.wages-table tbody tr:hover{
+    background:#fffaf5;
 }
 
-.total-row{
-    font-weight:700;
-    background:#f9fafb;
+/* ALTERNATE ROWS */
+
+.wages-table tbody tr:nth-child(even){
+    background:#fcfcfc;
 }
+
+/* TOTAL ROW */
+
+.total-row td{
+    font-weight:800;
+    background:var(--total-bg) !important;
+    color:var(--primary-dark);
+    border-top:2px solid var(--primary);
+    font-size:11.5px;
+}
+
+/* BUTTONS */
+
+.btn{
+    border:none;
+    border-radius:8px;
+    padding:10px 16px;
+    font-weight:600;
+    transition:0.25s ease;
+    cursor:pointer;
+}
+
+.btn-primary{
+    background:var(--primary);
+    color:white;
+}
+
+.btn-primary:hover{
+    background:var(--primary-dark);
+    transform:translateY(-1px);
+}
+
+.btn-secondary{
+    background:#374151;
+    color:white;
+}
+
+.btn-secondary:hover{
+    background:#111827;
+    transform:translateY(-1px);
+}
+
+/* FORM ELEMENTS */
+
+select{
+    height:42px;
+    border:1px solid #d1d5db;
+    border-radius:8px;
+    padding:0 12px;
+    background:#fff;
+    color:#111827;
+    font-weight:500;
+    min-width:140px;
+}
+
+label{
+    display:block;
+    margin-bottom:6px;
+    font-size:13px;
+    font-weight:600;
+    color:#374151;
+}
+
+/* LOGO */
+
+.company-header img{
+    background:#fff;
+    border-radius:12px;
+    padding:6px;
+    border:1px solid #fed7aa;
+    box-shadow:0 2px 8px rgba(234,88,12,0.08);
+}
+
+/* SCROLLBAR */
+
+.table-wrapper::-webkit-scrollbar{
+    height:8px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb{
+    background:#fdba74;
+    border-radius:20px;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .company-header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .sheet-title{
+        font-size:16px;
+    }
+
+    .company-name{
+        font-size:24px;
+    }
+
+    .wages-container{
+        padding:14px;
+    }
+
+    .page-header form{
+        width:100%;
+    }
+
+    select{
+        min-width:100%;
+    }
+}
+
+/* PRINT */
 
 @media print{
 
@@ -547,6 +715,23 @@
 
     .wages-container{
         border:none;
+        box-shadow:none;
+        border-radius:0;
+        padding:0;
+    }
+
+    .wages-table{
+        font-size:10px;
+    }
+
+    .wages-table th{
+        background:#f3f4f6 !important;
+        color:#000 !important;
+    }
+
+    .total-row td{
+        background:#f5f5f5 !important;
+        color:#000 !important;
     }
 
     @page{
@@ -556,5 +741,6 @@
 }
 
 </style>
+
 
 @endsection

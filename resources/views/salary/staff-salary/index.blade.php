@@ -98,6 +98,7 @@
             class="ss-bar-select"
             required>
 
+            
         <option value="">
             — Choose Staff —
         </option>
@@ -138,7 +139,17 @@
            required>
 
 </div>
+<div>
+    <label class="form-label">Week Off</label>
 
+    <input type="number"
+           name="week_off"
+           id="week_off"
+           class="form-control"
+           min="0"
+           value="0"
+           placeholder="Week Off">
+</div>
 <div class="ss-bar-divider"></div>
 
 {{-- ESTIMATED SALARY --}}
@@ -218,7 +229,7 @@
 
                     <td>{{ $salary->staff->department ?? '—' }}</td>
 
-                    <td class="col-center">{{ $salary->present_days }}</td>
+                    <td class="col-center">{{  $salary->working_days }} </td>
 
                     <td class="col-num">₹{{ number_format($salary->gross_salary, 0) }}</td>
 
@@ -638,87 +649,58 @@
 
 <script>
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded',function(){
 
-    const staffSelect =
-        document.getElementById('staff_id');
+    const staffSelect=document.getElementById('staff_id');
 
-    const presentDaysInput =
-        document.getElementById('present_days');
+    const presentDaysInput=document.getElementById('present_days');
 
-    const estimatedSalaryInput =
-        document.getElementById('estimated_salary');
+    const weekOffInput=document.getElementById('week_off');
 
-    function calculateEstimatedSalary() {
+    const estimatedSalaryInput=document.getElementById('estimated_salary');
 
-        let selectedOption =
-            staffSelect.options[
-                staffSelect.selectedIndex
-            ];
+    function calculateEstimatedSalary(){
 
-        // Monthly Salary
-        let monthlySalary =
-            parseFloat(
-                selectedOption.dataset.totalSalary || 0
-            );
+        let selectedOption=staffSelect.options[staffSelect.selectedIndex];
 
-        // Selected Month
-        let selectedMonth =
-            parseInt(
-                document.querySelector(
-                    'select[name="month"]'
-                ).value
-            );
+        if(!selectedOption.value){
+            estimatedSalaryInput.value='';
+            return;
+        }
 
-        // Selected Year
-        let selectedYear =
-            parseInt(
-                document.querySelector(
-                    'select[name="year"]'
-                ).value
-            );
+        let monthlySalary=parseFloat(selectedOption.dataset.totalSalary || 0);
 
-        // Total Days In Selected Month
-        let totalDaysInMonth =
-            new Date(
-                selectedYear,
-                selectedMonth,
-                0
-            ).getDate();
+        let selectedMonth=parseInt(document.querySelector('select[name="month"]').value);
 
-        // Present Days
-        let presentDays =
-            parseFloat(
-                presentDaysInput.value || 0
-            );
+        let selectedYear=parseInt(document.querySelector('select[name="year"]').value);
 
-        // Daily Wage
-        let dailyWage =
-            monthlySalary / totalDaysInMonth;
+        let totalDaysInMonth=new Date(selectedYear,selectedMonth,0).getDate();
 
-        // Estimated Salary
-        let estimatedSalary =
-            dailyWage * presentDays;
+        let presentDays=parseFloat(presentDaysInput.value || 0);
 
-        // Show Estimated Salary
-        estimatedSalaryInput.value =
-            '₹ ' + estimatedSalary.toFixed(2);
+        let weekOff=parseFloat(weekOffInput.value || 0);
 
+        let dailyWage=monthlySalary/totalDaysInMonth;
+
+        let presentSalary=presentDays*dailyWage;
+
+        let weekOffSalary=weekOff*dailyWage;
+
+        let estimatedSalary=presentSalary+weekOffSalary;
+
+        estimatedSalaryInput.value='₹ '+estimatedSalary.toFixed(2);
     }
 
-    // Staff change
-    staffSelect.addEventListener(
-        'change',
-        calculateEstimatedSalary
-    );
+    staffSelect.addEventListener('change',calculateEstimatedSalary);
 
-    // Present days change
-    presentDaysInput.addEventListener(
-        'input',
-        calculateEstimatedSalary
-    );
+    presentDaysInput.addEventListener('input',calculateEstimatedSalary);
+
+    weekOffInput.addEventListener('input',calculateEstimatedSalary);
+
+    document.querySelector('select[name="month"]').addEventListener('change',calculateEstimatedSalary);
+
+    document.querySelector('select[name="year"]').addEventListener('change',calculateEstimatedSalary);
 
 });
-
 </script>
 @endpush

@@ -71,7 +71,7 @@ class SalaryController extends Controller
         ]);
 
         $labour = Labour::findOrFail($request->labour_id);
-
+        // $sites = Site::orderBy("name")->get();
         $month = $request->month;
         $year = $request->year;
 

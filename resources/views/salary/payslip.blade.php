@@ -133,7 +133,7 @@
                     $otDays = $effectiveOtHours / $workingHoursPerDay;
                     // dd($otDays);
 
-// $otDays = rtrim(rtrim(sprintf('%.2f', $otDays), '0'), '.');
+                    // $otDays = rtrim(rtrim(sprintf('%.2f', $otDays), '0'), '.');
                     // $otDays = 
 
                     $finalOtHours =
