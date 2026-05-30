@@ -538,10 +538,12 @@
                         <tr class="row-total-green">
                             <td>Gross Income</td>
                             <td>{{ number_format($salary->staff->total_salary ?? 0, 2) }}</td>
-                            <td>{{ number_format(
-                                ($salary->earned_basic ?? 0) +
-                                ($salary->earned_hra ?? 0) +
-                                ($salary->earned_other_allowance ?? 0), 2) }}
+                            <td>
+                                ₹{{ number_format(
+                                    round(($salary->earned_basic ?? 0) +
+                                    ($salary->earned_hra ?? 0) +
+                                    ($salary->earned_other_allowance ?? 0)),
+                                2) }}
                             </td>
                         </tr>
                     </tbody>
@@ -629,7 +631,7 @@
         </div>
 
         <div class="nb-amount">
-             ₹{{ number_format($salary->net_salary ?? 0,2) }}
+             ₹{{ number_format(round($salary->net_salary ?? 0,2)) }}
         </div>
 
         <div class="nb-words">

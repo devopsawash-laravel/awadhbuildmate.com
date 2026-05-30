@@ -122,6 +122,41 @@
 
 <div class="ss-bar-divider"></div>
 
+{{-- TOTAL SALARY --}}
+<div class="ss-bar-group">
+
+    <label class="ss-bar-label">
+        TOTAL SALARY
+    </label>
+
+    <input type="number"
+           name="total_salary"
+           id="total_salary"
+           class="ss-days-input"
+           min="0"
+           placeholder="Salary"
+           required>
+
+</div>
+
+<div class="ss-bar-divider"></div>
+
+{{-- DAILY WAGE --}}
+<div class="ss-bar-group">
+
+    <label class="ss-bar-label">
+        DAILY WAGE
+    </label>
+
+    <input type="text"
+           id="daily_wage"
+           class="ss-days-input ss-readonly"
+           readonly>
+
+</div>
+
+<div class="ss-bar-divider"></div>
+
 {{-- PRESENT DAYS --}}
 <div class="ss-bar-group">
 
@@ -139,17 +174,26 @@
            required>
 
 </div>
-<div>
-    <label class="form-label">Week Off</label>
+
+<div class="ss-bar-divider"></div>
+
+{{-- WEEK OFF --}}
+<div class="ss-bar-group">
+
+    <label class="ss-bar-label">
+        WEEK OFF
+    </label>
 
     <input type="number"
            name="week_off"
            id="week_off"
-           class="form-control"
+           class="ss-days-input"
            min="0"
            value="0"
            placeholder="Week Off">
+
 </div>
+
 <div class="ss-bar-divider"></div>
 
 {{-- ESTIMATED SALARY --}}
@@ -165,7 +209,6 @@
            readonly>
 
 </div>
-
         {{-- GENERATE --}}
         <div class="ss-bar-group ss-bar-group-btn">
             <button type="submit" class="ss-bar-btn ss-bar-btn-generate">
@@ -229,7 +272,7 @@
 
                     <td>{{ $salary->staff->department ?? '—' }}</td>
 
-                    <td class="col-center">{{  $salary->working_days }} </td>
+                    <td class="col-center">{{  $salary->paid_days }} </td>
 
                     <td class="col-num">₹{{ number_format($salary->gross_salary, 0) }}</td>
 
@@ -337,15 +380,13 @@
     display: flex;
     align-items: flex-end;
     flex-wrap: wrap;
-    gap: 0;
+    gap: 12px;              /* ← change from 0 to 12px */
     background: #fff;
     border: 1px solid #e2e8f0;
     border-radius: 10px;
     padding: 16px 20px;
     margin-bottom: 12px;
     box-shadow: 0 1px 3px rgba(0,0,0,.04);
-    column-gap: 0;
-    row-gap: 12px;
 }
 
 .ss-bar-form {
@@ -358,10 +399,17 @@
 .ss-gen-form {
     display: flex;
     align-items: flex-end;
+    flex-wrap: nowrap;
     gap: 0;
-    flex-wrap: wrap;
+    width: 100%;
 }
 
+.ss-bar-group-btn {
+    justify-content: flex-end;
+    padding-right: 0;
+    align-self: flex-end;  /* ← add this */
+    padding-bottom: 0;
+}
 /* vertical separator between the two forms */
 .ss-bar-separator {
     width: 1px;
@@ -659,47 +707,51 @@ document.addEventListener('DOMContentLoaded',function(){
 
     const estimatedSalaryInput=document.getElementById('estimated_salary');
 
-    function calculateEstimatedSalary(){
+    function calculateSalary(){
 
-        let selectedOption=staffSelect.options[staffSelect.selectedIndex];
+    let totalSalary=parseFloat(document.getElementById('total_salary').value || 0);
 
-        if(!selectedOption.value){
-            estimatedSalaryInput.value='';
-            return;
-        }
+    let selectedMonth=parseInt(document.querySelector('select[name="month"]').value);
 
-        let monthlySalary=parseFloat(selectedOption.dataset.totalSalary || 0);
+    let selectedYear=parseInt(document.querySelector('select[name="year"]').value);
 
-        let selectedMonth=parseInt(document.querySelector('select[name="month"]').value);
+    let totalDaysInMonth=new Date(selectedYear,selectedMonth,0).getDate();
 
-        let selectedYear=parseInt(document.querySelector('select[name="year"]').value);
+    let dailyWage=totalDaysInMonth>0 ? totalSalary/totalDaysInMonth : 0;
 
-        let totalDaysInMonth=new Date(selectedYear,selectedMonth,0).getDate();
+    document.getElementById('daily_wage').value=dailyWage.toFixed(2);
 
-        let presentDays=parseFloat(presentDaysInput.value || 0);
+    let presentDays=parseFloat(document.getElementById('present_days').value || 0);
 
-        let weekOff=parseFloat(weekOffInput.value || 0);
+    let weekOff=parseFloat(document.getElementById('week_off').value || 0);
 
-        let dailyWage=monthlySalary/totalDaysInMonth;
+    let estimatedSalary=(presentDays+weekOff)*dailyWage;
 
-        let presentSalary=presentDays*dailyWage;
+    document.getElementById('estimated_salary').value='₹ '+estimatedSalary.toFixed(2);
+}
 
-        let weekOffSalary=weekOff*dailyWage;
+document.getElementById('total_salary').addEventListener('input',calculateSalary);
 
-        let estimatedSalary=presentSalary+weekOffSalary;
+document.getElementById('present_days').addEventListener('input',calculateSalary);
 
-        estimatedSalaryInput.value='₹ '+estimatedSalary.toFixed(2);
-    }
+document.getElementById('week_off').addEventListener('input',calculateSalary);
 
-    staffSelect.addEventListener('change',calculateEstimatedSalary);
+document.querySelector('select[name="month"]').addEventListener('change',calculateSalary);
 
-    presentDaysInput.addEventListener('input',calculateEstimatedSalary);
+document.querySelector('select[name="year"]').addEventListener('change',calculateSalary);
 
-    weekOffInput.addEventListener('input',calculateEstimatedSalary);
+// Staff's salary will be auto-filled when a staff is selected from dropdown, using data attribute from option tag
 
-    document.querySelector('select[name="month"]').addEventListener('change',calculateEstimatedSalary);
+staffSelect.addEventListener('change', function(){
 
-    document.querySelector('select[name="year"]').addEventListener('change',calculateEstimatedSalary);
+    let selectedOption = this.options[this.selectedIndex];
+
+    let salary = selectedOption.dataset.totalSalary || 0;
+
+    document.getElementById('total_salary').value = salary;
+
+    calculateSalary();
+});
 
 });
 </script>

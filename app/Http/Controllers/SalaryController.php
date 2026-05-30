@@ -6,6 +6,7 @@ use App\Models\Advance;
 use App\Models\Attendance;
 use App\Models\Labour;
 use App\Models\SalarySlip;
+use App\Models\StaffSalarySlip;
 use App\Models\Site;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -320,60 +321,81 @@ class SalaryController extends Controller
         dd("shiva");
     }
 
-    public function test(Request $request)
+        public function test(Request $request)
     {
         $month = $request->month ?? now()->month;
-
         $year = $request->year ?? now()->year;
 
-        // Sites
-        $sites = Site::orderBy("name")->get();
+        $sites = Site::orderBy('name')->get();
 
-        // Salary Query
-        $salaryQuery = SalarySlip::with(["labour.site"])
-            ->where("month", $month)
-            ->where("year", $year);
+        // Labour Salaries
+        $salaryQuery = SalarySlip::with(['labour.site'])
+            ->where('month', $month)
+            ->where('year', $year);
 
-        // Site Filter
-        if ($request->filled("site_id")) {
-            $salaryQuery->whereHas("labour", function ($q) use ($request) {
-                $q->where("site_id", $request->site_id);
+        if ($request->filled('site_id')) {
+            $salaryQuery->whereHas('labour', function ($q) use ($request) {
+                $q->where('site_id', $request->site_id);
             });
         }
 
-        $salarySlips = $salaryQuery->orderBy("created_at", "desc")->get();
+        $salarySlips = $salaryQuery->get();
+
+        // Staff Salaries
+        $staffQuery = StaffSalarySlip::with(['staff.site'])
+            ->where('month', $month)
+            ->where('year', $year);
+
+        if ($request->filled('site_id')) {
+            $staffQuery->whereHas('staff', function ($q) use ($request) {
+                $q->where('site_id', $request->site_id);
+            });
+        }
+
+        $staffSalaries = $staffQuery->get();
 
         $statement = [];
-
         $totalAmount = 0;
 
+        // Labour Records
         foreach ($salarySlips as $salary) {
             $statement[] = [
-                "account_number" => $salary->labour->Account_Number,
+                'employee_type' => 'Labour',
+                'account_number' => $salary->labour->Account_Number,
+                'name' => $salary->labour->name,
+                'ifsc' => $salary->labour->IFSC,
+                'site' => $salary->labour->site->name ?? '-',
+                'amount' => round($salary->net_salary, 2),
+            ];
 
-                "name" => $salary->labour->name,
-                "ifsc" => $salary->labour->IFSC,
+            $totalAmount += $salary->net_salary;
+        }
 
-                "site" => $salary->labour->site->name ?? "-",
-                "amount" => round($salary->net_salary, 2),
+        // Staff Records
+        foreach ($staffSalaries as $salary) {
+            $statement[] = [
+                'employee_type' => 'Staff',
+                'account_number' => $salary->staff->Account_Number,
+                'name' => $salary->staff->name,
+                'ifsc' => $salary->staff->IFSC,
+                'site' => $salary->staff->site->name ?? '-',
+                'amount' => round($salary->net_salary, 2),
             ];
 
             $totalAmount += $salary->net_salary;
         }
 
         return view(
-            "salary.bank-statement",
+            'salary.bank-statement',
             compact(
-                "statement",
-                "totalAmount",
-                "month",
-                "year",
-                "sites",
-                "salarySlips"
+                'statement',
+                'totalAmount',
+                'month',
+                'year',
+                'sites'
             )
         );
     }
-
     public function exportBankStatement(Request $request)
     {
         $month = $request->month ?? now()->month;
@@ -452,31 +474,65 @@ class SalaryController extends Controller
         return response()->stream($callback, 200, $headers);
     }
     public function testwages(Request $request)
-    {
-        $month = $request->month ?? now()->month;
+{
+    $month = $request->month ?? now()->month;
+    $year = $request->year ?? now()->year;
 
-        $year = $request->year ?? now()->year;
+    $sites = Site::orderBy("name")->get();
 
-        // Sites
-        $sites = Site::orderBy("name")->get();
+    // Labour Salaries
+    $salaryQuery = SalarySlip::with(["labour.site"])
+        ->where("month", $month)
+        ->where("year", $year);
 
-        // Salary Query
-        $salaryQuery = SalarySlip::with(["labour.site"])
-            ->where("month", $month)
-            ->where("year", $year);
-
-        // Site Filter
-        if ($request->filled("site_id")) {
-            $salaryQuery->whereHas("labour", function ($q) use ($request) {
-                $q->where("site_id", $request->site_id);
-            });
-        }
-
-        $salarySlips = $salaryQuery->orderBy("created_at", "desc")->get();
-
-        return view(
-            "salary.wages-sheet",
-            compact("salarySlips", "month", "year", "sites")
-        );
+    if ($request->filled("site_id")) {
+        $salaryQuery->whereHas("labour", function ($q) use ($request) {
+            $q->where("site_id", $request->site_id);
+        });
     }
+
+    $salarySlips = $salaryQuery
+        ->orderBy("created_at", "desc")
+        ->get();
+
+    // Staff Salaries
+    $staffSalarySlips = StaffSalarySlip::with(["staff.site"])
+    ->where("month", $month)
+    ->where("year", $year);
+
+    if ($request->filled("site_id")) {
+        $staffSalarySlips->whereHas("staff", function ($q) use ($request) {
+            $q->where("site_id", $request->site_id);
+        });
+    }
+
+    $staffSalarySlips = $staffSalarySlips
+        ->orderBy("created_at", "desc")
+        ->get();
+
+    $combinedSlips = collect();
+
+    foreach ($salarySlips as $salary) {
+        $salary->employee_type = 'Labour';
+        $salary->employee = $salary->labour;
+        $combinedSlips->push($salary);
+    }
+
+    foreach ($staffSalarySlips as $salary) {
+        $salary->employee_type = 'Staff';
+        $salary->employee = $salary->staff;
+        $combinedSlips->push($salary);
+    } 
+
+// dd($combinedSlips->first());
+return view(
+    "salary.wages-sheet",
+    compact(
+        "combinedSlips",
+        "month",
+        "year",
+        "sites"
+    )
+);
+}
 }

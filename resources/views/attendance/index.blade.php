@@ -5,534 +5,711 @@
 
 @section('content')
 
-@section('content')
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Sora:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-<div class="page-header">
+<style>
+:root {
+    --org-50:  #FFF7ED;
+    --org-100: #FFEDD5;
+    --org-200: #FED7AA;
+    --org-400: #FB923C;
+    --org-500: #F97316;
+    --org-600: #EA580C;
+    --org-700: #C2410C;
+    --org-800: #9A3412;
+    --org-900: #7C2D12;
+    --gray-50:  #F8FAFC;
+    --gray-100: #F1F5F9;
+    --gray-200: #E2E8F0;
+    --gray-300: #CBD5E1;
+    --gray-400: #94A3B8;
+    --gray-500: #64748B;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1E293B;
+    --green-50:  #EAF3DE;
+    --green-100: #C0DD97;
+    --green-500: #22C55E;
+    --green-600: #3B6D11;
+    --red-50:   #FCEBEB;
+    --red-500:  #EF4444;
+    --red-600:  #A32D2D;
+    --amber-50: #FAEEDA;
+    --amber-100: #FAC775;
+    --amber-500: #F59E0B;
+    --amber-600: #854F0B;
+    --blue-50:  #EFF6FF;
+    --blue-400: #60A5FA;
+    --blue-600: #185FA5;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --font-ui: 'DM Sans', sans-serif;
+    --font-display: 'Sora', sans-serif;
+}
+
+* { box-sizing: border-box; }
+body { font-family: var(--font-ui); }
+
+/* ── Page Header ──────────────────────────── */
+.att-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+.att-page-header .ph-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin: 0;
+}
+.att-page-header .ph-sub {
+    font-size: 13px;
+    color: var(--gray-400);
+    margin-top: 3px;
+}
+
+/* ── Buttons ──────────────────────────────── */
+.att-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 18px;
+    font-family: var(--font-ui);
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background .15s, color .15s, border-color .15s;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.att-btn-outline {
+    background: #fff;
+    color: var(--gray-600);
+    border-color: var(--gray-200);
+}
+.att-btn-outline:hover { background: var(--gray-100); color: var(--gray-800); }
+.att-btn-orange {
+    background: var(--org-600);
+    color: #fff;
+    border-color: var(--org-600);
+}
+.att-btn-orange:hover { background: var(--org-800); border-color: var(--org-800); }
+.att-btn-primary {
+    background: var(--org-900);
+    color: #fff;
+    border-color: var(--org-900);
+}
+.att-btn-primary:hover { background: var(--org-800); }
+.att-btn-success {
+    background: var(--green-600);
+    color: #fff;
+}
+.att-btn-success:hover { filter: brightness(0.9); }
+.att-btn-info {
+    background: var(--blue-600);
+    color: #fff;
+}
+.att-btn-info:hover { filter: brightness(0.9); }
+.att-btn-sm { padding: 7px 13px; font-size: 12px; }
+
+/* ── Filter Card ──────────────────────────── */
+.filter-card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+.filter-card-header {
+    background: var(--org-900);
+    padding: 13px 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.filter-card-header .fch-title {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: .5px;
+}
+.filter-card-header i { color: var(--org-200); }
+.filter-body {
+    padding: 18px 22px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+/* ── Form Controls ────────────────────────── */
+.fc-group { display: flex; flex-direction: column; gap: 5px; flex: 1; min-width: 160px; }
+.fc-group label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    color: var(--gray-400);
+}
+.fc-group select,
+.fc-group input[type="date"] {
+    width: 100%;
+    padding: 9px 12px;
+    font-family: var(--font-ui);
+    font-size: 13px;
+    color: var(--gray-800);
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+}
+.fc-group select:focus,
+.fc-group input[type="date"]:focus {
+    border-color: var(--org-400);
+    box-shadow: 0 0 0 3px var(--org-50);
+    background: #fff;
+}
+
+.search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 260px;
+    max-width: 380px;
+}
+.search-wrap i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray-400);
+    font-size: 14px;
+    pointer-events: none;
+}
+.search-wrap input {
+    width: 100%;
+    padding: 9px 36px 9px 36px;
+    font-family: var(--font-ui);
+    font-size: 13px;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+    color: var(--gray-800);
+}
+.search-wrap input:focus {
+    border-color: var(--org-400);
+    box-shadow: 0 0 0 3px var(--org-50);
+    background: #fff;
+}
+.search-wrap input::placeholder { color: var(--gray-400); }
+.clear-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--gray-200);
+    border: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: 13px;
+    cursor: pointer;
+    color: var(--gray-600);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+.clear-btn:hover { background: var(--gray-300); }
+
+/* ── Attendance Card ──────────────────────── */
+.att-card {
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+.att-card-header {
+    padding: 14px 22px;
+    background: var(--org-900);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+.att-card-header .ach-date {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.att-card-header .ach-date i { color: var(--org-200); }
+.ach-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ── Table ────────────────────────────────── */
+.table-wrap { overflow-x: auto; }
+table.att-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    font-family: var(--font-ui);
+}
+.att-table thead tr {
+    background: var(--org-50);
+    border-bottom: 2px solid var(--org-100);
+}
+.att-table thead th {
+    padding: 11px 14px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    color: var(--org-800);
+    text-align: left;
+    white-space: nowrap;
+}
+.att-table tbody td {
+    padding: 11px 14px;
+    border-bottom: 1px solid var(--gray-100);
+    color: var(--gray-800);
+    vertical-align: middle;
+}
+.att-table tbody tr:last-child td { border-bottom: none; }
+.att-table tbody tr:hover td { background: var(--org-50); }
+
+.emp-name { font-weight: 600; font-size: 13px; color: var(--gray-800); }
+.emp-id   { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+
+/* Category badge */
+.cat-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--org-50);
+    color: var(--org-800);
+    border: 1px solid var(--org-100);
+}
+
+/* Wage */
+.wage { font-weight: 600; color: var(--gray-700); }
+
+/* Attendance toggle */
+.att-toggle {
+    display: flex;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    width: fit-content;
+}
+.att-toggle .att-opt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    padding: 7px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+    user-select: none;
+    color: var(--gray-500);
+    background: transparent;
+    border-right: 1px solid var(--gray-200);
+}
+.att-toggle .att-opt:last-child { border-right: none; }
+.att-toggle .att-opt input[type="radio"] { display: none; }
+.att-toggle .att-opt:hover { background: var(--gray-100); color: var(--gray-700); }
+.att-toggle .att-opt.sel-present  { background: #22C55E; color: #fff; }
+.att-toggle .att-opt.sel-absent   { background: #EF4444; color: #fff; }
+.att-toggle .att-opt.sel-half_day { background: #F59E0B; color: #fff; }
+.att-toggle .att-opt.sel-week_off { background: #3B82F6; color: #fff; }
+
+/* OT input */
+.ot-input {
+    width: 90px;
+    padding: 7px 10px;
+    font-family: var(--font-ui);
+    font-size: 13px;
+    color: var(--gray-800);
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+}
+.ot-input:focus {
+    border-color: var(--org-400);
+    box-shadow: 0 0 0 3px var(--org-50);
+    background: #fff;
+}
+
+/* ── Footer ───────────────────────────────── */
+.att-footer {
+    padding: 14px 22px;
+    border-top: 1px solid var(--gray-200);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--gray-50);
+}
+.att-footer .footer-count {
+    font-size: 12px;
+    color: var(--gray-400);
+}
+.att-footer .footer-count span {
+    font-weight: 600;
+    color: var(--gray-700);
+}
+
+/* ── Empty State ──────────────────────────── */
+.empty-block {
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--gray-400);
+}
+.empty-block i { font-size: 40px; margin-bottom: 14px; color: var(--org-200); }
+.empty-block p { font-size: 14px; }
+.empty-block a { color: var(--org-600); font-weight: 500; text-decoration: none; }
+.empty-block a:hover { color: var(--org-800); }
+
+/* ── Select2 overrides ────────────────────── */
+.select2-container--default .select2-selection--single {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    height: 38px;
+    display: flex;
+    align-items: center;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    font-family: var(--font-ui);
+    font-size: 13px;
+    color: var(--gray-800);
+    line-height: 38px;
+    padding-left: 12px;
+}
+.select2-container--default .select2-selection--single:focus,
+.select2-container--default.select2-container--open .select2-selection--single {
+    border-color: var(--org-400);
+    box-shadow: 0 0 0 3px var(--org-50);
+}
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background: var(--org-600);
+}
+
+@media print {
+    .att-page-header, .filter-card, .att-btn, .att-footer { display: none !important; }
+    .att-card { border: none !important; border-radius: 0 !important; }
+    .att-table tbody tr:hover td { background: transparent !important; }
+}
+</style>
+
+{{-- Page Header --}}
+<div class="att-page-header">
     <div>
-        <div class="page-title">Daily Attendance</div>
-        <div class="page-subtitle">Mark attendance for all active labours</div>
+        <p class="ph-title">Daily Attendance</p>
+        <p class="ph-sub">Mark attendance for all active labours</p>
     </div>
-    <a href="{{ route('attendance.monthly') }}" class="btn btn-outline">
+    <a href="{{ route('attendance.monthly') }}" class="att-btn att-btn-outline">
         <i class="fas fa-calendar-alt"></i> Monthly Report
     </a>
 </div>
 
-<!-- Date Selector -->
-<div class="card mb-4">
+{{-- Filter Card --}}
+<div class="filter-card">
 
-    <div class="card-body" style="padding:0;">
-
-        {{-- Top Controls --}}
-        <div style="
-            padding:18px 20px;
-            display:flex;
-            justify-content:space-between;
-            align-items:end;
-            gap:18px;
-            flex-wrap:wrap;
-        ">
-
-            {{-- Date Form --}}
-            <form method="GET"
-            style="
-                display:flex;
-                gap:12px;
-                align-items:flex-end;
-                flex-wrap:wrap;
-            ">
-
-<form method="GET"
-      style="
-        display:flex;
-        gap:12px;
-        align-items:flex-end;
-        flex-wrap:wrap;
-      ">
-
-    {{-- Site --}}
-{{-- <div style="min-width:220px;"> --}}
-<div style="min-width:220px;flex:1;">
-    <label>Site</label>
-
-    <select name="site_id" id="site">
-
-        <option value="">
-            All Sites
-        </option>
-
-        @foreach($sites as $site)
-
-            <option value="{{ $site->id }}"
-                {{ request('site_id') == $site->id ? 'selected' : '' }}>
-
-                {{ $site->name }}
-
-            </option>
-
-        @endforeach
-
-    </select>
-
-</div>
-
-    {{-- Month --}}
-    <div style="min-width:220px;flex:1;">
-
-        <label>Month</label>
-
-        <select name="month" id="month_select">
-
-            @for($m = 1; $m <= 12; $m++)
-
-            <option value="{{ $m }}"
-                {{ $m == $month ? 'selected' : '' }}>
-
-                {{ date('F', mktime(0,0,0,$m,1)) }}
-
-            </option>
-
-            @endfor
-
-        </select>
-
+    <div class="filter-card-header">
+        <i class="fas fa-filter"></i>
+        <span class="fch-title">Filter Attendance</span>
     </div>
 
-    {{-- Year --}}
-    <div style="min-width:110px;flex:1;">
+    <div class="filter-body">
 
-        <label>Year</label>
+        <form method="GET" style="display:contents;">
 
-        <select name="year" id="year_select">
-            <option value=""></option>
-            @for($y = date('Y'); $y >= date('Y') - 3; $y--)
-
-            <option value="{{ $y }}"
-                {{ $y == $year ? 'selected' : '' }}>
-
-                {{ $y }}
-
-            </option>
-
-            @endfor
-
-        </select>
-
-    </div>
-
-    {{-- Date --}}
-    <div>
-
-        <label>Date</label>
-
-        <input type="date"
-               name="date"
-               id="attendance_date"
-               value="{{ $date }}"
-               max="{{ date('Y-m-d') }}">
-
-    </div>
-
-    <button type="submit" class="btn btn-secondary" id="load">
-        <i class="fas fa-search"></i>
-        Load
-    </button>
-
-
-</form>
-            {{-- Search Labour --}}
-            <div style="
-                position:relative;
-                min-width:320px;
-                flex:1;
-                max-width:420px;
-            ">
-
-                <i class="fas fa-search"
-                   style="
-                        position:absolute;
-                        left:14px;
-                        top:50%;
-                        transform:translateY(-50%);
-                        color:#9ca3af;
-                        font-size:14px;
-                   ">
-                </i>
-
-                <input type="text"
-                       id="labourSearch"
-                       placeholder="Search labour by name, ID or category..."
-                       style="
-                            width:100%;
-                            padding:11px 42px 11px 40px;
-                            border:1px solid #d1d5db;
-                            border-radius:10px;
-                            font-size:14px;
-                            background:#fff;
-                            transition:.2s;
-                            outline:none;
-                       "
-
-                       onfocus="this.style.borderColor='#f97316';
-                                this.style.boxShadow='0 0 0 3px rgba(249,115,22,.12)'"
-
-                       onblur="this.style.borderColor='#d1d5db';
-                               this.style.boxShadow='none'">
-
-                <button type="button"
-                        id="clearSearch"
-                        style="
-                            position:absolute;
-                            right:12px;
-                            top:50%;
-                            transform:translateY(-50%);
-                            border:none;
-                            background:#f3f4f6;
-                            width:22px;
-                            height:22px;
-                            border-radius:50%;
-                            font-size:14px;
-                            cursor:pointer;
-                            color:#6b7280;
-                            display:none;
-                        ">
-
-                    ×
-
-                </button>
-
+            {{-- Site --}}
+            <div class="fc-group">
+                <label>Site</label>
+                <select name="site_id" id="site">
+                    <option value="">All Sites</option>
+                    @foreach($sites as $site)
+                        <option value="{{ $site->id }}" {{ request('site_id') == $site->id ? 'selected' : '' }}>
+                            {{ $site->name }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
+            {{-- Month --}}
+            <div class="fc-group">
+                <label>Month</label>
+                <select name="month" id="month_select">
+                    @for($m = 1; $m <= 12; $m++)
+                        <option value="{{ $m }}" {{ $m == $month ? 'selected' : '' }}>
+                            {{ date('F', mktime(0,0,0,$m,1)) }}
+                        </option>
+                    @endfor
+                </select>
+            </div>
+
+            {{-- Year --}}
+            <div class="fc-group" style="max-width:130px;">
+                <label>Year</label>
+                <select name="year" id="year_select">
+                    <option value=""></option>
+                    @for($y = date('Y'); $y >= date('Y') - 3; $y--)
+                        <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>{{ $y }}</option>
+                    @endfor
+                </select>
+            </div>
+
+            {{-- Date --}}
+            <div class="fc-group" style="max-width:180px;">
+                <label>Date</label>
+                <input type="date"
+                       name="date"
+                       id="attendance_date_filter"
+                       value="{{ $date }}"
+                       max="{{ date('Y-m-d') }}">
+            </div>
+
+            <button type="submit" class="att-btn att-btn-orange" style="margin-bottom:1px;">
+                <i class="fas fa-search"></i> Load
+            </button>
+
+        </form>
+
+        {{-- Live Search --}}
+        <div class="search-wrap" style="margin-bottom:1px;">
+            <i class="fas fa-search"></i>
+            <input type="text"
+                   id="labourSearch"
+                   placeholder="Search by name, ID or category…">
+            <button type="button" id="clearSearch" class="clear-btn">×</button>
         </div>
 
     </div>
-
 </div>
 
+{{-- Main Content --}}
 @if($labours->isEmpty())
-    <div class="card">
-        <div class="empty-state">
+    <div class="att-card">
+        <div class="empty-block">
             <i class="fas fa-users"></i>
-            <p>No active labours found. <a href="{{ route('labours.create') }}">Add labours</a> first.</p>
+            <p>No active labours found. <a href="{{ route('labours.create') }}">Add labours</a> to get started.</p>
         </div>
     </div>
 @else
+
 <form method="POST" action="{{ route('attendance.store') }}">
     @csrf
-    <input type="hidden" id="attendance_date" name="date" value="{{ $date }}">
+    <input type="hidden" name="date" value="{{ $date }}">
 
-    <div class="card">
-        <div class="card-header">
-            <span>
-                <i class="fas fa-calendar-check" style="color:var(--primary)"></i>&nbsp;
-                Attendance for {{ \Carbon\Carbon::parse($date)->format('l, d M Y') }}
-            </span>
-            <div style="display:flex;gap:8px;">
+    <div class="att-card">
 
-                <button type="button" onclick="markAll('present')" class="btn btn-sm btn-success">
-                    <i class="fas fa-check-double"></i> Mark All Present
+        {{-- Card Header --}}
+        <div class="att-card-header">
+            <div class="ach-date">
+                <i class="fas fa-calendar-check"></i>
+                Attendance — {{ \Carbon\Carbon::parse($date)->format('l, d M Y') }}
+            </div>
+            <div class="ach-actions">
+                <button type="button" onclick="markAll('present')" class="att-btn att-btn-sm att-btn-success">
+                    <i class="fas fa-check-double"></i> All Present
                 </button>
-                  <button type="button" onclick="markAll('week_off')" class="btn btn-sm btn-info">
-                    <i class="fas fa-check-double"></i> Mark All Week OFF
+                <button type="button" onclick="markAll('week_off')" class="att-btn att-btn-sm att-btn-info">
+                    <i class="fas fa-umbrella-beach"></i> All Week Off
                 </button>
-                <button type="submit" class="btn btn-sm btn-primary">
+                <button type="submit" class="att-btn att-btn-sm att-btn-primary">
                     <i class="fas fa-save"></i> Save Attendance
                 </button>
-              
             </div>
         </div>
-       
-</div>
-        <div class="table-wrapper">
-            <table>
+
+        {{-- Table --}}
+        <div class="table-wrap">
+            <table class="att-table">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Name</th>
+                        <th style="width:44px;">#</th>
+                        <th>Labour</th>
                         <th>Category</th>
                         <th>Daily Wage</th>
-                        <th style="width:220px;">Attendance</th>
-                        <th style="width:150px;">OT Hours</th>
+                        <th style="width:230px;">Attendance</th>
+                        <th style="width:120px;">OT Hours</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($labours as $i => $labour)
                     <tr class="labour-row">
-                        <td style="color:var(--text-muted)">{{ $i + 1 }}</td>
-                        <td><strong>{{ $labour->name }}</strong><br><small class="text-muted">{{ $labour->employee_id }}</small></td>
-                        <td><span class="badge badge-{{ strtolower($labour->category) }}">{{ $labour->category }}</span></td>
-                        <td>₹{{ number_format($labour->daily_wage, 0) }}</td>
+
+                        <td style="color:var(--gray-400);font-size:12px;">{{ $i + 1 }}</td>
+
                         <td>
-             <div style="display:flex;gap:0;border:1px solid var(--border);border-radius:7px;overflow:hidden;">
+                            <div class="emp-name">{{ $labour->name }}</div>
+                            <div class="emp-id">{{ $labour->employee_id }}</div>
+                        </td>
 
-                @foreach([
-                    'present' => ['P','var(--success)'],
-                    'absent' => ['A','var(--danger)'],
-                    'half_day' => ['½','var(--warning)'],
-                    'week_off' => ['WO','var(--info)']
-                ] as $val => [$label, $color])
+                        <td>
+                            <span class="cat-badge">{{ $labour->category }}</span>
+                        </td>
 
-                @php $checked = false; @endphp
+                        <td class="wage">₹{{ number_format($labour->daily_wage, 0) }}</td>
 
-                <label style="
-                    flex:1;
-                    text-align:center;
-                    padding:7px 4px;
-                    cursor:pointer;
-                    transition:all 0.15s;
-                    background:transparent;
-                    color:inherit;
-                    font-size:12px;
-                    font-weight:700;
-                "
-                class="att-label"
-                data-color="{{ $color }}">
+                        <td>
+                            <div class="att-toggle">
+                                @foreach([
+                                    'present'  => ['P',  'present'],
+                                    'absent'   => ['A',  'absent'],
+                                    'half_day' => ['½',  'half_day'],
+                                    'week_off' => ['WO', 'week_off'],
+                                ] as $val => [$label, $cls])
+                                <label class="att-opt" data-status="{{ $val }}">
+                                    <input type="radio"
+                                           name="attendance[{{ $labour->id }}]"
+                                           value="{{ $val }}">
+                                    {{ $label }}
+                                </label>
+                                @endforeach
+                            </div>
+                        </td>
 
-                    <input type="radio"
-                                name="attendance[{{ $labour->id }}]"
-                                value="{{ $val }}"
-                                style="display:none;">
-                    {{ $label }}
-                </label>
-                @endforeach
-         </div>
-    </td>
                         <td>
                             <input type="number"
-                                name="overtime[{{ $labour->id }}]"
-                                value=" "
-                                min="0" max="12" step="0.5"
-                                style="width:100%;"
-                                placeholder="0">
+                                   name="overtime[{{ $labour->id }}]"
+                                   min="0" max="12" step="0.5"
+                                   placeholder="0"
+                                   class="ot-input">
                         </td>
+
                     </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-        <div style="padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;">
-            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Attendance</button>
+
+        {{-- Footer --}}
+        <div class="att-footer">
+            <div class="footer-count">
+                Showing <span id="visibleCount">{{ $labours->count() }}</span> of
+                <span>{{ $labours->count() }}</span> labours
+            </div>
+            <button type="submit" class="att-btn att-btn-primary">
+                <i class="fas fa-save"></i> Save Attendance
+            </button>
         </div>
+
     </div>
 </form>
 @endif
 
 @push('scripts')
-
 <script>
-  const searchInput =
-    document.getElementById('labourSearch');
+document.addEventListener('DOMContentLoaded', function () {
 
-const clearBtn =
-    document.getElementById('clearSearch');
-
-searchInput.addEventListener('input', function () {
-
-    clearBtn.style.display =
-        this.value.length ? 'block' : 'none';
-});
-
-clearBtn.addEventListener('click', function () {
-
-    searchInput.value = '';
-
-    document.querySelectorAll('.labour-row')
-        .forEach(row => {
-
-        row.style.display = '';
-    });
-
-    clearBtn.style.display = 'none';
-
-    searchInput.focus();
-});
-// Colorize attendance labels on click
-document.querySelectorAll('.att-label').forEach(label => {
-    label.addEventListener('click', function () {
-        const row = this.closest('tr');
-        row.querySelectorAll('.att-label').forEach(l => {
-            l.style.background = 'transparent';
-            l.style.color = 'inherit';
-        });
-        this.style.background = this.dataset.color;
-        this.style.color = '#fff';
-    });
-});
-
-function markAll(status) {
-    document.querySelectorAll(`input[type=radio][value="${status}"]`).forEach(radio => {
-        radio.checked = true;
-        radio.closest('.att-label').click();
-    });
-    
-}
-
-// Attendance label color handling
-document.addEventListener('click', function(e) {
-
-    const label = e.target.closest('.att-label');
-
-    if (!label) return;
-
-    const row = label.closest('tr');
-
-    row.querySelectorAll('.att-label').forEach(l => {
-
-        l.style.background = 'transparent';
-
-        l.style.color = 'inherit';
-    });
-
-    label.style.background = label.dataset.color;
-
-    label.style.color = '#fff';
-});
-
-
-// Mark all attendance
-function markAll(status) {
-
-    document.querySelectorAll(
-        `input[type=radio][value="${status}"]`
-    ).forEach(radio => {
-
-        radio.checked = true;
-
-        const label = radio.closest('.att-label');
-
-        label.style.background = label.dataset.color;
-
-        label.style.color = '#fff';
-    });
-}
-
-
-// Search labour
-document.getElementById('labourSearch')
-    .addEventListener('keyup', function () {
-
-    let value = this.value.toLowerCase();
-
-    document.querySelectorAll('.labour-row')
-        .forEach(row => {
-
-        let labourName =
-            row.children[1].innerText.toLowerCase();
-
-        let category =
-            row.children[2].innerText.toLowerCase();
-
-        let employeeId =
-            row.children[1].innerText.toLowerCase();
-
-        let fullText =
-            labourName + ' ' +
-            category + ' ' +
-            employeeId;
-
-        row.style.display =
-            fullText.includes(value)
-                ? ''
-                : 'none';
-    });
-    });
-    document.addEventListener('DOMContentLoaded', function () {
-
-    const monthSelect =
-        document.getElementById('month_select');
-
-    const yearSelect =
-        document.getElementById('year_select');
-
-    const dateInput =
-        document.getElementById('attendance_date');
-
-    function updateDateRange() {
-
-        let month = monthSelect.value;
-
-        let year = yearSelect.value;
-
-        // First day
-        let firstDay =
-            `${year}-${String(month).padStart(2,'0')}-01`;
-
-        // Last day
-        let lastDate =
-            new Date(year, month, 0).getDate();
-
-        let lastDay =
-            `${year}-${String(month).padStart(2,'0')}-${lastDate}`;
-
-        // Apply min/max
-        dateInput.min = firstDay;
-
-        dateInput.max = lastDay;
-
-        // Auto update selected date
-        if (
-            !dateInput.value ||
-            dateInput.value < firstDay ||
-            dateInput.value > lastDay
-        ) {
-            dateInput.value = firstDay;
-        }
-    }
-
-    monthSelect.addEventListener(
-        'change',
-        updateDateRange
-    );
-
-    yearSelect.addEventListener(
-        'change',
-        updateDateRange
-    );
-
-    updateDateRange();
-
-});
-
-$(document).ready(function(){
-
+    /* ── Select2 ─────────────────────────────── */
     $('#site').select2({
-        placeholder: "Select Site",
+        placeholder: 'Select Site',
         minimumResultsForSearch: Infinity,
         allowClear: true,
         width: '100%'
     });
+
+    /* ── Date range from month/year ──────────── */
+    const monthSel  = document.getElementById('month_select');
+    const yearSel   = document.getElementById('year_select');
+    const dateInput = document.getElementById('attendance_date_filter');
+
+    function updateDateRange() {
+        const m = monthSel.value;
+        const y = yearSel.value;
+        if (!m || !y) return;
+        const first = `${y}-${String(m).padStart(2,'0')}-01`;
+        const last  = new Date(y, m, 0).getDate();
+        const lastD = `${y}-${String(m).padStart(2,'0')}-${last}`;
+        dateInput.min = first;
+        dateInput.max = lastD;
+        if (!dateInput.value || dateInput.value < first || dateInput.value > lastD) {
+            dateInput.value = first;
+        }
+    }
+
+    monthSel.addEventListener('change', updateDateRange);
+    yearSel.addEventListener('change', updateDateRange);
+    updateDateRange();
+
+    /* ── Attendance toggle ───────────────────── */
+    document.querySelectorAll('.att-opt').forEach(label => {
+        label.addEventListener('click', function () {
+            const row    = this.closest('tr');
+            const status = this.dataset.status;
+            row.querySelectorAll('.att-opt').forEach(l => {
+                l.className = 'att-opt';
+            });
+            this.classList.add('sel-' + status);
+            this.querySelector('input').checked = true;
+        });
+    });
+
+    /* ── Mark all ────────────────────────────── */
+    window.markAll = function (status) {
+        document.querySelectorAll('.labour-row').forEach(row => {
+            row.querySelectorAll('.att-opt').forEach(l => {
+                l.className = 'att-opt';
+            });
+            const target = row.querySelector(`.att-opt[data-status="${status}"]`);
+            if (target) {
+                target.classList.add('sel-' + status);
+                target.querySelector('input').checked = true;
+            }
+        });
+    };
+
+    /* ── Live search ─────────────────────────── */
+    const searchInput   = document.getElementById('labourSearch');
+    const clearBtn      = document.getElementById('clearSearch');
+    const visibleCount  = document.getElementById('visibleCount');
+    const allRows       = document.querySelectorAll('.labour-row');
+
+    function filterRows() {
+        const q = searchInput.value.toLowerCase();
+        let visible = 0;
+        allRows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+            const show = text.includes(q);
+            row.style.display = show ? '' : 'none';
+            if (show) visible++;
+        });
+        if (visibleCount) visibleCount.textContent = visible;
+        clearBtn.style.display = q.length ? 'flex' : 'none';
+    }
+
+    searchInput.addEventListener('input', filterRows);
+
+    clearBtn.addEventListener('click', function () {
+        searchInput.value = '';
+        filterRows();
+        searchInput.focus();
+    });
 });
-
-// $(document).ready(function(){
-
-//     $('#month_select').select2({
-//         placeholder: "Select Month",
-//         minimumResultsForSearch: Infinity,
-//         // allowClear: true,
-//         width: '100%'
-//     });
-// });
-
-
-// $('#year_select').select2({
-//     placeholder: "Select Year",
-//     minimumResultsForSearch: Infinity,
-//     // allowClear: true,
-//     width: '100%'
-// });
-
-
-
-// $('#attendance_date').select2({
-//     placeholder: "Select Year",
-//     minimumResultsForSearch: Infinity,
-//     // allowClear: true,
-//     width: '100%'
-// });
 </script>
 @endpush
 

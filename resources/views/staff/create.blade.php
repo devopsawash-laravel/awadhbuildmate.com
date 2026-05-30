@@ -185,7 +185,7 @@
                     </select>
                 </div> --}}
 
-                <div class="form-group">
+            {{-- <div class="form-group">
 
                 <label>Salary Month *</label>
 
@@ -207,9 +207,9 @@
                     <option value="11">December</option>
 
                 </select>
-            </div>
+            </div> --}}
 
-            <div class="form-group">
+            {{-- <div class="form-group">
 
             <label>Year *</label>
 
@@ -225,10 +225,10 @@
 
             </select>
 
-        </div>
+        </div> --}}
 
                  <!-- Daily Wage -->
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label>Daily Wage (₹) *</label>
 
                     <input
@@ -238,7 +238,7 @@
                         placeholder="Auto calculated daily wage"
                         readonly
                         step="0.01">
-                </div>
+                </div> --}}
 
                 <div class="form-group">
                     <label>Basic Salary</label>

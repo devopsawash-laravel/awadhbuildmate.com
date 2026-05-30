@@ -922,7 +922,22 @@ button, a, input, select {
     color:#1e3a8a !important;
 }
 
-
+/* ==================== PRINT STYLES ==================== */
+@media print {
+    @page {
+        size: auto;
+        margin-top: 5mm; /* just enough to not clip content */
+        margin-bottom: 0;
+    }
+    .sidebar        { display: none !important; }
+    .topbar         { display: none !important; }
+    .sidebar-toggle { display: none !important; }
+    .sidebar-overlay{ display: none !important; }
+    .no-print       { display: none !important; }
+    .main           { margin-left: 0 !important; }
+    .content        { padding: 0 !important; }
+    body            { background: #fff !important; }
+}
 /* CREATE LABOUR CSS FOR PROPER ALIGHNMENT OF BOXES */
 </style>
     @stack('styles')
