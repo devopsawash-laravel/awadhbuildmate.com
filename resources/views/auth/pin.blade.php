@@ -14,7 +14,11 @@
         .ab-left { background: #E85100; flex: 1.1; padding: 2.5rem 2.5rem 2rem; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
         .ab-left::after { content: ''; position: absolute; right: -70px; bottom: -70px; width: 320px; height: 320px; border-radius: 50%; background: rgba(255,255,255,0.08); }
         .ab-left::before { content: ''; position: absolute; right: 50px; bottom: 70px; width: 180px; height: 180px; border-radius: 50%; background: rgba(255,255,255,0.06); }
-        .ab-logo-box { width: 44px; height: 44px; background: rgba(255,255,255,0.18); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+
+        /* Logo box */
+        .ab-logo-box { width: 44px; height: 44px; background: rgba(255,255,255,0.18); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; overflow: hidden; }
+        .ab-logo-box img { width: 100%; height: 100%; object-fit: contain; }
+
         .ab-brand { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 800; color: #fff; letter-spacing: 0.08em; margin-bottom: 3px; }
         .ab-tagline { font-size: 9px; color: rgba(255,255,255,0.7); letter-spacing: 0.18em; font-weight: 500; margin-bottom: 2rem; }
         .ab-heading { font-family: 'Barlow Condensed', sans-serif; font-size: 52px; font-weight: 800; color: #fff; line-height: 1; letter-spacing: 0.02em; text-transform: uppercase; margin-bottom: 1rem; }
@@ -49,10 +53,12 @@
 <div class="ab-wrap">
     <div class="ab-left">
         <div>
-            <div class="ab-logo-box"><i class="ti ti-hard-hat" style="font-size:22px;color:#fff;"></i></div>
+            <div class="ab-logo-box">
+                <img src="{{ asset('images/projects/logo.png') }}" alt="Awadh Buildmate Logo">
+            </div>
             <div class="ab-brand">AWADH BUILDMATE</div>
             <div class="ab-tagline">BUILD &nbsp;·&nbsp; FABRICATE &nbsp;·&nbsp; ERECT</div>
-            <div class="ab-heading">VERIFY<br>YOUR<br>PIN</div>
+            <div class="ab-heading">VERIFY YOUR PIN</div>
             <p class="ab-desc">Confirm your identity with your secure 6-digit PIN to access the admin panel.</p>
         </div>
         <div class="ab-footer">© 2026 Awadh Buildmate Pvt. Ltd. — Ankleshwar, Gujarat</div>
