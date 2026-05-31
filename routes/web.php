@@ -11,16 +11,68 @@ use Illuminate\Support\Facades\Route;
 // use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\admin\Logincontroller;
 use App\Http\Controllers\SiteController;
-
+use Illuminate\Support\Facades\Mail;
+use App\Http\Controllers\Auth\GoogleController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 
 // Route::get('/login', function () {
 //     return view('auth.login');
 // })->name('login');
 
+//-------------------WEBSITE ROUTES-------------------------//
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])
+    ->name('website.home');
+Route::get('/testservices', [App\Http\Controllers\HomeController::class, 'test'])->name('website.services');
+Route::get('/testprojects', [App\Http\Controllers\HomeController::class, 'testproject'])->name('website.projects');
+Route::get('/testcontact', [App\Http\Controllers\HomeController::class, 'testcontact'])->name('website.contact');
+Route::get('/testabout', [App\Http\Controllers\HomeController::class, 'testabout'])->name('website.about');
 
-Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('/test', [App\Http\Controllers\HomeController::class, 'index'])->name('home1');
+//-------------------ADMIN PANEL ROUTES WITH MIDDLEWARE-------------------------//
+Route::get('/admin/login', [App\Http\Controllers\admin\Logincontroller::class, 'index'])->name('admin.login');
+Route::post('/admin/login', [Logincontroller::class, 'index1'])->name('admin.login.post');
+// Route::post('/admin/logout',[Logincontroller::class, 'logout'])->name('admin.logout');
 
+Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('google.login');
+
+Route::get('/auth/google/callback', [GoogleController::class, 'callback']);
+
+Route::get('/verify-pin', function () {
+    return view('auth.pin');
+})->name('pin.form');
+
+Route::post('/verify-pin', function (Illuminate\Http\Request $request) {
+
+    if ($request->pin === env('ADMIN_PIN')) {
+
+        session(['pin_verified' => true]);
+
+        return redirect()->route('dashboard');
+    }
+
+    return back()->withErrors([
+        'pin' => 'Invalid PIN'
+    ]);
+
+})->name('pin.verify');
+
+Route::post('/logout', function (Request $request) {
+
+    Auth::logout();
+
+    $request->session()->invalidate();
+
+    $request->session()->regenerateToken();
+
+    return redirect('admin/login');
+
+})->name('logout');
+
+//------------------Middleware------------------------------------------------//
+Route::middleware(['auth', 'pin'])->group(function () {
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+// Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('home1');
 
 // Labours
 Route::resource('labours', LabourController::class);
@@ -62,15 +114,12 @@ Route::delete('/advances/{advance}',[AdvanceController::class, 'destroy'])->name
 // Auth::routes();
 
 //Admin Login Route
-Route::get('/admin/login', [App\Http\Controllers\admin\Logincontroller::class, 'index'])->name('admin.login');
-Route::post('/admin/login', [Logincontroller::class, 'index1'])->name('admin.login.post');
-Route::post('/admin/logout',[Logincontroller::class, 'logout'])->name('admin.logout');
+// Route::get('/admin/login', [App\Http\Controllers\admin\Logincontroller::class, 'index'])->name('admin.login');
+// Route::post('/admin/login', [Logincontroller::class, 'index1'])->name('admin.login.post');
+// Route::post('/admin/logout',[Logincontroller::class, 'logout'])->name('admin.logout');
 
 //Testing route
-Route::get('/testservices', [App\Http\Controllers\HomeController::class, 'test'])->name('website.services');
-Route::get('/testprojects', [App\Http\Controllers\HomeController::class, 'testproject'])->name('website.projects');
-Route::get('/testcontact', [App\Http\Controllers\HomeController::class, 'testcontact'])->name('website.contact');
-Route::get('/testabout', [App\Http\Controllers\HomeController::class, 'testabout'])->name('website.about');
+
 // Route::get('/testdashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('admin.dashboard');
 
 // Testing route for dashboard links
@@ -88,13 +137,7 @@ Route::get('/admin/enquiries', function() {
 Route::post('/magic-link',          [Logincontroller::class, 'sendMagicLink'  ])->name('magic.login');
 Route::get( '/magic-link/{token}',  [Logincontroller::class, 'verifyMagicLink'])->name('magic.login');
 
-//Site module route testing
-// Route::post('/admin/sites', [App\Http\Controllers\Admin\SiteController::class, 'index'])->name('admin.sites.index');
-// Route::get('/admin/sites', [App\Http\Controllers\Admin\SiteController::class, 'index'])->name('admin.sites.index');
-// Route::get('/admin/sites/{site}', [App\Http\Controllers\Admin\SiteController::class, 'show'])->name('admin.sites.show');
 
-// Staff module route testing
-// Route::POST('/admin/staff/create', [App\Http\Controllers\StaffController::class, 'create'])->name('Staff.create');
 Route::Resource('staff', App\Http\Controllers\StaffController::class);
 
 //Payslip modules
@@ -122,3 +165,16 @@ Route::get(
     '/bank-statement/export',
     [SalaryController::class, 'exportBankStatement']
 )->name('salary.bankstatement.export');
+
+// Testing route for sending email notifications
+Route::get('/test-mail', function () {
+
+    Mail::raw('Laravel Gmail Test', function ($message) {
+        $message->to('awadhbuildmate@gmail.com')
+                ->subject('Mail Test');
+    });
+
+    return 'Mail Sent';
+});
+
+});

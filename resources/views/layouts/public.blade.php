@@ -492,7 +492,7 @@
 <body>
 
 <nav class="navbar" id="navbar">
-    <a href="{{ route('home1') }}" class="nav-logo">
+    <a href="{{ route('website.home') }}" class="nav-logo">
         <div class="nav-logo-icon"><i class="fas fa-hard-hat"></i></div>
         <div class="nav-logo-text">
             <div class="nav-brand">Awadh Buildmate</div>
@@ -501,8 +501,8 @@
     </a>
 
     <ul class="nav-links">
-        <li><a href="{{ route('home1') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a></li>
-        <li><a href="{{ route('website.services') }}" class="{{ request()->routeIs('services') ? 'active' : '' }}">Services</a></li>
+        <li><a href="{{ route('website.home') }}" class="{{ request()->routeIs('website.home') ? 'active' : '' }}">Home</a></li>
+        <li><a href="{{ route('website.services') }}" class="{{ request()->routeIs('website.services') ? 'active' : '' }}">Services</a></li>
         <li><a href="{{ route('website.projects') }}" class="{{ request()->routeIs('projects') ? 'active' : '' }}">Projects</a></li>
         <li><a href="{{ route('website.about') }}" class="{{ request()->routeIs('about') ? 'active' : '' }}">About</a></li>
         <li><a href="{{ route('website.contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a></li>
@@ -538,7 +538,7 @@
 
 <div class="mobile-menu" id="mobileMenu">
 
-    <a href="{{ route('home1') }}">Home</a>
+    <a href="{{ route('website.home') }}">Home</a>
 
     <a href="{{ route('website.services') }}">Services</a>
 

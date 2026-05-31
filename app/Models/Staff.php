@@ -20,4 +20,8 @@ class Staff extends Model
     {
         return $this->hasMany(StaffSalarySlip::class);
     }
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class);
+    }
 }

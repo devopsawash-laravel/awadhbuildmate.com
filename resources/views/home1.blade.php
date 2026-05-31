@@ -773,7 +773,7 @@ body {
 <body>
 
 <nav class="navbar" id="navbar">
-    <a href="{{ route('home1') }}" class="nav-logo">
+    <a href="{{ route('website.home') }}" class="nav-logo">
         <div class="nav-logo-icon"><img src="{{ asset('images/projects/logo.png') }}" alt="Awadh Buildmate Logo"></div>
         <div class="nav-logo-text">
             <div class="nav-brand">Awadh Buildmate</div>
@@ -782,7 +782,7 @@ body {
     </a>
 
     <ul class="nav-links">
-        <li><a href="{{ route('home1') }}" class="{{ request()->routeIs('home1') ? 'active' : '' }}">Home</a></li>
+        <li><a href="{{ route('website.home') }}" class="{{ request()->routeIs('website.home') ? 'active' : '' }}">Home</a></li>
         <li><a href="{{ route('website.services') }}" class="{{ request()->routeIs('website.services') ? 'active' : '' }}">Services</a></li>
         <li><a href="{{ route('website.projects') }}" class="{{ request()->routeIs('website.projects') ? 'active' : '' }}">Projects</a></li>
         <li><a href="{{ route('website.about') }}" class="{{ request()->routeIs('website.about') ? 'active' : '' }}">About</a></li>
@@ -797,8 +797,20 @@ body {
         @endauth
         <a href="{{ route('website.contact') }}" class="btn-nav-contact">Get Quote</a>
     </div> --}}
+    <div class="nav-cta">
+
+    <a href="{{ route('admin.login') }}" class="btn-nav-login">
+        <i class="fas fa-lock"></i> Admin Login
+    </a>
+
+    <a href="{{ route('website.contact') }}" class="btn-nav-contact">
+        Get Quote
+    </a>
+
+</div>
     
     <!-- MOBILE MENU BUTTON -->
+
 <div class="mobile-menu-btn" id="mobileMenuBtn">
     <i class="fas fa-bars"></i>
 </div>
@@ -806,7 +818,7 @@ body {
 <!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
 
-    <a href="{{ route('home1') }}">Home</a>
+    <a href="{{ route('website.home') }}">Home</a>
     <a href="{{ route('website.services') }}">Services</a>
     <a href="{{ route('website.projects') }}">Projects</a>
     <a href="{{ route('website.about') }}">About</a>

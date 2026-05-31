@@ -452,7 +452,8 @@
 
             <div class="emp-field">
                 <div class="ef-label">Bank Name</div>
-                <div class="ef-value">{{ $salary->staff->bank->name ?? '—' }}</div>
+                {{-- <div class="ef-value">{{ $salary->staff->bank->name ?? '—' }}</div> --}}
+                {{-- <div class="ef-value">{{ $salary->staff->bank_name ?? '—' }}</div> --}}
             </div>
 
             <div class="emp-field">
@@ -540,9 +541,9 @@
                             <td>{{ number_format($salary->staff->total_salary ?? 0, 2) }}</td>
                             <td>
                                 ₹{{ number_format(
-                                    round(($salary->earned_basic ?? 0) +
+                                    ($salary->earned_basic ?? 0) +
                                     ($salary->earned_hra ?? 0) +
-                                    ($salary->earned_other_allowance ?? 0)),
+                                    ($salary->earned_other_allowance ?? 0),
                                 2) }}
                             </td>
                         </tr>
@@ -631,7 +632,7 @@
         </div>
 
         <div class="nb-amount">
-             ₹{{ number_format(round($salary->net_salary ?? 0,2)) }}
+             ₹{{ number_format($salary->net_salary ?? 0,2)}}
         </div>
 
         <div class="nb-words">

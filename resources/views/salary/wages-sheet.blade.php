@@ -208,7 +208,7 @@
 
                         <th colspan="6">Deduction</th>
 
-                        <th rowspan="2">Net Amount Paid</th>
+                        {{-- <th rowspan="2">Net Amount Paid</th> --}}
                         <th rowspan="2">Total Payable</th>
 
                     </tr>
@@ -393,11 +393,11 @@
                         </td>
 
                         {{-- Final --}}
-                        <td>
+                        {{-- <td>
                             <strong>
                                 {{ number_format($salary->net_salary ?? 0,0) }}
                             </strong>
-                        </td>
+                        </td> --}}
 
                         <td>
                             <strong>
@@ -450,7 +450,7 @@
 
                         <td>{{ number_format($grandTotalDeduction,0) }}</td>
 
-                        <td>{{ number_format($grandNetSalary,0) }}</td>
+                        {{-- <td>{{ number_format($grandNetSalary,0) }}</td> --}}
 
                         <td>{{ number_format($grandTotalPayable,0) }}</td>
 

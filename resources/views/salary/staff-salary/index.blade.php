@@ -274,14 +274,14 @@
 
                     <td class="col-center">{{  $salary->paid_days }} </td>
 
-                    <td class="col-num">₹{{ number_format($salary->gross_salary, 0) }}</td>
+                    <td class="col-num">₹{{ number_format($salary->gross_salary, 2) }}</td>
 
-                    <td class="col-num ss-deduction">-₹{{ number_format($salary->pf_deduction, 0) }}</td>
+                    <td class="col-num ss-deduction">-₹{{ number_format($salary->pf_deduction, 2) }}</td>
 
-                    <td class="col-num ss-deduction">-₹{{ number_format($salary->advance_deduction, 0) }}</td>
+                    <td class="col-num ss-deduction">-₹{{ number_format($salary->advance_deduction, 2) }}</td>
 
                     <td class="col-num">
-                        <span class="ss-net-badge">₹{{ number_format($salary->net_salary, 0) }}</span>
+                        <span class="ss-net-badge">₹{{ number_format($salary->net_salary, 2) }}</span>
                     </td>
 
                     <td>

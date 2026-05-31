@@ -110,15 +110,11 @@ class StaffSalaryController extends Controller
 
         $totalDaysInMonth = Carbon::create($year,$month,1)->daysInMonth;
 
-        $dailyWage = round($totalSalary / $totalDaysInMonth,2);
+       $dailyWage = $totalSalary / $totalDaysInMonth;
 
-        $paidDays = $presentDays + $weekOff;
+$paidDays = $presentDays + $weekOff;
 
-        $presentSalary = round($presentDays * $dailyWage,2);
-
-        $weekOffSalary = round($weekOff * $dailyWage,2);
-
-        $grossSalary = round($presentSalary + $weekOffSalary,2);
+$grossSalary = round($paidDays * $dailyWage, 2);
 
         // $earnedBasic = round(($basicSalary / $totalDaysInMonth) * $paidDays,2);
         // $earnedHra = round(($hra / $totalDaysInMonth) * $paidDays,2);
@@ -126,11 +122,14 @@ class StaffSalaryController extends Controller
 
         $totalComponents = $basicSalary + $hra + $otherAllowance;
 
-        $earnedBasic = round(($basicSalary / $totalComponents) * $grossSalary,2);
+       $earnedBasic = round(($basicSalary / $totalComponents) * $grossSalary, 2);
 
-        $earnedHra = round(($hra / $totalComponents) * $grossSalary,2);
+$earnedHra = round(($hra / $totalComponents) * $grossSalary, 2);
 
-        $earnedOtherAllowance = round(($otherAllowance / $totalComponents) * $grossSalary,2);
+$earnedOtherAllowance = round(
+    $grossSalary - $earnedBasic - $earnedHra,
+    2
+);
 
         $pfDeduction = 0;
         $advanceDeduction = 0;
@@ -141,7 +140,7 @@ class StaffSalaryController extends Controller
             $advanceDeduction +
             $otherDeduction;
 
-        $netSalary = round($grossSalary - $totalDeduction,2);
+        $netSalary = ($grossSalary - $totalDeduction);
 
         $slip = StaffSalarySlip::create([
             'staff_id' => $staff->id,
@@ -151,7 +150,8 @@ class StaffSalaryController extends Controller
             'working_days' => $totalDaysInMonth,
             'paid_days' => $presentDays,
             'week_off' => $weekOff,
-            'daily_wage' => $dailyWage,
+            // 'daily_wage' => $dailyWage,
+            'daily_wage' => round($dailyWage, 2),
             'basic_salary' => $basicSalary,
             'hra' => $hra,
             'other_allowance' => $otherAllowance,
@@ -174,15 +174,12 @@ class StaffSalaryController extends Controller
 
         public function show(int $id)
         {
-        $salary = StaffSalarySlip::with('staff.site')->findOrFail($id);
-        //    dd($salary);
-        return view('salary.staff-salary.show', compact('salary'));
-        }
-        public function pdf(StaffSalarySlip $salary)
-        {
-            $salary->load("staff");
-            // $pdf = PDF::loadView('salary.pdf', compact('salary'));
-            // return $pdf->download('salary-slip-' . $salary->staff->name . '-' . $salary->month . '-' . $salary->year . '.pdf');
+            $salary = StaffSalarySlip::with([
+                'staff.site',
+                'staff.bank'
+            ])->findOrFail($id);
+
+            return view('salary.staff-salary.show', compact('salary'));
         }
 
     public function destroy(int $id)
@@ -198,9 +195,12 @@ class StaffSalaryController extends Controller
                 'Salary slip deleted successfully.'
             );
     }
-    public function payslip(StaffSalarySlip $salary)
+  public function payslip(StaffSalarySlip $salary)
     {
-        $salary->load("staff");
+        $salary->load([
+            'staff',
+            'staff.bank'
+        ]);
 
         return view("salary.staff-salary.payslip", compact("salary"));
     }

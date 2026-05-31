@@ -938,6 +938,48 @@ button, a, input, select {
     .content        { padding: 0 !important; }
     body            { background: #fff !important; }
 }
+
+/* ==================== LOGOUT BUTTON ==================== */
+.nav-logout-btn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Barlow', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.3px;
+}
+
+.nav-logout-btn i {
+    font-size: 14px;
+    width: 16px;
+    text-align: center;
+}
+
+.nav-logout-btn:hover {
+    background: rgba(239, 68, 68, 0.22);
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* ==================== HIDE SIDEBAR SCROLLBAR ==================== */
+.nav-section {
+    overflow-y: auto;
+    scrollbar-width: none;        /* Firefox */
+    -ms-overflow-style: none;     /* IE/Edge */
+}
+
+.nav-section::-webkit-scrollbar {
+    display: none;                /* Chrome/Safari */
+}
 /* CREATE LABOUR CSS FOR PROPER ALIGHNMENT OF BOXES */
 </style>
     @stack('styles')
@@ -990,7 +1032,12 @@ button, a, input, select {
             Site  
         </a>
         </div>
-        
+        <form action="{{ route('logout') }}" method="POST" style="padding: 0 12px 12px;">
+            @csrf
+            <button type="submit" class="nav-logout-btn">
+                <i class="fas fa-right-from-bracket"></i> Logout
+            </button>
+        </form>
 
     <div class="sidebar-footer">
         <i class="fas fa-building"></i> &nbsp;Construction Site v1.0

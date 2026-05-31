@@ -29,7 +29,7 @@ class Logincontroller extends Controller
     {
         // Already logged in → go directly to dashboard
         if (Auth::check()) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('dashboard');
         }
  
         return view('admin.login');

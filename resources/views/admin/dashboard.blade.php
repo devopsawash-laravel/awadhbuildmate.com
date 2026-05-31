@@ -423,7 +423,7 @@
                 <a href="{{ route('admin.enquiries') }}" class="db-action-btn db-action-btn--outline">
                     <i class="fas fa-envelope"></i> View Enquiries
                 </a>
-                <form action="{{ route('admin.logout') }}" method="POST" style="display:inline;">
+                <form action="{{ route('logout') }}" method="POST" style="display:inline;">
                     @csrf
                     <button type="submit" class="db-action-btn db-action-btn--danger">
                         <i class="fas fa-sign-out-alt"></i> Logout
