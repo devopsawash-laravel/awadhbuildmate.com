@@ -9,7 +9,7 @@ use App\Http\Controllers\StaffSalaryController;
 use App\Http\Controllers\AdvanceController;
 use Illuminate\Support\Facades\Route;
 // use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\admin\LoginController;
+use App\Http\Controllers\Admin\LoginControllerController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Auth\GoogleController;
@@ -29,7 +29,7 @@ Route::get('/testcontact', [App\Http\Controllers\HomeController::class, 'testcon
 Route::get('/testabout', [App\Http\Controllers\HomeController::class, 'testabout'])->name('website.about');
 
 //-------------------ADMIN PANEL ROUTES WITH MIDDLEWARE-------------------------//
-Route::get('/admin/login', [App\Http\Controllers\admin\LoginController::class, 'index'])->name('admin.login');
+Route::get('/admin/login', [App\Http\Controllers\Admin\LoginControllerController::class, 'index'])->name('admin.login');
 Route::post('/admin/login', [LoginController::class, 'index1'])->name('admin.login.post');
 // Route::post('/admin/logout',[LoginController::class, 'logout'])->name('admin.logout');
 
@@ -114,7 +114,7 @@ Route::delete('/advances/{advance}',[AdvanceController::class, 'destroy'])->name
 // Auth::routes();
 
 //Admin Login Route
-// Route::get('/admin/login', [App\Http\Controllers\admin\LoginController::class, 'index'])->name('admin.login');
+// Route::get('/admin/login', [App\Http\Controllers\Admin\LoginControllerController::class, 'index'])->name('admin.login');
 // Route::post('/admin/login', [LoginController::class, 'index1'])->name('admin.login.post');
 // Route::post('/admin/logout',[LoginController::class, 'logout'])->name('admin.logout');
 
