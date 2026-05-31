@@ -114,9 +114,9 @@ Route::delete('/advances/{advance}',[AdvanceController::class, 'destroy'])->name
 // Auth::routes();
 
 //Admin Login Route
-// Route::get('/admin/login', [App\Http\Controllers\admin\Logincontroller::class, 'index'])->name('admin.login');
-// Route::post('/admin/login', [Logincontroller::class, 'index1'])->name('admin.login.post');
-// Route::post('/admin/logout',[Logincontroller::class, 'logout'])->name('admin.logout');
+// Route::get('/admin/login', [App\Http\Controllers\admin\LoginController::class, 'index'])->name('admin.login');
+// Route::post('/admin/login', [LoginController::class, 'index1'])->name('admin.login.post');
+// Route::post('/admin/logout',[LoginController::class, 'logout'])->name('admin.logout');
 
 //Testing route
 
@@ -134,8 +134,8 @@ Route::get('/admin/enquiries', function() {
 
 
 //Mail Route for testing email notification
-// Route::post('/magic-link',          [Logincontroller::class, 'sendMagicLink'  ])->name('magic.login');
-// Route::get( '/magic-link/{token}',  [Logincontroller::class, 'verifyMagicLink'])->name('magic.login');
+// Route::post('/magic-link',          [LoginController::class, 'sendMagicLink'  ])->name('magic.login');
+// Route::get( '/magic-link/{token}',  [LoginController::class, 'verifyMagicLink'])->name('magic.login');
 
 
 Route::Resource('staff', App\Http\Controllers\StaffController::class);
