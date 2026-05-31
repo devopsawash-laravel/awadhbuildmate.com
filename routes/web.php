@@ -29,11 +29,11 @@ Route::get('/testcontact', [App\Http\Controllers\HomeController::class, 'testcon
 Route::get('/testabout', [App\Http\Controllers\HomeController::class, 'testabout'])->name('website.about');
 
 //-------------------ADMIN PANEL ROUTES WITH MIDDLEWARE-------------------------//
-Route::get('/admin/login', [App\Http\Controllers\Admin\LoginControllerController::class, 'index'])->name('admin.login');
-Route::post('/admin/login', [LoginController::class, 'index1'])->name('admin.login.post');
-// Route::post('/admin/logout',[LoginController::class, 'logout'])->name('admin.logout');
+Route::get('/admin/login', [App\Http\Controllers\Admin\LoginController::class, 'index'])->name('admin.login');
+Route::post('/admin/login', [App\Http\Controllers\Admin\LoginController::class, 'index1'])->name('admin.login.post');
+// Route::post('/admin/logout',[App\Http\Controllers\Admin\LoginController::class, 'logout'])->name('admin.logout');
 
-Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('google.login');
+Route::get('/auth/google', [App\Http\Controllers\Auth\GoogleController::class, 'redirect'])->name('google.login');
 
 Route::get('/auth/google/callback', [GoogleController::class, 'callback']);
 
