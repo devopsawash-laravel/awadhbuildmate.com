@@ -13,7 +13,7 @@ use App\Notifications\AdminLoginLink;
 // use Illuminate\Support\Facades\Notification;
 // use Illuminate\Support\Facades\Hash;
 
-class Logincontroller extends Controller
+class LoginController extends Controller
 {
     /**
      * Display a listing of the resource.

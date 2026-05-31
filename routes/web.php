@@ -9,7 +9,7 @@ use App\Http\Controllers\StaffSalaryController;
 use App\Http\Controllers\AdvanceController;
 use Illuminate\Support\Facades\Route;
 // use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\admin\Logincontroller;
+use App\Http\Controllers\admin\LoginController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Auth\GoogleController;
@@ -29,9 +29,9 @@ Route::get('/testcontact', [App\Http\Controllers\HomeController::class, 'testcon
 Route::get('/testabout', [App\Http\Controllers\HomeController::class, 'testabout'])->name('website.about');
 
 //-------------------ADMIN PANEL ROUTES WITH MIDDLEWARE-------------------------//
-Route::get('/admin/login', [App\Http\Controllers\admin\Logincontroller::class, 'index'])->name('admin.login');
-Route::post('/admin/login', [Logincontroller::class, 'index1'])->name('admin.login.post');
-// Route::post('/admin/logout',[Logincontroller::class, 'logout'])->name('admin.logout');
+Route::get('/admin/login', [App\Http\Controllers\admin\LoginController::class, 'index'])->name('admin.login');
+Route::post('/admin/login', [LoginController::class, 'index1'])->name('admin.login.post');
+// Route::post('/admin/logout',[LoginController::class, 'logout'])->name('admin.logout');
 
 Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('google.login');
 
@@ -134,8 +134,8 @@ Route::get('/admin/enquiries', function() {
 
 
 //Mail Route for testing email notification
-Route::post('/magic-link',          [Logincontroller::class, 'sendMagicLink'  ])->name('magic.login');
-Route::get( '/magic-link/{token}',  [Logincontroller::class, 'verifyMagicLink'])->name('magic.login');
+// Route::post('/magic-link',          [Logincontroller::class, 'sendMagicLink'  ])->name('magic.login');
+// Route::get( '/magic-link/{token}',  [Logincontroller::class, 'verifyMagicLink'])->name('magic.login');
 
 
 Route::Resource('staff', App\Http\Controllers\StaffController::class);
