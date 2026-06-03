@@ -541,7 +541,7 @@
         <div class="nav-logo-icon"><img src="{{ asset('images/projects/logo.png') }}" alt="Awadh Buildmate Logo"></div>
         <div class="nav-logo-text">
             <div class="nav-brand">Awadh Buildmate</div>
-            <div class="nav-tagline">Build · Fabricate · Erect</div>
+            <div class="nav-tagline">Made for Quality and Trust</div>
         </div>
     </a>
 

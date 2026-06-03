@@ -939,7 +939,7 @@ body {
         </h2>
 
         <p class="section-subtitle" style="margin-bottom:60px;">
-            Made For Quality and Trust.
+            {{-- Made For Quality and Trust. --}}
         </p>
 
     </div>

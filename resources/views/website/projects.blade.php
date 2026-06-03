@@ -74,9 +74,9 @@
         <div class="projects-grid">
             @php
             $projects = [
-                ['cat' => 'IBR Fabrication & Erection', 'title' => 'Asian Paints(L&T) – Lakhani Engineering and Organisation', 'client' => 'L&T, Dahej', 'year' => '2025-26', 'value' => '₹6.3 Cr', 'tag' => 'Ongoing'],
+                ['cat' => 'IBR Piping Fabrication & Erection', 'title' => 'Asian Paints(L&T)', 'client' => 'L&T, Dahej', 'year' => '2025-26', 'value' => '₹6.3 Cr', 'tag' => 'Ongoing'],
                 ['cat' => 'Structure', 'title' => 'Adani Power Limited(FabTech)', 'client' => 'Mundra', 'year' => '2026', 'value' => '₹1.2 Cr', 'tag' => 'Ongoing'],
-                ['cat' => 'Piping Erection', 'title' => 'GNFC Chemical Plant AMC', 'client' => 'Mundra', 'year' => '2026', 'value' => '-', 'tag' => 'Ongoing'],
+                // ['cat' => 'Piping Erection', 'title' => '', 'client' => 'Mundra', 'year' => '2026', 'value' => '-', 'tag' => 'Ongoing'],
                 // ['cat' => 'Steel Erection', 'title' => 'Reliance Industries Warehouse', 'client' => 'Reliance, Dahej', 'year' => '2022', 'value' => '₹2.1 Cr', 'tag' => 'Completed'],
                 // ['cat' => 'Fabrication', 'title' => 'IOCL Storage Tank Farm', 'client' => 'IOCL, Vadodara', 'year' => '2023', 'value' => '₹3.5 Cr', 'tag' => 'Completed'],
                 // ['cat' => 'Industrial Construction', 'title' => 'Adani Adani Power Limited(FabTech)peline Project', 'client' => 'BPCL, Rajkot', 'year' => '2023', 'value' => '₹1.8 Cr', 'tag' => 'Completed'],
