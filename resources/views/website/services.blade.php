@@ -86,7 +86,7 @@
             <div class="sb-visual"><i class="fas fa-drafting-compass sb-visual-icon"></i></div>
             <div>
                 <div class="sb-num">01</div>
-                <h2 class="sb-title">Structural Fabrication</h2>
+                <h2 class="sb-title">Piping Fabrication and Erection</h2>
                 <p class="sb-desc">We fabricate a wide range of structural steel components with precision cutting, welding, and finishing. Our workshop is equipped with modern machinery ensuring quality at every step.</p>
                 <ul class="sb-features">
                     <li>Structural steel beams, columns, and trusses</li>
@@ -102,7 +102,7 @@
             <div class="sb-visual"><i class="fas fa-industry sb-visual-icon"></i></div>
             <div>
                 <div class="sb-num">02</div>
-                <h2 class="sb-title">Steel Erection</h2>
+                <h2 class="sb-title">UG Piping works</h2>
                 <p class="sb-desc">Our trained riggers and erectors safely and efficiently assemble steel structures on-site. We handle all types of erection work including heavy lifts using advanced machinery.</p>
                 <ul class="sb-features">
                     <li>Industrial plant and factory erection</li>
@@ -118,7 +118,7 @@
             <div class="sb-visual"><i class="fas fa-building sb-visual-icon"></i></div>
             <div>
                 <div class="sb-num">03</div>
-                <h2 class="sb-title">Industrial Construction</h2>
+                <h2 class="sb-title">Structural Fabrication and Erection</h2>
                 <p class="sb-desc">Complete turnkey construction solutions for industrial clients. We manage everything from site preparation and civil works to final commissioning and handover.</p>
                 <ul class="sb-features">
                     <li>Factory and plant construction</li>
@@ -134,7 +134,7 @@
             <div class="sb-visual"><i class="fas fa-tools sb-visual-icon"></i></div>
             <div>
                 <div class="sb-num">04</div>
-                <h2 class="sb-title">Plant Maintenance</h2>
+                <h2 class="sb-title">Boiler Fabrication and Erection</h2>
                 <p class="sb-desc">We provide annual maintenance contracts (AMC) and shutdown maintenance services to keep industrial plants running at peak performance with minimal downtime.</p>
                 <ul class="sb-features">
                     <li>Annual maintenance contracts (AMC)</li>

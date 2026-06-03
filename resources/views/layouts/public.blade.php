@@ -39,7 +39,7 @@
         }
 
         /* ─── NAVBAR ─── */
-        .navbar {
+       .navbar {
             position: fixed;
             top: 0; left: 0; right: 0;
             z-index: 1000;
@@ -64,22 +64,62 @@
             text-decoration: none;
         }
 
-        .nav-logo-icon {
+        /* .nav-logo-icon {
             width: 42px; height: 42px;
             background: var(--orange);
             display: flex; align-items: center; justify-content: center;
             clip-path: polygon(0 0, 88% 0, 100% 12%, 100% 100%, 12% 100%, 0 88%);
         }
 
-        .nav-logo-icon i { color: #fff; font-size: 18px; }
+        .nav-logo-icon i { color: #fff; font-size: 1px; } */
+/* Updated CSS for logo */
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+}
 
+.nav-logo-icon {
+    width: 56px;
+    height: 56px;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* optional shape */
+    clip-path: polygon(0 0, 88% 0, 100% 12%, 100% 100%, 12% 100%, 0 88%);
+}
+
+.nav-logo-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* or contain */
+    display: block;
+}
+
+.nav-brand {
+    color: #ff5a00;
+    font-size: 28px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.nav-tagline {
+    color: #ff5a00;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+}
         .nav-logo-text { line-height: 1; }
 
         .nav-brand {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 22px;
             letter-spacing: 2px;
-            color: #fff;
+            color: #ff5a00;
         }
 
         .nav-tagline {
@@ -465,7 +505,11 @@
     }
 
 }
-
+.footer-links {
+    /* word-break: break-word; */
+    overflow-wrap: anywhere;
+    white-space: nowrap;
+}
 /* =========================================
    SMALL MOBILE
 ========================================= */
@@ -493,7 +537,8 @@
 
 <nav class="navbar" id="navbar">
     <a href="{{ route('website.home') }}" class="nav-logo">
-        <div class="nav-logo-icon"><i class="fas fa-hard-hat"></i></div>
+        {{-- <div class="nav-logo-icon"><i class="fas fa-hard-hat"></i></div> --}}
+        <div class="nav-logo-icon"><img src="{{ asset('images/projects/logo.png') }}" alt="Awadh Buildmate Logo"></div>
         <div class="nav-logo-text">
             <div class="nav-brand">Awadh Buildmate</div>
             <div class="nav-tagline">Build · Fabricate · Erect</div>
@@ -568,7 +613,7 @@
         <div class="footer-grid">
             <div>
                 <div class="footer-brand">Awadh <span class="orange">Buildmate</span></div>
-                <p class="footer-desc">Premier construction company specializing in structural fabrication, erection, and industrial construction across India.</p>
+                <p class="footer-desc">Made for Quality and Trust.</p>
                 <div style="display:flex;gap:12px;margin-top:20px;">
                     <a href="#" style="width:36px;height:36px;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--orange)';this.style.color='var(--orange)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)';this.style.color='var(--muted)'"><i class="fab fa-linkedin-in" style="font-size:14px"></i></a>
                     <a href="#" style="width:36px;height:36px;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--orange)';this.style.color='var(--orange)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)';this.style.color='var(--muted)'"><i class="fab fa-instagram" style="font-size:14px"></i></a>
@@ -578,11 +623,11 @@
             <div>
                 <div class="footer-heading">Services</div>
                 <ul class="footer-links">
-                    <li><a href="{{ route('website.services') }}">Structural Fabrication</a></li>
-                    <li><a href="{{ route('website.services') }}">Steel Erection</a></li>
-                    <li><a href="{{ route('website.services') }}">Industrial Construction</a></li>
-                    <li><a href="{{ route('website.services') }}">Pipe Fabrication</a></li>
-                    <li><a href="{{ route('website.services') }}">Civil Works</a></li>
+                    <li><a href="{{ route('website.services') }}">Piping Fabrication and Erection</a></li>
+                    <li><a href="{{ route('website.services') }}">UG Piping Works</a></li>
+                    <li><a href="{{ route('website.services') }}">Structural Fabrication and Erection</a></li>
+                    <li><a href="{{ route('website.services') }}">Boiler Fabrication and Erection</a></li>
+                    {{-- <li><a href="{{ route('website.services') }}">Civil Works</a></li> --}}
                 </ul>
             </div>
             <div>
@@ -596,9 +641,9 @@
             <div>
                 <div class="footer-heading">Contact</div>
                 <ul class="footer-links">
-                    <li><a href="tel:+919876543210"><i class="fas fa-phone" style="color:var(--orange);margin-right:8px;font-size:12px"></i>+91 98765 43210</a></li>
-                    <li><a href="mailto:info@awadhbuildmate.com"><i class="fas fa-envelope" style="color:var(--orange);margin-right:8px;font-size:12px"></i>info@awadhbuildmate.com</a></li>
-                    <li style="color:var(--muted);font-size:14px;line-height:1.6;"><i class="fas fa-map-marker-alt" style="color:var(--orange);margin-right:8px;font-size:12px"></i>Ankleshwar, Gujarat, India</li>
+                    <li><a href="tel:+91 7275502405"><i class="fas fa-phone" style="color:var(--orange);margin-right:8px;font-size:12px"></i>+91 72755 02405</a></li>
+                    <li><a href="mailto:awadhbuildmate@gmail.com"><i class="fas fa-envelope" style="color:var(--orange);margin-right:8px;font-size:12px"></i>awadhbuildmate@gmail.com</a></li>
+                    <li style="color:var(--muted);font-size:14px;line-height:1.6;"><i class="fas fa-map-marker-alt" style="color:var(--orange);margin-right:8px;font-size:12px"></i>Vadodara, Gujarat, India</li>
                 </ul>
             </div>
         </div>

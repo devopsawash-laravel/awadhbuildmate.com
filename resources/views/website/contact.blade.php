@@ -80,22 +80,22 @@ textarea.form-control { resize: vertical; min-height: 120px; }
 
                 <div class="contact-info-item">
                     <div class="ci-label"><i class="fas fa-phone"></i> Phone</div>
-                    <div class="ci-val">+91 98765 43210</div>
+                    <div class="ci-val">+91 7275502405</div>
                     <div class="ci-sub">Mon–Sat, 9AM–6PM</div>
                 </div>
                 <div class="contact-info-item">
                     <div class="ci-label"><i class="fas fa-envelope"></i> Email</div>
-                    <div class="ci-val">info@awadhbuildmate.com</div>
+                    <div class="ci-val">awadhbuildmate@gmail.com</div>
                     <div class="ci-sub">We reply within 24 hours</div>
                 </div>
                 <div class="contact-info-item">
                     <div class="ci-label"><i class="fas fa-map-marker-alt"></i> Office</div>
-                    <div class="ci-val">Awadh Buildmate Pvt. Ltd.</div>
-                    <div class="ci-sub">GIDC Industrial Area, Ankleshwar,<br>Bharuch — 393002, Gujarat, India</div>
+                    <div class="ci-val">Awadh Buildmate</div>
+                    <div class="ci-sub">Vadodara — 390023, Gujarat, India</div>
                 </div>
                 <div class="contact-info-item">
                     <div class="ci-label"><i class="fab fa-whatsapp"></i> WhatsApp</div>
-                    <div class="ci-val">+91 98765 43210</div>
+                    <div class="ci-val">+91 7275502405</div>
                     <div class="ci-sub">Quick enquiries welcome</div>
                 </div>
             </div>
@@ -111,7 +111,7 @@ textarea.form-control { resize: vertical; min-height: 120px; }
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('contact.send') }}">
+                <form method="POST" action="{{ route('website.contact') }}">
                     @csrf
                     <div class="form-row">
                         <div class="form-group">

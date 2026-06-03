@@ -51,14 +51,14 @@
     <div class="container">
         <div class="about-intro">
             <div>
-                <div class="big-stat">12</div>
+                <div class="big-stat">1.</div>
                 <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:-8px">Years of Excellence</div>
             </div>
             <div class="about-text">
                 <div class="section-tag">Who We Are</div>
                 <h2 class="section-title" style="font-size:42px;margin-bottom:24px">Building India's<br>Industrial Backbone</h2>
-                <p>Awadh Buildmate Pvt. Ltd. was founded with a single mission: to deliver world-class fabrication, erection, and construction services to India's industrial sector. Based in Ankleshwar, Gujarat — the heart of India's chemical and industrial belt — we have grown from a small workshop to a trusted name across the country.</p>
-                <p>With over 200 completed projects and 500+ skilled workers on our rolls, we handle everything from small maintenance jobs to multi-crore greenfield plant constructions. Our team of certified welders, riggers, fitters, and engineers bring unmatched expertise to every job site.</p>
+                <p>Made for Quality and Trust.</p>
+                <p>Our mission is to provide dependable and efficient construction services that exceed client expectations through quality, dedication, and transparency..</p>
                 <a href="{{ route('website.contact') }}" class="btn-primary" style="margin-top:8px"><i class="fas fa-arrow-right"></i> Work With Us</a>
             </div>
         </div>

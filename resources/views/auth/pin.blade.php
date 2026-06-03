@@ -17,7 +17,9 @@
 
         /* Logo box */
         .ab-logo-box { width: 44px; height: 44px; background: rgba(255,255,255,0.18); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; overflow: hidden; }
-        .ab-logo-box img { width: 100%; height: 100%; object-fit: contain; }
+        .ab-logo-box { perspective: 400px; }
+        .ab-logo-box img { width: 100%; height: 100%; object-fit: contain; transform-origin: center center; animation: ab-coin 3s ease-in-out infinite; }
+        @keyframes ab-coin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
 
         .ab-brand { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 800; color: #fff; letter-spacing: 0.08em; margin-bottom: 3px; }
         .ab-tagline { font-size: 9px; color: rgba(255,255,255,0.7); letter-spacing: 0.18em; font-weight: 500; margin-bottom: 2rem; }
@@ -58,7 +60,7 @@
             </div>
             <div class="ab-brand">AWADH BUILDMATE</div>
             <div class="ab-tagline">BUILD &nbsp;·&nbsp; FABRICATE &nbsp;·&nbsp; ERECT</div>
-            <div class="ab-heading">VERIFY YOUR PIN</div>
+            <div class="ab-heading">VERIFY<br>YOUR<br>PIN</div>
             <p class="ab-desc">Confirm your identity with your secure 6-digit PIN to access the admin panel.</p>
         </div>
         <div class="ab-footer">© 2026 Awadh Buildmate Pvt. Ltd. — Ankleshwar, Gujarat</div>

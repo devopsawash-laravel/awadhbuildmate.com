@@ -65,7 +65,7 @@
     <div class="container">
         <div class="section-tag">Our Work</div>
         <h1 class="section-title">Featured<br>Projects</h1>
-        <p class="section-subtitle" style="margin-top:16px">A selection of completed projects across India demonstrating our capabilities and commitment to quality.</p>
+        <p class="section-subtitle" style="margin-top:16px">A selection of completed and Ongoing projects across cities demonstrating our capabilities and commitment to quality.</p>
     </div>
 </div>
 
@@ -74,15 +74,14 @@
         <div class="projects-grid">
             @php
             $projects = [
-                ['cat' => 'Fabrication & Erection', 'title' => 'HPCL Refinery Expansion', 'client' => 'HPCL, Mumbai', 'year' => '2023', 'value' => '₹4.2 Cr', 'tag' => 'Completed'],
-                ['cat' => 'Structural Construction', 'title' => 'ONGC Offshore Platform', 'client' => 'ONGC, Surat', 'year' => '2023', 'value' => '₹7.8 Cr', 'tag' => 'Completed'],
-                ['cat' => 'Plant Maintenance', 'title' => 'GNFC Chemical Plant AMC', 'client' => 'GNFC, Bharuch', 'year' => '2022–24', 'value' => '₹1.5 Cr', 'tag' => 'Ongoing'],
-                ['cat' => 'Steel Erection', 'title' => 'Reliance Industries Warehouse', 'client' => 'Reliance, Dahej', 'year' => '2022', 'value' => '₹2.1 Cr', 'tag' => 'Completed'],
-                ['cat' => 'Fabrication', 'title' => 'IOCL Storage Tank Farm', 'client' => 'IOCL, Vadodara', 'year' => '2023', 'value' => '₹3.5 Cr', 'tag' => 'Completed'],
-                ['cat' => 'Industrial Construction', 'title' => 'Adani Power Plant Support', 'client' => 'Adani, Mundra', 'year' => '2021', 'value' => '₹9.2 Cr', 'tag' => 'Completed'],
-                ['cat' => 'Pipe Fabrication', 'title' => 'BPCL Pipeline Project', 'client' => 'BPCL, Rajkot', 'year' => '2023', 'value' => '₹1.8 Cr', 'tag' => 'Completed'],
-                ['cat' => 'Structural Fabrication', 'title' => 'Torrent Power Substation', 'client' => 'Torrent, Ahmedabad', 'year' => '2022', 'value' => '₹2.6 Cr', 'tag' => 'Completed'],
-                ['cat' => 'Erection', 'title' => 'GSFC Fertilizer Plant', 'client' => 'GSFC, Vadodara', 'year' => '2024', 'value' => '₹5.1 Cr', 'tag' => 'Ongoing'],
+                ['cat' => 'IBR Fabrication & Erection', 'title' => 'Asian Paints(L&T) – Lakhani Engineering and Organisation', 'client' => 'L&T, Dahej', 'year' => '2025-26', 'value' => '₹6.3 Cr', 'tag' => 'Ongoing'],
+                ['cat' => 'Structure', 'title' => 'Adani Power Limited(FabTech)', 'client' => 'Mundra', 'year' => '2026', 'value' => '₹1.2 Cr', 'tag' => 'Ongoing'],
+                ['cat' => 'Piping Erection', 'title' => 'GNFC Chemical Plant AMC', 'client' => 'Mundra', 'year' => '2026', 'value' => '-', 'tag' => 'Ongoing'],
+                // ['cat' => 'Steel Erection', 'title' => 'Reliance Industries Warehouse', 'client' => 'Reliance, Dahej', 'year' => '2022', 'value' => '₹2.1 Cr', 'tag' => 'Completed'],
+                // ['cat' => 'Fabrication', 'title' => 'IOCL Storage Tank Farm', 'client' => 'IOCL, Vadodara', 'year' => '2023', 'value' => '₹3.5 Cr', 'tag' => 'Completed'],
+                // ['cat' => 'Industrial Construction', 'title' => 'Adani Adani Power Limited(FabTech)peline Project', 'client' => 'BPCL, Rajkot', 'year' => '2023', 'value' => '₹1.8 Cr', 'tag' => 'Completed'],
+                // ['cat' => 'Structural Fabrication', 'title' => 'Torrent Power Substation', 'client' => 'Torrent, Ahmedabad', 'year' => '2022', 'value' => '₹2.6 Cr', 'tag' => 'Completed'],
+                // ['cat' => 'Erection', 'title' => 'GSFC Fertilizer Plant', 'client' => 'GSFC, Vadodara', 'year' => '2024', 'value' => '₹5.1 Cr', 'tag' => 'Ongoing'],
             ];
             @endphp
 

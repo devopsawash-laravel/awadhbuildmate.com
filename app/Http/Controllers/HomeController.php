@@ -39,6 +39,7 @@ class HomeController extends Controller
     public function testcontact()
     {
         return view('website.contact');
+        // dd('Shivani');
     }
     public function testabout()
     {

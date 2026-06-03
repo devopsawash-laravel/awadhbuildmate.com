@@ -358,6 +358,10 @@
             .right { width: 100%; border: none; padding: 36px 24px; }
             .back-link { left: 24px; }
         }
+          .ab-logo-box { width: 44px; height: 44px; background: rgba(255,255,255,0.18); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; overflow: hidden; }
+        .ab-logo-box { perspective: 400px; }
+        .ab-logo-box img { width: 100%; height: 100%; object-fit: contain; transform-origin: center center; animation: ab-coin 3s ease-in-out infinite; }
+        @keyframes ab-coin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
     </style>
 </head>
 <body>
@@ -365,7 +369,9 @@
 {{-- ── LEFT BRAND PANEL ─────────────────────────────────────────── --}}
 <div class="left">
     <div class="left-top">
-        <div class="brand-icon"><i class="fas fa-hard-hat"></i></div>
+        <div class="ab-logo-box">
+                <img src="{{ asset('images/projects/logo.png') }}" alt="Awadh Buildmate Logo">
+        </div>
         {{-- <div class="brand-icon"><img src="{{ asset('images/projects/logo.png') }}" alt="Awadh Buildmate Logo"></div> --}}
         <div class="brand-name">Awadh Buildmate</div>
         <div class="brand-sub">Build · Fabricate · Erect</div>

@@ -765,7 +765,47 @@ body {
     overflow-x: hidden;
     width: 100%;
 }
+.footer-links li {
+    margin-bottom: 10px;
+}
 
+.footer-links a,
+.footer-links .address {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.footer-links i {
+    color: var(--orange);
+    font-size: 12px;
+    margin-top: 5px;
+    flex-shrink: 0;
+}
+
+.email-link {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    white-space: nowrap;
+}
+.marquee-track {
+    display: flex;
+    gap: 20px;
+    animation: scroll 20s linear infinite;
+}
+
+@keyframes scroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
     </style>
 
     @stack('styles')
@@ -899,7 +939,7 @@ body {
         </h2>
 
         <p class="section-subtitle" style="margin-bottom:60px;">
-            Build For Quality and Trust.
+            Made For Quality and Trust.
         </p>
 
     </div>
@@ -910,21 +950,21 @@ body {
         <div class="marquee-track">
 
             <div class="marquee-item">
-                <img src="{{ asset('images/projects/1.jpg') }}" alt="">
-                <span>Welding Works</span>
+                <img src="{{ asset('images/projects/new1.jpeg') }}" alt="">
+                <span>Piping Fabrication and Erection</span>
             </div>
 
             <div class="marquee-item">
-                <img src="{{ asset('images/projects/2.jpg') }}" alt="">
-                <span>Steel Structuring</span>
+                <img src="{{ asset('images/projects/new2.jpg') }}" alt="">
+                <span>UG Piping Works</span>
             </div>
 
             <div class="marquee-item">
-                <img src="{{ asset('images/projects/3.jpg') }}" alt="">
-                <span>Industrial Erection</span>
+                <img src="{{ asset('images/projects/new3.jpg') }}" alt="">
+                <span>Structural Fabrication and Erection</span>
             </div>
 
-            <div class="marquee-item">
+            {{-- <div class="marquee-item">
                 <img src="{{ asset('images/projects/4.jpg') }}" alt="">
                 <span>Pipe Fabrication</span>
             </div>
@@ -932,30 +972,30 @@ body {
             <div class="marquee-item">
                 <img src="{{ asset('images/projects/5.jpg') }}" alt="">
                 <span>Fabrication</span>
-            </div>
+            </div> --}}
 
             <!-- DUPLICATE FOR SMOOTH LOOP -->
 
             <div class="marquee-item">
                 <img src="{{ asset('images/projects/1.jpg') }}" alt="">
-                <span>Welding Works</span>
+                <span>Piping Fabrication and Erection</span>
             </div>
 
             <div class="marquee-item">
                 <img src="{{ asset('images/projects/2.jpg') }}" alt="">
-                <span>Steel Structuring</span>
+                <span>UG Piping Works</span>
             </div>
 
             <div class="marquee-item">
                 <img src="{{ asset('images/projects/3.jpg') }}" alt="">
-                <span>Industrial Erection</span>
+                <span>Structural Fabrication and Erection</span>
             </div>
 
         </div>
     </div>
 
     <!-- BOTTOM MARQUEE -->
-    <div class="marquee reverse">
+    {{-- <div class="marquee reverse">
 
         <div class="marquee-track">
 
@@ -997,7 +1037,7 @@ body {
             </div>
 
         </div>
-    </div>
+    </div> --}}
 
 </section>
 <main>
@@ -1008,7 +1048,7 @@ body {
         <div class="footer-grid">
             <div>
                 <div class="footer-brand">Awadh <span class="orange">Buildmate</span></div>
-                <p class="footer-desc">Building durable solutions with a focus on precision, strength, and performance, Trusted for delivering work that meets high standards and client expectations.</p>
+                <p class="footer-desc">Made for Quality and Trust.</p>
                 <div style="display:flex;gap:12px;margin-top:20px;">
                     <a href="#" style="width:36px;height:36px;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--orange)';this.style.color='var(--orange)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)';this.style.color='var(--muted)'"><i class="fab fa-linkedin-in" style="font-size:14px"></i></a>
                     <a href="#" style="width:36px;height:36px;border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;transition:all 0.2s;" onmouseover="this.style.borderColor='var(--orange)';this.style.color='var(--orange)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)';this.style.color='var(--muted)'"><i class="fab fa-instagram" style="font-size:14px"></i></a>
@@ -1018,11 +1058,11 @@ body {
             <div>
                 <div class="footer-heading">Services</div>
                 <ul class="footer-links">
-                    <li><a href="{{ route('website.services') }}">Structural Fabrication</a></li>
-                    <li><a href="{{ route('website.services') }}">Steel Erection</a></li>
-                    <li><a href="{{ route('website.services') }}">Industrial Construction</a></li>
-                    <li><a href="{{ route('website.services') }}">Pipe Fabrication</a></li>
-                    <li><a href="{{ route('website.services') }}">Civil Works</a></li>
+                    <li><a href="{{ route('website.services') }}">Piping Fabrication and Erection</a></li>
+                    <li><a href="{{ route('website.services') }}">UG Piping Works</a></li>
+                    <li><a href="{{ route('website.services') }}">Structural Fabrication and Erection</a></li>
+                    <li><a href="{{ route('website.services') }}">Boiler Fabrication and Erection</a></li>
+                    {{-- <li><a href="{{ route('website.services') }}">Civil Works</a></li> --}}
                 </ul>
             </div>
             <div>
@@ -1034,13 +1074,28 @@ body {
                 </ul>
             </div>
             <div>
-                <div class="footer-heading">Contact</div>
-                <ul class="footer-links">
-                    <li><a href="tel:+91 7275502405"><i class="fas fa-phone" style="color:var(--orange);margin-right:8px;font-size:12px"></i>+91 7275502405</a></li>
-                    <li><a href="mailto:awadhbuildmate@gmail.com"><i class="fas fa-envelope" style="color:var(--orange);margin-right:8px;font-size:12px"></i>awadhbuildmate@gmail.com</a></li>
-                    <li style="color:var(--muted);font-size:14px;line-height:1.6;"><i class="fas fa-map-marker-alt" style="color:var(--orange);margin-right:8px;font-size:12px"></i>Vadodara, Gujarat, India</li>
-                </ul>
-            </div>
+    <div class="footer-heading">Contact</div>
+    <ul class="footer-links">
+        <li>
+            <a href="tel:+917275502405">
+                <i class="fas fa-phone"></i>
+                +91 7275502405
+            </a>
+        </li>
+
+        <li>
+            <a href="mailto:awadhbuildmate@gmail.com" class="email-link">
+                <i class="fas fa-envelope"></i>
+                awadhbuildmate@gmail.com
+            </a>
+        </li>
+
+        <li class="address">
+            <i class="fas fa-map-marker-alt"></i>
+            Vadodara, Gujarat, India
+        </li>
+    </ul>
+</div>
         </div>
 
         <div class="footer-bottom">
