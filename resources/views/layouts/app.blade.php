@@ -1031,6 +1031,11 @@ button, a, input, select {
             <i class="fas fa-building-columns"></i>
             Site  
         </a>
+         <div class="nav-label" style="margin-top:8px;">Generate Invoice</div>
+        <a href="{{ route('invoices.create') }}" class="nav-item {{ request()->routeIs('invoice.create') ? 'active' : '' }}">
+            <i class="fas fa-building-columns"></i>
+            Generate Invoice
+        </a>
         </div>
         <form action="{{ route('logout') }}" method="POST" style="padding: 0 12px 12px;">
             @csrf

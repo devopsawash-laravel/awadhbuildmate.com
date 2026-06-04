@@ -110,26 +110,27 @@ class StaffSalaryController extends Controller
 
         $totalDaysInMonth = Carbon::create($year,$month,1)->daysInMonth;
 
-       $dailyWage = $totalSalary / $totalDaysInMonth;
+        $dailyWage = $totalSalary / $totalDaysInMonth;
 
-$paidDays = $presentDays + $weekOff;
+        $paidDays = $presentDays + $weekOff;
+        // dd($paidDays);
 
-$grossSalary = round($paidDays * $dailyWage, 2);
+        $grossSalary = round($paidDays * $dailyWage, 2);
 
-        // $earnedBasic = round(($basicSalary / $totalDaysInMonth) * $paidDays,2);
-        // $earnedHra = round(($hra / $totalDaysInMonth) * $paidDays,2);
-        // $earnedOtherAllowance = round(($otherAllowance / $totalDaysInMonth) * $paidDays,2);
+            // $earnedBasic = round(($basicSalary / $totalDaysInMonth) * $paidDays,2);
+            // $earnedHra = round(($hra / $totalDaysInMonth) * $paidDays,2);
+            // $earnedOtherAllowance = round(($otherAllowance / $totalDaysInMonth) * $paidDays,2);
 
         $totalComponents = $basicSalary + $hra + $otherAllowance;
 
-       $earnedBasic = round(($basicSalary / $totalComponents) * $grossSalary, 2);
+        $earnedBasic = round(($basicSalary / $totalComponents) * $grossSalary, 2);
 
-$earnedHra = round(($hra / $totalComponents) * $grossSalary, 2);
+         $earnedHra = round(($hra / $totalComponents) * $grossSalary, 2);
 
-$earnedOtherAllowance = round(
-    $grossSalary - $earnedBasic - $earnedHra,
-    2
-);
+        $earnedOtherAllowance = round(
+        $grossSalary - $earnedBasic - $earnedHra,
+        2
+    );
 
         $pfDeduction = 0;
         $advanceDeduction = 0;

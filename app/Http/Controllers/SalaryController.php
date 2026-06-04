@@ -516,23 +516,27 @@ class SalaryController extends Controller
         $salary->employee_type = 'Labour';
         $salary->employee = $salary->labour;
         $combinedSlips->push($salary);
+        // dd($salarySlips);
     }
 
     foreach ($staffSalarySlips as $salary) {
         $salary->employee_type = 'Staff';
         $salary->employee = $salary->staff;
+        // $salary->working_days = $salary->paid_days ?? 0;
         $combinedSlips->push($salary);
     } 
-
-// dd($combinedSlips->first());
-return view(
-    "salary.wages-sheet",
-    compact(
-        "combinedSlips",
-        "month",
-        "year",
-        "sites"
-    )
-);
-}
+    
+    //dd($salary);
+    // dd($staffSalarySlips);
+    // dd($combinedSlips);
+    return view(
+        "salary.wages-sheet",
+        compact(
+            "combinedSlips",
+            "month",
+            "year",
+            "sites"
+        )
+    );
+    }
 }

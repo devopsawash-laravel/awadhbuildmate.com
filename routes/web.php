@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Auth\GoogleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Http\Controllers\InvoiceController;
 
 // Route::get('/login', function () {
 //     return view('auth.login');
@@ -176,5 +177,8 @@ Route::get('/test-mail', function () {
 
     return 'Mail Sent';
 });
-
+// web.php
+Route::get('/invoices/create', [InvoiceController::class, 'create'])->name('invoices.create');
+Route::post('/invoices', [InvoiceController::class, 'store'])->name('invoices.store');
+Route::get('/invoices/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoices.edit');
 });

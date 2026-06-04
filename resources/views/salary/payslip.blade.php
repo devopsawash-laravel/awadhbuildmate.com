@@ -130,8 +130,8 @@
                     
                     // For removing unnecessory 0's.
                     // $otDays = rtrim(rtrim(number_format($effectiveOtHours / $workingHoursPerDay, 2, '.', ''), ''), '.');
-                    $otDays = $effectiveOtHours / $workingHoursPerDay;
-                    // dd($otDays);
+                    $otDays =$effectiveOtHours / $workingHoursPerDay;
+                    // dd($otDays)
 
                     // $otDays = rtrim(rtrim(sprintf('%.2f', $otDays), '0'), '.');
                     // $otDays = 

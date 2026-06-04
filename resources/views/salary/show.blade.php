@@ -459,11 +459,11 @@
         $workingHoursPerDay = $salary->labour->working_hours_per_day ?? 8;
         $otMultiplier       = $salary->labour->ot_rate_multiplier ?? 1;
         $effectiveOtHours   = ($salary->overtime_hours ?? 0) * $otMultiplier;
-        $otDays             = round($effectiveOtHours / $workingHoursPerDay, 2);
+        $otDays             = floor($effectiveOtHours / $workingHoursPerDay * 10) / 10;
         $finalPayableDays   = floor(($paidDays + $otDays) * 10) / 10;
         $finalOtHours       = ($salary->overtime_hours ?? 0) * ($salary->ot_rate_multiplier ?? 1);
         $lastOT             = $finalOtHours * $otMultiplier;
-    @endphp
+    @endphp 
 
     <div class="section">
         <div class="sec-title orange">Working Details</div>

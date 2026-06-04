@@ -84,23 +84,17 @@
 }
 
 .nav-logo-icon {
-    width: 56px;
-    height: 56px;
-    overflow: hidden;
-
+    width: 65px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    /* optional shape */
-    clip-path: polygon(0 0, 88% 0, 100% 12%, 100% 100%, 12% 100%, 0 88%);
 }
 
 .nav-logo-icon img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* or contain */
-    display: block;
+    object-fit: contain;
 }
 
 .nav-brand {
@@ -628,8 +622,8 @@
     }
 
     .nav-logo-icon {
-        width: 46px;
-        height: 46px;
+        width: 65px;
+        height: 65px;
     }
 
     .section-title {
@@ -806,6 +800,27 @@ body {
         transform: translateX(-50%);
     }
 }
+@media (max-width: 768px) {
+
+    .navbar {
+        height: 75px;
+    }
+
+    .nav-logo-icon {
+        width: 55px;
+        height: 55px;
+    }
+
+    .nav-brand {
+        font-size: 22px;
+    }
+
+    .nav-tagline {
+        font-size: 8px;
+        letter-spacing: 2px;
+    }
+}
+
     </style>
 
     @stack('styles')
@@ -817,6 +832,7 @@ body {
         <div class="nav-logo-icon"><img src="{{ asset('images/projects/logo.png') }}" alt="Awadh Buildmate Logo"></div>
         <div class="nav-logo-text">
             <div class="nav-brand">Awadh Buildmate</div>
+            <div class="nav-tagline">Made for Quality and Trust</div>
             <div class="nav-tagline">Build · Fabricate · Erect</div>
         </div>
     </a>
