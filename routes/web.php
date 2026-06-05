@@ -185,5 +185,7 @@ Route::post('/invoice/store', [InvoiceController::class, 'store'])->name('invoic
 Route::get('/invoice', [InvoiceController::class, 'index'])->name('invoice.index');
 
 Route::get('/invoices/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoices.edit');
+Route::get('/invoice/{invoice}', [InvoiceController::class, 'show'])->name('invoice.show');
+Route::delete('/invoice/{invoice}', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
 });
 // Route::get('/invoice', [InvoiceController::class, 'index'])->name('invoice.index');

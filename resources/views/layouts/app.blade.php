@@ -1032,7 +1032,7 @@ button, a, input, select {
             Site  
         </a>
          <div class="nav-label" style="margin-top:8px;">Generate Invoice</div>
-        <a href="{{ route('invoices.create') }}" class="nav-item {{ request()->routeIs('invoice.create') ? 'active' : '' }}">
+        <a href="{{ route('invoice.index') }}" class="nav-item {{ request()->routeIs('invoice.create') ? 'active' : '' }}">
             <i class="fas fa-building-columns"></i>
             Generate Invoice
         </a>

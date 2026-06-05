@@ -10,14 +10,15 @@ class InvoiceController extends Controller
 {
     public function index()
     {
-        $invoices = Invoice::latest()->get();
-
+        $invoices = Invoice::latest()->paginate(10);
+        // $invoices = Invoice::latest()->get();
         return view('invoice.index', compact('invoices'));
     }
    // InvoiceController@create
-    public function create() {  
-        return view('invoice.create');
-    }
+    public function create() {
+    $invoices = Invoice::latest()->get();
+    return view('invoice.create', compact('invoices'));
+}
 
 // InvoiceController@store
     public function store(Request $request)
@@ -50,8 +51,18 @@ class InvoiceController extends Controller
         $invoice->items()->create($item);
     }
 
-    return redirect()
-        ->route('invoices.create')
-        ->with('success', 'Invoice stored successfully!');
+    return redirect()->route('invoice.index')->with('success', 'Invoice stored successfully!');
 }
+    public function show(Invoice $invoice)
+    {
+        $invoice->load('items');
+
+        return view('invoice.show', compact('invoice'));
     }
+    public function destroy(Invoice $invoice)
+    {
+        $invoice->delete();
+
+        return redirect()->route('invoice.index')->with('success', 'Invoice deleted successfully!');
+    }
+}
