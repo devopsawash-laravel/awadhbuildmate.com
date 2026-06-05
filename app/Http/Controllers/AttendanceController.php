@@ -27,15 +27,11 @@ class AttendanceController extends Controller
     // Site Filter
     if ($request->filled('site_id')) {
 
-        $query->where(
-            'site_id',
-            $request->site_id
-        );
+        $query->where('site_id',$request->site_id);
     }
 
-    $labours = $query
-        ->orderBy('name')
-        ->get();
+    // $labours = $query->orderBy('name')->get();
+    $labours = $query->whereDate('joining_date', '<=', $date)->orderBy('name')->get();
 
     // Existing Attendance
     $attendances = Attendance::where('date', $date)
@@ -108,17 +104,19 @@ class AttendanceController extends Controller
         );
     }
 
-    // Attendance Relation
-    $labours = $query
-        ->with([
-            'attendances' => function ($q) use ($month, $year) {
 
-                $q->whereMonth('date', $month)
-                  ->whereYear('date', $year);
-            }
-        ])
-        ->orderBy('name')
-        ->get();
+    // $labours = $query->with(['attendances' => function ($q) use ($month, $year) {
+    //             $q->whereMonth('date', $month)
+    //               ->whereYear('date', $year);
+    //         }
+    //     ])->orderBy('name')->get();
+    
+    // Attendance Relation
+    $lastDateOfMonth = Carbon::create($year, $month)->endOfMonth();
+    $labours = $query->whereDate('joining_date', '<=', $lastDateOfMonth)->with(['attendances' => function ($q) use ($month, $year) {
+            $q->whereMonth('date', $month)->whereYear('date', $year);
+        }
+    ])->orderBy('name')->get();
 
     $daysInMonth = Carbon::createFromDate(
         $year,

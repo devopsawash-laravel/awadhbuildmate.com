@@ -162,7 +162,7 @@ body {
   background: var(--surface-2); border-bottom: 1px solid var(--border);
   text-align: left; white-space: nowrap;
 }
-.inv-table thead th.r { text-align: right; }
+.inv-table thead th.r { text-align: left; }
 .inv-table tbody tr {
   border-bottom: 1px solid var(--border);
   transition: background 0.12s;
@@ -184,7 +184,7 @@ body {
 .cell-amount { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: var(--text-1); }
 .cell-grand  { font-family: 'DM Mono', monospace; font-size: 13.5px; font-weight: 700; color: var(--accent); }
 
-.actions { display: flex; gap: 6px; justify-content: flex-end; }
+.actions { display: flex; gap: 6px; text-align: right; }
 .act-btn {
   display: inline-flex; align-items: center; gap: 4px;
   padding: 5px 10px; border-radius: var(--radius-sm);
