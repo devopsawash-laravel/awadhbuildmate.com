@@ -14,9 +14,19 @@ return new class extends Migration
     public function up()
     {
         Schema::create('invoice_items', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+        $table->id();
+
+        $table->foreignId('invoice_id')
+            ->constrained()
+            ->cascadeOnDelete();
+
+        $table->string('particulars');
+        $table->decimal('qty', 10, 2)->default(0);
+        $table->decimal('rate', 12, 2)->default(0);
+        $table->decimal('amount', 12, 2)->default(0);
+
+        $table->timestamps();
+    });
     }
 
     /**

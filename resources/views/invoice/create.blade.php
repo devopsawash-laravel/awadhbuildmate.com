@@ -153,6 +153,7 @@ body {
   color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  text-align: left;
 }
 .item-row {
   display: grid;
@@ -518,15 +519,17 @@ body {
       <div class="topbar-sub">Invoice Creator</div>
     </div>
   </div>
+  <form action="{{ route('invoice.store') }}" method="POST">
   <div style="display:flex;align-items:center;gap:12px;">
     <span class="status-pill"><span class="status-dot"></span>Live Preview</span>
     <div class="topbar-actions">
       <button class="btn btn-ghost" onclick="window.print()">
         <i class="ti ti-printer" aria-hidden="true"></i> Print
       </button>
-      <button class="btn btn-primary" onclick="alert('Save action — connect to Laravel backend')">
-        <i class="ti ti-device-floppy" aria-hidden="true"></i> Save Invoice
+      <button type="submit" class="btn btn-primary">
+          <i class="ti ti-device-floppy"></i> Save Invoice
       </button>
+    </form>
     </div>
   </div>
 </header>
@@ -534,6 +537,8 @@ body {
 <div class="app-layout">
 
   <!-- ══ FORM PANEL ══ -->
+  <form action="{{ route('invoice.store') }}" method="POST">
+  @csrf
   <aside class="form-panel">
 
     <!-- Bill Info -->
@@ -544,11 +549,11 @@ body {
       <div class="field-row">
         <div class="field">
           <label>Bill No.</label>
-          <input type="text" id="bill_no" placeholder="25-03-2026" oninput="updatePreview()">
+          <input type="text" id="bill_no" name="bill_no" placeholder="25-03-2026" oninput="updatePreview()">
         </div>
         <div class="field">
           <label>Bill Date</label>
-          <input type="date" id="bill_date" oninput="updatePreview()">
+          <input type="date" id="bill_date" name="bill_date" oninput="updatePreview()">
         </div>
       </div>
     </div>
@@ -560,11 +565,11 @@ body {
       </div>
       <div class="field">
         <label>Client / Company Name</label>
-        <input type="text" id="to_name" placeholder="e.g. Lakhani Engineering" oninput="updatePreview()">
+        <input type="text" id="to_name" name="to_name" placeholder="e.g. Lakhani Engineering" oninput="updatePreview()">
       </div>
       <div class="field" style="margin-top:10px;">
         <label>C/o or Sub-line</label>
-        <input type="text" id="to_co" placeholder="e.g. C/o L&T (Asian Paint)" oninput="updatePreview()">
+        <input type="text" id="to_co" name="to_co" placeholder="e.g. C/o L&T (Asian Paint)" oninput="updatePreview()">
       </div>
     </div>
 
@@ -576,11 +581,11 @@ body {
       <div class="field-row">
         <div class="field">
           <label>Contact Person</label>
-          <input type="text" id="contact_person" placeholder="Name" oninput="updatePreview()">
+          <input type="text" id="contact_person" name="contact_person" placeholder="Name" oninput="updatePreview()">
         </div>
         <div class="field">
           <label>Contact Number</label>
-          <input type="text" id="contact_number" placeholder="+91 XXXXX XXXXX" oninput="updatePreview()">
+          <input type="text" id="contact_number" name="contact_number" placeholder="+91 XXXXX XXXXX" oninput="updatePreview()">
         </div>
       </div>
     </div>
@@ -592,20 +597,20 @@ body {
       </div>
       <div class="field">
         <label>Firm Name</label>
-        <input type="text" id="from_name" value="Awadh Buildmate" oninput="updatePreview()">
+        <input type="text" id="from_name" name="from_name" value="Awadh Buildmate" oninput="updatePreview()">
       </div>
       <div class="field" style="margin-top:10px;">
         <label>Address</label>
-        <textarea id="from_address" rows="2" oninput="updatePreview()">Floor No.: 1st, Building No.: C-101, Building: Nakshtra Heights, Subhanpura Road, Subhanpura, Vadodara, Gujarat - 390023.</textarea>
+        <textarea id="from_address" name="from_address" rows="2" oninput="updatePreview()">Floor No.: 1st, Building No.: C-101, Building: Nakshtra Heights, Subhanpura Road, Subhanpura, Vadodara, Gujarat - 390023.</textarea>
       </div>
       <div class="field-row" style="margin-top:10px;">
         <div class="field">
           <label>PAN</label>
-          <input type="text" id="from_pan" value="GTBPM0457F" oninput="updatePreview()">
+          <input type="text" id="from_pan" name="from_pan" value="GTBPM0457F" oninput="updatePreview()">
         </div>
         <div class="field">
           <label>GST No.</label>
-          <input type="text" id="from_gst" value="24GTBPM0457F1ZW" oninput="updatePreview()">
+          <input type="text" id="from_gst" name="from_gst" value="24GTBPM0457F1ZW" oninput="updatePreview()">
         </div>
       </div>
     </div>
@@ -617,21 +622,21 @@ body {
       </div>
       <div class="field">
         <label>Bank Name</label>
-        <input type="text" id="bank_name" value="Indian Overseas Bank" oninput="updatePreview()">
+        <input type="text" id="bank_name" name="bank_name" value="Indian Overseas Bank" oninput="updatePreview()">
       </div>
       <div class="field-row" style="margin-top:10px;">
         <div class="field">
           <label>Account No.</label>
-          <input type="text" id="account_no" placeholder="Account number" oninput="updatePreview()">
+          <input type="text" id="account_no" name="account_no" placeholder="Account number" oninput="updatePreview()">
         </div>
         <div class="field">
           <label>IFSC Code</label>
-          <input type="text" id="ifsc_code" placeholder="IOBA0001234" oninput="updatePreview()">
+          <input type="text" id="ifsc_code" name="ifsc_code" placeholder="IOBA0001234" oninput="updatePreview()">
         </div>
       </div>
       <div class="field" style="margin-top:10px;">
         <label>Proprietor Name</label>
-        <input type="text" id="proprietor" value="Harsh Raj Maurya" oninput="updatePreview()">
+        <input type="text" id="proprietor" name="proprietor" value="Harsh Raj Maurya" oninput="updatePreview()">
       </div>
     </div>
 
@@ -661,16 +666,16 @@ body {
       <div class="field-row">
         <div class="field">
           <label>GST Rate (%)</label>
-          <input type="number" id="gst_rate" value="18" min="0" oninput="updatePreview()">
+          <input type="number" id="gst_rate" name="gst_rate" value="18" min="0" oninput="updatePreview()">
         </div>
         <div class="field">
           <label>TDS Rate (%)</label>
-          <input type="number" id="tds_rate" value="5" min="0" oninput="updatePreview()">
+          <input type="number" id="tds_rate" name="tds_rate" value="5" min="0" oninput="updatePreview()">
         </div>
       </div>
       <div class="field" style="margin-top:10px;">
         <label>Deposit / Advance Deduction (₹)</label>
-        <input type="number" id="deposit" value="0" min="0" oninput="updatePreview()">
+        <input type="number" id="deposit" name="deposit" value="0" min="0" oninput="updatePreview()">
       </div>
     </div>
 
@@ -680,7 +685,7 @@ body {
         <span class="section-title"><i class="ti ti-notes" aria-hidden="true"></i> &nbsp;Note (Optional)</span>
       </div>
       <div class="field">
-        <textarea id="note" rows="3" placeholder="Any additional notes…" oninput="updatePreview()"></textarea>
+        <textarea id="note" name="note" rows="3" placeholder="Any additional notes…" oninput="updatePreview()"></textarea>
       </div>
     </div>
 
@@ -689,13 +694,13 @@ body {
       <button class="btn btn-ghost" onclick="window.print()">
         <i class="ti ti-printer" aria-hidden="true"></i> Print
       </button>
-      <button class="btn btn-primary" onclick="alert('Save invoice — connect to backend')">
-        <i class="ti ti-device-floppy" aria-hidden="true"></i> Save Invoice
-      </button>
+    <button type="submit" class="btn btn-primary">
+      <i class="ti ti-device-floppy"></i> Save Invoice
+    </button>
     </div>
-
+  </form>
   </aside>
-
+   
   <!-- ══ PREVIEW PANEL ══ -->
   <main class="preview-panel">
     <div class="invoice-doc" id="invoicePreview">
@@ -743,8 +748,8 @@ body {
         <table class="inv-table">
           <thead>
             <tr>
-              <th style="width:32px;text-align:center">#</th>
-              <th>Particulars</th>
+              <th style="width:32px;text-align:left">#</th>
+              <th style="width:32px;text-align:left">Particulars</th>
               <th style="width:64px">QTY</th>
               <th style="width:96px">Rate (₹)</th>
               <th style="width:110px">Amount (₹)</th>
@@ -963,5 +968,19 @@ document.addEventListener('DOMContentLoaded', () => {
   updatePreview();
 });
 </script>
+@if(session('success'))
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Invoice Saved',
+    text: '{{ session('success') }}',
+    confirmButtonText: 'OK',
+    confirmButtonColor: '#ff7a00',
+    background: '#fff',
+    color: '#333'
+});
+</script>
+@endif
 </body>
 </html>

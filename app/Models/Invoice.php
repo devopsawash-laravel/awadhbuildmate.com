@@ -54,7 +54,6 @@ class Invoice extends Model
         'total_deduction',
         'grand_total',
     ];
-
     protected $casts = [
         'bill_date'       => 'date',
         'gst_rate'        => 'decimal:2',
@@ -71,7 +70,7 @@ class Invoice extends Model
     // ── Relationships ────────────────────────────────
     public function items()
     {
-        return $this->hasMany(InvoiceItem::class);
+        return $this->hasMany(InvoiceItems::class);
     }
 
     // ── Computed totals accessor ─────────────────────

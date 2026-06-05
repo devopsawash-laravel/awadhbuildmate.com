@@ -179,6 +179,11 @@ Route::get('/test-mail', function () {
 });
 // web.php
 Route::get('/invoices/create', [InvoiceController::class, 'create'])->name('invoices.create');
-Route::post('/invoices', [InvoiceController::class, 'store'])->name('invoices.store');
+
+Route::post('/invoice/store', [InvoiceController::class, 'store'])->name('invoice.store');
+
+Route::get('/invoice', [InvoiceController::class, 'index'])->name('invoice.index');
+
 Route::get('/invoices/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoices.edit');
 });
+// Route::get('/invoice', [InvoiceController::class, 'index'])->name('invoice.index');
