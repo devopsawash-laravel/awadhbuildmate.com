@@ -709,9 +709,9 @@ body {
       </span>
     </button>
 
-    <a href="{{ route('invoice.show', $inv->id) }}?print=1" target="_blank" class="inv-card-btn">
+    {{-- <a href="{{ route('invoice.show', $inv->id) }}?print=1" target="_blank" class="inv-card-btn">
   <i class="ti ti-printer" aria-hidden="true"></i> Print
-</a>
+</a> --}}
 
     <form action="{{ route('invoice.store') }}" method="POST" style="display:contents">
       @csrf
