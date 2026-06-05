@@ -51,7 +51,8 @@ class InvoiceController extends Controller
         $invoice->items()->create($item);
     }
 
-    return redirect()->route('invoice.index')->with('success', 'Invoice stored successfully!');
+    return redirect()->route('invoice.index')->with('success', 'Invoice saved successfully!');
+    //    return redirect()->route('invoices.create')->with('success', 'Invoice stored successfully!');
 }
     public function show(Invoice $invoice)
     {

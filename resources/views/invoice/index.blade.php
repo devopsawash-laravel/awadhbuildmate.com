@@ -252,6 +252,53 @@ body {
     border-radius: 50%;
     object-fit: cover;
 }
+/* Success */
+/* ─── SUCCESS TOAST ─── */
+.toast {
+  position: fixed; bottom: 32px; right: 32px; z-index: 9999;
+  display: flex; align-items: center; gap: 14px;
+  background: #fff; border: 1px solid #C6E6C3;
+  border-left: 5px solid #3B6D11;
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  min-width: 320px; max-width: 420px;
+  overflow: hidden;
+  animation: slideIn 0.35s cubic-bezier(.21,1.02,.73,1) forwards;
+}
+.toast.hide { animation: slideOut 0.3s ease forwards; }
+.toast-icon {
+  width: 38px; height: 38px; flex-shrink: 0;
+  background: var(--green-bg); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: var(--green);
+}
+.toast-title { font-size: 13.5px; font-weight: 700; color: var(--text-1); margin-bottom: 2px; }
+.toast-sub   { font-size: 12px; color: var(--text-3); }
+.toast-close {
+  margin-left: auto; background: none; border: none;
+  cursor: pointer; color: var(--text-3); font-size: 18px;
+  padding: 4px; line-height: 1;
+}
+.toast-close:hover { color: var(--text-1); }
+.toast-progress {
+  position: absolute; bottom: 0; left: 0;
+  height: 3px; background: var(--green);
+  width: 100%;
+  animation: progress 4s linear forwards;
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes slideOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(16px); }
+}
+@keyframes progress {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
 </style>
 @endpush
 
@@ -405,6 +452,19 @@ body {
   </div>
 
 </div>
+@if(session('success'))
+<div class="toast" id="toast">
+  <div class="toast-icon"><i class="ti ti-circle-check"></i></div>
+  <div>
+    <div class="toast-title">Invoice Saved!</div>
+    <div class="toast-sub">{{ session('success') }}</div>
+  </div>
+  <button class="toast-close" onclick="dismissToast()">
+    <i class="ti ti-x"></i>
+  </button>
+  <div class="toast-progress"></div>
+</div>
+@endif
 
 @endsection
 
@@ -427,6 +487,15 @@ function filterTable(q) {
   document.getElementById('visibleCount').textContent = term
     ? `Showing ${visible} result${visible !== 1 ? 's' : ''}`
     : `Showing {{ $invoices->count() }} of {{ $invoices->total() }}`;
+} 
+function dismissToast() {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.classList.add('hide');
+  setTimeout(() => t.remove(), 300);
 }
+@if(session('success'))
+  setTimeout(dismissToast, 4000);
+@endif
 </script>
 @endpush

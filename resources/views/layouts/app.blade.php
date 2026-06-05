@@ -241,7 +241,7 @@ button, a, input, select {
         .brand-logo i { font-size: 20px; }
 
         .brand-sub {
-            font-size: 11px;
+            font-size: 10px;
             color: rgba(255,255,255,0.4);
             margin-top: 3px;
             letter-spacing: 2px;
@@ -988,8 +988,12 @@ button, a, input, select {
 
 <nav class="sidebar">
     <div class="sidebar-brand">
-        <div class="brand-logo"><i class="fas fa-hard-hat"></i> ConstructPro</div>
-        <div class="brand-sub">Labour Management</div>
+        {{-- <div class="brand-logo"><i class="fas fa-hard-hat"></i> AwadhBuildmate</div> --}}
+        <div class="brand-logo">
+        <img src="/images/projects/logo.png" alt="Awadh Buildmate Logo" style="height:38px; width:38px; border-radius:50%; object-fit:cover;">
+        AwadhBuildmate
+        </div>
+        <div class="brand-sub">Made For Quality and Trust</div>
     </div>
 
     <div class="nav-section">
