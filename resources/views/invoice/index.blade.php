@@ -367,10 +367,10 @@ body {
   @php
     $allInvoices = \App\Models\Invoice::all();
     $totalBill   = $allInvoices->sum('bill_amount');
-    $totalGrand  = $allInvoices->sum('grand_total');
-    // $totalReceivable = $allInvoices->sum(function ($invoice) {
-    //     return max(0, $invoice->grand_total - $invoice->received_amount);
-    // });
+    // $totalGrand  = $allInvoices->sum('grand_total');
+    $totalReceivable = $allInvoices->sum(function ($invoice) {
+        return max(0, $invoice->grand_total - $invoice->received_amount);
+    });
   @endphp
   <div class="stats-row">
     <div class="stat-card">
@@ -391,8 +391,8 @@ body {
       <div class="stat-icon green"><i class="ti ti-cash" aria-hidden="true"></i></div>
       <div>
         <div class="stat-label">Total Receivable</div>
-        <div class="stat-val">₹ {{ number_format($totalGrand, 0, '.', ',') }}</div>
-        {{-- <div class="stat-val">₹ {{ number_format($totalReceivable, 0, '.', ',') }}</div> --}}
+        {{-- <div class="stat-val">₹ {{ number_format($totalGrand, 0, '.', ',') }}</div> --}}
+        <div class="stat-val">₹ {{ number_format($totalReceivable, 0, '.', ',') }}</div>
       </div>
     </div>
   </div>

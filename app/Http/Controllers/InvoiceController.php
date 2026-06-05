@@ -10,7 +10,8 @@ class InvoiceController extends Controller
 {
     public function index()
     {
-        $invoices = Invoice::latest()->paginate(10);
+        // $invoices = Invoice::latest()->paginate(10)->orderby('created_at', 'asc')->get();
+        $invoices = Invoice::orderBy('created_at', 'asc')->paginate(10);
         // $invoices = Invoice::latest()->get();
         return view('invoice.index', compact('invoices'));
     }

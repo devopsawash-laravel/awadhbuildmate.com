@@ -87,6 +87,19 @@ class StaffSalaryController extends Controller
         $month = $request->month;
         $year = $request->year;
 
+        $joiningDate = Carbon::parse($staff->joining_date);
+
+        $salaryMonth = Carbon::create($year, $month, 1);
+
+        if (
+            $joiningDate->year == $year &&
+            $joiningDate->month == $month
+        ) {
+            $eligibleDays = $totalDaysInMonth - $joiningDate->day + 1;
+        } else {
+            $eligibleDays = $totalDaysInMonth;
+        }
+
         $totalSalary = $request->total_salary;
         $presentDays = $request->present_days;
         $weekOff = $request->week_off ?? 0;
@@ -113,6 +126,14 @@ class StaffSalaryController extends Controller
         $dailyWage = $totalSalary / $totalDaysInMonth;
 
         $paidDays = $presentDays + $weekOff;
+                if ($paidDays > $eligibleDays) {
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'present_days' =>
+                        "This employee joined on {$joiningDate->format('d M Y')}. Maximum eligible days for this month are {$eligibleDays}."
+                ]);
+        }
         // dd($paidDays);
 
         $grossSalary = round($paidDays * $dailyWage, 2);

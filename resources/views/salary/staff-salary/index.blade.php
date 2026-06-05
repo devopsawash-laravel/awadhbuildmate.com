@@ -222,7 +222,10 @@
 {{-- FORMULA NOTE --}}
 <div class="ss-formula-box">
     <i class="fas fa-info-circle"></i>
-    Salary = (Present Days &times; Daily Wage) + (OT Hours &times; OT Rate &times; Multiplier) &minus; PF &minus; Pending Advances
+    {{-- Salary = (Present Days &times; Daily Wage) + (OT Hours &times; OT Rate &times; Multiplier) &minus; PF &minus; Pending Advances --}}
+    Salary = (Paid Days × Daily Wage) − Deductions
+<br>
+<small>Paid Days = Present Days + Week Off (as per Joining Date eligibility)</small>
 </div>
 
 {{-- ───────── SALARY SLIPS TABLE ───────── --}}
