@@ -397,7 +397,7 @@ body {
       <div class="empty-icon"><i class="ti ti-receipt-off" aria-hidden="true"></i></div>
       <div class="empty-title">No invoices yet</div>
       <div class="empty-sub">Create your first invoice to get started.</div>
-      <a href="{{ route('invoice.create') }}" class="btn btn-primary">
+      <a href="{{ route('invoices.create') }}" class="btn btn-primary">
         <i class="ti ti-plus" aria-hidden="true"></i> Create Invoice
       </a>
     </div>
