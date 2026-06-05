@@ -616,6 +616,30 @@ body {
   from { width: 100%; }
   to   { width: 0%; }
 }
+
+/* Signature and stamp */
+.inv-sign-block {
+    position: relative;
+    text-align: center;
+    width: 250px;
+}
+
+.inv-sign-images {
+    position: relative;
+    height: 120px;
+    margin-bottom: 0;
+}
+.stamp-img {
+    position: absolute;
+    right: 0;
+    /* top: -0px; */
+    height: 150px; /* increase size */
+    width: auto;
+    opacity: 0.9;
+    z-index: 1;
+    background: transparent;
+    mix-blend-mode: multiply;
+}
 </style>
 @endpush
 
@@ -764,9 +788,9 @@ body {
 
     <form action="{{ route('invoice.store') }}" method="POST" style="display:contents">
       @csrf
-      <button type="submit" class="btn btn-primary" style="flex:unset;">
+      {{-- <button type="submit" class="btn btn-primary" style="flex:unset;">
         <i class="ti ti-device-floppy"></i> Save Invoice
-      </button>
+      </button> --}}
     </form>
   </div>
 </header>
@@ -864,11 +888,11 @@ body {
       <div class="field-row" style="margin-top:10px;">
         <div class="field">
           <label>Account No.</label>
-          <input type="text" id="account_no" name="account_no" placeholder="Account number" oninput="updatePreview()">
+          <input type="text" id="account_no" name="account_no" value="20800200004208" placeholder="Account number" oninput="updatePreview()">
         </div>
         <div class="field">
           <label>IFSC Code</label>
-          <input type="text" id="ifsc_code" name="ifsc_code" placeholder="IOBA0001234" oninput="updatePreview()">
+          <input type="text" id="ifsc_code" name="ifsc_code" value="IOBA0002080" oninput="updatePreview()">
         </div>
       </div>
       <div class="field" style="margin-top:10px;">
@@ -1044,10 +1068,25 @@ body {
             <strong>Note:</strong> <span id="prev_note"></span>
           </div>
         </div>
-        <div class="inv-sign-block">
+        {{-- <div class="inv-sign-block">
           <div class="inv-sign-for">For, <span id="prev_from_name2">Awadh Buildmate</span></div>
           <div class="inv-sign-line" id="prev_proprietor">Harsh Raj Maurya</div>
           <div class="inv-sign-role">Proprietor</div>
+        </div> --}}
+        <div class="inv-sign-block">
+            <div class="inv-sign-for">
+                For, <span id="prev_from_name2">Awadh Buildmate</span>
+            </div>
+
+            <div class="inv-sign-images">
+                <img src="{{ asset('images/projects/stamp.jpg') }}" alt="Company Stamp" class="stamp-img">
+            </div>
+
+            <div class="inv-sign-line" id="prev_proprietor">
+                Harsh Raj Maurya
+            </div>
+
+            <div class="inv-sign-role">Proprietor</div>
         </div>
       </div>
 

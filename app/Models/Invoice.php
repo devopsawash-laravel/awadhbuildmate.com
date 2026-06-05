@@ -53,6 +53,9 @@ class Invoice extends Model
         'tds_amount',
         'total_deduction',
         'grand_total',
+
+        'received_amount',
+        'payment_status',
     ];
     protected $casts = [
         'bill_date'       => 'date',
@@ -84,5 +87,9 @@ class Invoice extends Model
         $grand      = $billAmount - $totalDed;
 
         return compact('total', 'gst', 'billAmount', 'tds', 'totalDed', 'grand');
+    }
+    public function getPendingAmountAttribute()
+    {
+        return max(0, $this->grand_total - $this->received_amount);
     }
 }

@@ -299,7 +299,35 @@ body {
   from { width: 100%; }
   to   { width: 0%; }
 }
+{{-- Status/Pending/Successs --}}
+.badge-success{
+    background:#dcfce7;
+    color:#166534;
+    padding:5px 10px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.badge-warning{
+    background:#fef3c7;
+    color:#92400e;
+    padding:5px 10px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:600;
+}
+
+.badge-danger{
+    background:#fee2e2;
+    color:#991b1b;
+    padding:5px 10px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:600;
+}
 </style>
+
 @endpush
 
 @section('content')
@@ -385,9 +413,12 @@ body {
         <tr>
           <th>Bill No.</th>
           <th>Date</th>
-          <th>Party</th>
+          <th>Client</th>
+          {{-- <th class="r">Bill Amount</th> --}}
           <th class="r">Bill Amount</th>
-          <th class="r">Grand Total</th>
+          <th class="r">Received</th>
+          <th class="r">Pending</th>
+          <th>Status</th>
           <th class="r">Actions</th>
         </tr>
       </thead>
@@ -402,15 +433,49 @@ body {
             <div class="cell-party-co">{{ $invoice->to_co }}</div>
             @endif
           </td>
-          <td class="r"><span class="cell-amount">₹ {{ number_format($invoice->bill_amount, 0, '.', ',') }}</span></td>
+          {{-- <td class="r"><span class="cell-amount">₹ {{ number_format($invoice->bill_amount, 0, '.', ',') }}</span></td> --}}
           <td class="r"><span class="cell-grand">₹ {{ number_format($invoice->grand_total, 0, '.', ',') }}</span></td>
+          <td class="r">
+        <form action="{{ route('invoice.update-payment', $invoice->id) }}" method="POST" style="display:flex; gap:8px;">
+        @csrf
+
+        <input
+            type="number"
+            name="received_amount"
+            value="{{ $invoice->received_amount }}"
+            min="0"
+            max="{{ $invoice->grand_total }}"
+            step="0.01"
+            style="
+                width:120px;
+                padding:6px 10px;
+                border:1px solid #ddd;
+                border-radius:8px;
+            "
+        >
+
+        <button type="submit" class="act-btn">
+            Save
+        </button>
+    </form>
+</td>
+
+    <td class="r">
+        ₹ {{ number_format(max(0, $invoice->grand_total - $invoice->received_amount), 0, '.', ',') }}
+    </td>
+    <td>
+        @if($invoice->payment_status == 'Received')
+            <span class="badge-success">Received</span>
+        @elseif($invoice->payment_status == 'Partial')
+            <span class="badge-warning">Partial</span>
+        @else
+            <span class="badge-danger">Pending</span>
+        @endif
+    </td>
           <td class="r">
             <div class="actions">
               <a href="{{ route('invoice.show', $invoice->id) }}" class="act-btn view">
                 <i class="ti ti-eye" aria-hidden="true"></i> View
-              </a>
-              <a href="{{ route('invoice.show', $invoice->id) }}?print=1" target="_blank" class="act-btn">
-                <i class="ti ti-printer" aria-hidden="true"></i> Print
               </a>
               {{-- <a href="{{ route('invoice.edit', $invoice->id) }}" class="act-btn">
                 <i class="ti ti-edit" aria-hidden="true"></i> Edit

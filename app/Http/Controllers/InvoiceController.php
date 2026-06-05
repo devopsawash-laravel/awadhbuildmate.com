@@ -66,4 +66,24 @@ class InvoiceController extends Controller
 
         return redirect()->route('invoice.index')->with('success', 'Invoice deleted successfully!');
     }
+    public function updatePayment(Request $request, Invoice $invoice)
+{
+    $request->validate([
+        'received_amount' => 'required|numeric|min:0'
+    ]);
+
+    $invoice->received_amount = $request->received_amount;
+
+    if ($invoice->received_amount >= $invoice->grand_total) {
+        $invoice->payment_status = 'Received';
+    } elseif ($invoice->received_amount > 0) {
+        $invoice->payment_status = 'Partial';
+    } else {
+        $invoice->payment_status = 'Pending';
+    }
+
+    $invoice->save();
+
+    return back()->with('success', 'Payment updated successfully.');
+}
 }
