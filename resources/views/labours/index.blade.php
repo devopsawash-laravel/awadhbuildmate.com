@@ -607,10 +607,10 @@
         </div>
 
         @if($labours->hasPages())
-        <div class="lr-pagination">
-            {{ $labours->links() }}
-        </div>
-        @endif
+    <div class="lr-pagination">
+        {{ $labours->withQueryString()->links() }}
+    </div>
+    @endif
 
     </div>
 

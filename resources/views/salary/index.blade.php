@@ -98,13 +98,25 @@
         </div>
 
         {{-- GENERATE --}}
-        <div class="ss-bar-group ss-bar-group-btn">
-            <button type="submit" class="ss-bar-btn ss-bar-btn-generate">
-                <i class="fas fa-file-signature"></i> Generate Salary Slip
-            </button>
-        </div>
+        <div class="ss-action-buttons">
 
-    </form>
+    <button type="submit" class="ss-bar-btn ss-bar-btn-generate">
+        <i class="fas fa-file-signature"></i>
+        <span>Generate Salary Slip</span>
+    </button>
+
+    <a href="{{ route('salary.bulkpdf', [
+        'month' => $month,
+        'year' => $year,
+        'site_id' => request('site_id')
+    ]) }}"
+       class="ss-bar-btn ss-bar-btn-download"
+       target="_blank">
+        <i class="fas fa-file-pdf"></i>
+        <span>Download All Payslips</span>
+    </a>
+
+</div>
     @endif
 </div>
 
@@ -360,7 +372,7 @@
 .ss-bar-btn {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     height: 36px;
     padding: 0 16px;
     font-size: 13px;
@@ -553,6 +565,12 @@
     font-size: 14px;
 }
 .ss-empty i { font-size: 28px; margin-bottom: 10px; display: block; opacity: 0.4; }
+.ss-action-buttons{
+    display:flex;
+    gap:12px; /* space between buttons */
+    align-items:center;
+    flex-wrap:wrap;
+}
 
 </style>
 @endpush

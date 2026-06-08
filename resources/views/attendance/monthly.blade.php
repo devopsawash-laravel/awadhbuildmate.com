@@ -137,7 +137,7 @@
                     <th class="cc">Category</th>
                     @for($d = 1; $d <= $daysInMonth; $d++)
                         @php $dn = \Carbon\Carbon::createFromDate($year, $month, $d)->format('D'); @endphp
-                        <th class="cd {{ in_array($dn,['Sat','Sun']) ? 'wknd' : '' }}">
+                        <th class="cd {{ in_array($dn,['Sun']) ? 'wknd' : '' }}">
                             <div>{{ $d }}</div>
                             <div style="font-weight:400;font-size:9px;color:#A84500">{{ $dn }}</div>
                         </th>
@@ -169,7 +169,7 @@
                                 $att = $attMap[$d] ?? null;
                                 $dn  = \Carbon\Carbon::createFromDate($year, $month, $d)->format('D');
                             @endphp
-                            <td class="{{ in_array($dn,['Sat','Sun']) ? 'wknd' : '' }}" style="text-align:center;padding:5px 3px;">
+                            <td class="{{ in_array($dn,['Sun']) ? 'wknd' : '' }}" style="text-align:center;padding:5px 3px;">
                                 @if($att)
                                     @if($att->status === 'present')
                                         <span style="color:#16A34A;font-weight:700;">P</span>

@@ -453,7 +453,7 @@
             <div class="emp-field">
                 <div class="ef-label">Bank Name</div>
                 {{-- <div class="ef-value">{{ $salary->staff->bank->name ?? '—' }}</div> --}}
-                {{-- <div class="ef-value">{{ $salary->staff->bank_name ?? '—' }}</div> --}}
+                <div class="ef-value">{{ $salary->staff->bank->name ?? '—' }}</div>
             </div>
 
             <div class="emp-field">

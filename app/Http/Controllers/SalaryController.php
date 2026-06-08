@@ -10,7 +10,7 @@ use App\Models\StaffSalarySlip;
 use App\Models\Site;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SalaryController extends Controller
 {
@@ -538,5 +538,265 @@ class SalaryController extends Controller
             "sites"
         )
     );
+ }
+ public function exportReport(Request $request)
+{
+    $month = $request->month ?? now()->month;
+    $year  = $request->year ?? now()->year;
+
+    // Labour
+    $salaryQuery = SalarySlip::with(['labour.site'])
+        ->where('month', $month)
+        ->where('year', $year);
+
+    if ($request->filled('site_id')) {
+        $salaryQuery->whereHas('labour', function ($q) use ($request) {
+            $q->where('site_id', $request->site_id);
+        });
     }
+
+    $salarySlips = $salaryQuery->get();
+
+    // Staff
+    $staffSalaryQuery = StaffSalarySlip::with(['staff.site'])
+        ->where('month', $month)
+        ->where('year', $year);
+
+    if ($request->filled('site_id')) {
+        $staffSalaryQuery->whereHas('staff', function ($q) use ($request) {
+            $q->where('site_id', $request->site_id);
+        });
+    }
+
+    $staffSalarySlips = $staffSalaryQuery->get();
+
+    $combinedSlips = collect();
+
+    foreach ($salarySlips as $salary) {
+        $salary->employee_type = 'Labour';
+        $salary->employee = $salary->labour;
+        $combinedSlips->push($salary);
+    }
+
+    foreach ($staffSalarySlips as $salary) {
+        $salary->employee_type = 'Staff';
+        $salary->employee = $salary->staff;
+        $combinedSlips->push($salary);
+    }
+
+    $filename = "Wages_Sheet_{$month}_{$year}.csv";
+
+    return response()->streamDownload(function () use ($combinedSlips) {
+
+        $file = fopen('php://output', 'w');
+
+        fputcsv($file, [
+            'Sr',
+            'Type',
+            'Name of Workman',
+            'Designation',
+            'Present Days',
+            'OT Hours',
+
+            'Actual Basic',
+            'Actual HRA',
+            'Actual Allowance',
+            'Actual Gross',
+
+            'Earned Basic',
+            'Earned HRA',
+            'Earned Allowance',
+            'OT Amount',
+            'Earned Gross',
+
+            'PF',
+            'ESIC',
+            'PT',
+            'ADV',
+            'LWF',
+            'Others',
+            'Total Deduction',
+
+            'Total Payable'
+        ]);
+
+        // Totals
+        $totalPaidDays = 0;
+        $totalOtHours = 0;
+        $totalActualBasic = 0;
+        $totalActualHra = 0;
+        $totalActualAllowance = 0;
+        $totalActualGross = 0;
+        $totalEarnedBasic = 0;
+        $totalEarnedHra = 0;
+        $totalEarnedAllowance = 0;
+        $totalOtAmount = 0;
+        $totalEarnedGross = 0;
+        $totalPf = 0;
+        $totalEsic = 0;
+        $totalPt = 0;
+        $totalAdv = 0;
+        $totalLWF = 0;
+        $totalOther = 0;
+        $grandTotalDeduction = 0;
+        $grandTotalPayable = 0;
+
+        foreach ($combinedSlips as $i => $salary) {
+
+            $workingHoursPerDay = $salary->labour->working_hours_per_day ?? 8;
+            $otMultiplier = $salary->labour->ot_rate_multiplier ?? 1;
+
+            $effectiveOtHours = ($salary->overtime_hours ?? 0) * $otMultiplier;
+            $otDays = round($effectiveOtHours / $workingHoursPerDay, 2);
+
+            $paidDays = ($salary->present_days ?? 0)
+                + (($salary->half_days ?? 0) * 0.5)
+                + ($salary->week_off_days ?? 0);
+
+            $labourpaidDays = round(($paidDays + $otDays) * 10) / 10;
+
+            $presentDays = $salary->employee_type == 'Staff'
+                ? (($salary->paid_days ?? 0) + ($salary->week_off ?? 0))
+                : $labourpaidDays;
+
+            $actualGross =
+                ($salary->employee->basic_salary ?? 0)
+                + ($salary->employee->hra ?? 0)
+                + ($salary->employee->other_allowance ?? 0);
+
+            $earnedGross =
+                ($salary->earned_basic ?? 0)
+                + ($salary->earned_hra ?? 0)
+                + ($salary->earned_other_allowance ?? 0)
+                + ($salary->overtime_amount ?? 0);
+
+            // Totals
+            $totalPaidDays += $presentDays;
+            $totalOtHours += ($salary->overtime_hours ?? 0);
+
+            $totalActualBasic += ($salary->employee->basic_salary ?? 0);
+            $totalActualHra += ($salary->employee->hra ?? 0);
+            $totalActualAllowance += ($salary->employee->other_allowance ?? 0);
+            $totalActualGross += $actualGross;
+
+            $totalEarnedBasic += ($salary->earned_basic ?? 0);
+            $totalEarnedHra += ($salary->earned_hra ?? 0);
+            $totalEarnedAllowance += ($salary->earned_other_allowance ?? 0);
+            $totalOtAmount += ($salary->overtime_amount ?? 0);
+            $totalEarnedGross += $earnedGross;
+
+            $totalPf += ($salary->pf_deduction ?? 0);
+            $totalEsic += ($salary->esic_deduction ?? 0);
+            $totalPt += ($salary->pt_deduction ?? 0);
+            $totalAdv += ($salary->advance_deduction ?? 0);
+            $totalLWF += ($salary->lwf_deduction ?? 0);
+            $totalOther += ($salary->other_deduction ?? 0);
+
+            $grandTotalDeduction += ($salary->total_deduction ?? 0);
+            $grandTotalPayable += ($salary->net_salary ?? 0);
+
+            fputcsv($file, [
+                $i + 1,
+                $salary->employee_type,
+                $salary->employee->name,
+                $salary->employee->category ?? $salary->employee->designation,
+                $presentDays,
+                $salary->overtime_hours ?? 0,
+
+                $salary->employee->basic_salary ?? 0,
+                $salary->employee->hra ?? 0,
+                $salary->employee->other_allowance ?? 0,
+                $actualGross,
+
+                $salary->earned_basic ?? 0,
+                $salary->earned_hra ?? 0,
+                $salary->earned_other_allowance ?? 0,
+                $salary->overtime_amount ?? 0,
+                $earnedGross,
+
+                $salary->pf_deduction ?? 0,
+                $salary->esic_deduction ?? 0,
+                $salary->pt_deduction ?? 0,
+                $salary->advance_deduction ?? 0,
+                $salary->lwf_deduction ?? 0,
+                $salary->other_deduction ?? 0,
+                $salary->total_deduction ?? 0,
+
+                $salary->net_salary ?? 0,
+            ]);
+        }
+
+        // TOTAL ROW
+        fputcsv($file, []);
+
+        fputcsv($file, [
+            'TOTAL',
+            '',
+            '',
+            '',
+            round($totalPaidDays),
+            round($totalOtHours),
+
+            round($totalActualBasic),
+            round($totalActualHra),
+            round($totalActualAllowance),
+            round($totalActualGross),
+
+            round($totalEarnedBasic),
+            round($totalEarnedHra),
+            round($totalEarnedAllowance),
+            round($totalOtAmount),
+            round($totalEarnedGross),
+
+            round($totalPf),
+            round($totalEsic),
+            round($totalPt),
+            round($totalAdv),
+            round($totalLWF),
+            round($totalOther),
+            round($grandTotalDeduction),
+
+            round($grandTotalPayable),
+        ]);
+
+        fclose($file);
+
+    }, $filename);
+}
+
+
+public function bulkPdf(Request $request)
+{
+    $salarySlips = SalarySlip::with([
+        'labour.site',
+        'labour.bank'
+    ])
+    ->where('month', $request->month)
+    ->where('year', $request->year)
+    ->get();
+
+    $pdf = Pdf::loadView('salary.bulkpdf', compact('salarySlips'))
+        ->setPaper('a4', 'portrait');
+
+    return $pdf->download(
+        'Salary-Slips-'.$request->month.'-'.$request->year.'.pdf'
+    );
+}
+public function bulkPdfstaff(Request $request)
+{
+    $salarySlips = StaffSalarySlip::with([
+        'staff.site',
+        'staff.bank'
+    ])->where('month', $request->month)->where('year', $request->year)->get();
+    foreach($salarySlips as $s){
+         dd($s->name);
+    }
+    // dd($salarySlips);
+    $pdf = Pdf::loadView('salary.staff-salary.bulkpdf', compact('salarySlips'))
+        ->setPaper('a4', 'portrait');
+
+    return $pdf->download(
+        'Salary-Slips-'.$request->month.'-'.$request->year.'.pdf'
+    );
+}
 }

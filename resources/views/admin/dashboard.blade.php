@@ -361,6 +361,10 @@
         .db-grid-2 { grid-template-columns: 1fr; }
         .db-header  { flex-direction: column; align-items: flex-start; gap: 10px; }
     }
+    .db-action-btn--Info {
+        background: #3b82f6;
+        color: #fff;
+    }
 </style>
 
 <div class="db-root">
@@ -411,6 +415,9 @@
                 <a href="{{ route('labours.create') }}" class="db-action-btn db-action-btn--orange">
                     <i class="fas fa-user-plus"></i> Add Labour
                 </a>
+                <a href="{{ route('staff.create') }}" class="db-action-btn db-action-btn--Info">
+                    <i class="fas fa-user-plus"></i> Add Staff
+                </a>
                 <a href="{{ route('attendance.index') }}" class="db-action-btn db-action-btn--success">
                     <i class="fas fa-calendar-check"></i> Mark Attendance
                 </a>
@@ -440,6 +447,13 @@
             <div>
                 <div class="db-stat-val">{{ $totalLabours }}</div>
                 <div class="db-stat-label">Active Labours</div>
+            </div>
+        </div>
+        <div class="db-stat-card">
+            <div class="db-stat-icon db-stat-icon--orange"><i class="fas fa-hard-hat"></i></div>
+            <div>
+                <div class="db-stat-val">{{ $totalStaff }}</div>
+                <div class="db-stat-label">Active Staff</div>
             </div>
         </div>
         <div class="db-stat-card">
@@ -486,7 +500,8 @@
                 </div>
             </div>
             <div class="db-card-body">
-                @foreach(['Welder','Fitter','Helper','Rigger','Assistant'] as $cat)
+                {{-- @foreach(['Welder','IBR Welder,'','Fitter','Helper','Rigger','Assistant'] as $cat) --}}
+                    @foreach(['Welder','IBR Welder','Electrician','Fitter','Helper','Rigger','Assistant Fitter','Grinder','Taker Welder','Gas Cutter','Khallasi Helper','Visual Grinder','Structure Fitter'] as $cat)
                     @php $count = $categoryStats[$cat] ?? 0; @endphp
                     <div class="db-bar-row">
                         <div class="db-bar-meta">
@@ -503,6 +518,48 @@
             </div>
         </div>
 
+        {{-- Staff by Category --}}
+        <div class="db-card db-card--orange">
+            <div class="db-card-header">
+                <div class="db-card-header-left">
+                    <div class="db-card-icon db-card-icon--orange">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <span class="db-card-title">Staff by Category</span>
+                </div>
+            </div>
+            <div class="db-card-body">
+                {{-- @foreach(['Welder','IBR Welder,'','Fitter','Helper','Rigger','Assistant'] as $cat) --}}
+                    @foreach([
+    'Site Incharge',
+    'QC-Quality',
+    'Safety Supervisor',
+    'Planning',
+    'Execution',
+    'Admin',
+    'Supervisor'
+] as $cat)
+
+    @php
+        $count = $staffCategoryStats[$cat] ?? 0;
+    @endphp
+
+    <div class="db-bar-row">
+        <div class="db-bar-meta">
+            <span>{{ $cat }}</span>
+            <span>{{ $count }}</span>
+        </div>
+
+        <div class="db-bar-track">
+            <div class="db-bar-fill"
+                 style="width:{{ $totalStaff > 0 ? ($count / $totalStaff) * 100 : 0 }}%">
+            </div>
+        </div>
+    </div>
+
+@endforeach
+            </div>
+        </div>
         {{-- Recent Enquiries --}}
         <div class="db-card db-card--blue">
             <div class="db-card-header">

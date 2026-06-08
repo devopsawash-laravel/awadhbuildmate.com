@@ -28,6 +28,20 @@
                 <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Address</td><td>{{ $labour->address ?? '—' }}</td></tr>
                 <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Joining Date</td><td>{{ $labour->joining_date->format('d M Y') }}</td></tr>
                 <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Status</td><td><span class="badge {{ $labour->status === 'active' ? 'badge-success' : 'badge-danger' }}">{{ ucfirst($labour->status) }}</span></td></tr>
+                <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Created At</td><td>{{ $labour->created_at->format('d M Y, h:i A') }}</td></tr>
+                <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Address</td><td>{{ $labour->address ?? '—' }}</td></tr>
+                <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Total Salary</td><td>{{ $labour->total_salary ?? '—' }}</td></tr>
+                <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Daily Wage</td><td>{{ $labour->daily_wage ?? '—' }}</td></tr>
+                <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Basic Salary</td><td>{{ $labour->basic_salary ?? '—' }}</td></tr>
+                <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">HRA</td><td>{{ $labour->hra ?? '—' }}</td></tr>
+                <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Other Allowances</td><td>{{ $labour->other_allowance ?? '—' }}</td></tr>
+                <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Overtime Rate</td><td>{{ $labour->overtime_rate ?? '—' }}</td></tr>
+                <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Account Number</td><td>{{ $labour->Account_Number ?? '—' }}</td></tr>
+                <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Nominee Details</td><td>{{ $labour->Nominee_details ?? '—' }}</td></tr>
+                <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Relation</td><td>{{ $labour->relation ?? '—' }}</td></tr>
+                <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">IFSC Code</td><td>{{ $labour->IFSC ?? '—' }}</td></tr>
+                <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">Pan_Card</td><td>{{ $labour->Pan_Card ?? '—' }}</td></tr>
+                <tr><td style="padding:7px 0;color:var(--text-muted);font-size:13px;">ESIC_Number</td><td>{{ $labour->ESIC_Number ?? '—' }}</td></tr>
             </table>
         </div>
     </div>

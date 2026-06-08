@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {{-- <link rel="icon" href="{{ asset('favicon.ico') }}"> --}}
+    <link rel="icon" type="image/png" href="{{ asset('images/projects/logo.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Awadh Buildmate — Expert Fabrication, Erection & Structural Construction across India">
@@ -53,7 +55,6 @@
             justify-content: space-between;
             transition: background 0.3s, border-bottom 0.3s;
         }
-
         .navbar.scrolled {
             background: rgba(10,10,10,0.95);
             backdrop-filter: blur(12px);
@@ -833,7 +834,7 @@ body {
         <div class="nav-logo-text">
             <div class="nav-brand">Awadh Buildmate</div>
             <div class="nav-tagline">Made for Quality and Trust</div>
-            <div class="nav-tagline">Build · Fabricate · Erect</div>
+            <div class="nav-tagline">Fabrication · Erection · Structural Works</div>
         </div>
     </a>
 

@@ -89,11 +89,17 @@ Route::get('/attendance/monthly', [AttendanceController::class, 'monthlyReport']
 
 //-------------------------lABOUR SALARY MODULE---------------------------------------------------------------//
 
+
 Route::get('/salary', [SalaryController::class, 'index'])->name('salary.index');
 Route::post('/salary/generate', [SalaryController::class, 'generate'])->name('salary.generate');
 Route::get('/salary/{salary}', [SalaryController::class, 'show'])->name('salary.show');
 Route::get('/salary/{salary}/pdf', [SalaryController::class, 'pdf'])->name('salary.pdf');
 Route::delete('/salary/{salary}', [SalaryController::class, 'destroy'])->name('salary.destroy');
+
+//-----Laboour Salary Bulk PDF Generation Route------//
+Route::get('/bulkpdf', [SalaryController::class, 'bulkPdf'])->name('salary.bulkpdf');
+Route::get('/bulkpdfstaff', [SalaryController::class, 'bulkPdfstaff'])->name('staff-salary.bulkpdfstaff');
+
 
 //------------------------STAFF SALARY MODULE------------------------------------------------------------------//
 
@@ -155,7 +161,7 @@ Route::get('/salary/{salary}/payslip',
 // Route::get('/salary/bank-statement', [SalaryController::class, 'bankStatement'])->name('salary.bankStatement');
 Route::get('/testbankstatment', [SalaryController::class, 'test'])->name('salary.bankstatement');
 Route::get('/testwages',[SalaryController::class, 'testwages'])->name('salary.wages-sheet');
-
+Route::get('/wages-sheet/export', [SalaryController::class, 'exportReport'])->name('wages.export');
 Route::resource('sites', SiteController::class);
 Route::get(
     '/sites/{site}',
@@ -189,4 +195,6 @@ Route::get('/invoice/{invoice}', [InvoiceController::class, 'show'])->name('invo
 Route::delete('/invoice/{invoice}', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
 Route::post('/invoice/{invoice}/payment', [InvoiceController::class, 'updatePayment'])->name('invoice.update-payment');
 });
+
+
 // Route::get('/invoice', [InvoiceController::class, 'index'])->name('invoice.index');

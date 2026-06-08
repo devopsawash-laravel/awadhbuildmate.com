@@ -93,14 +93,7 @@
 
                         <option value="">Select Category</option>
 
-                        @foreach([
-                            'Site Incharge',
-                            'QC-Quality',
-                            'Safety Supervisor',
-                            'Planning',
-                            'Execution',
-                            'Admin',
-                            'Supervisor',
+                        @foreach(['Site Incharge','QC-Quality','Safety Supervisor','Planning','Execution','Admin','Supervisor',
                         ] as $dept)
 
                             <option value="{{ $dept }}">
@@ -153,7 +146,7 @@
 
             {{-- Salary Section --}}
             <div style="font-weight:600;font-size:13px;margin-bottom:14px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;">
-                <i class="fas fa-rupee-sign"></i> Salary Structure
+                <i class=""></i> Salary Structure
             </div>
 
             <div class="form-grid-4">

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Bank;
 use App\Models\Site;
 
+
 class LabourController extends Controller
 {
     public function index(Request $request)
@@ -55,23 +56,16 @@ class LabourController extends Controller
 
     // Site Filter
     if ($request->filled('site_id')) {
-
-        $query->where(
-            'site_id',
-            $request->site_id
-        );
+        $query->where('site_id', $request->site_id);
     }
 
     $labours = $query
-        ->latest()
-        ->paginate(10);
+        ->orderBy('created_at', 'asc')
+        ->paginate(60);
 
     return view(
         'labours.index',
-        compact(
-            'labours',
-            'sites'
-        )
+        compact('labours', 'sites')
     );
 }
     public function create()
@@ -106,7 +100,7 @@ class LabourController extends Controller
 
         'name' => 'required|string|max:255',
         'employee_id' => 'required|string|unique:labours',
-        'category' => 'required|in:Welder,Fitter,Helper,Rigger,Assistant Fitter,Grinder,Taker Welder,Gas Cutter,Khallasi Helper,Visual Grinder,Structure Fitter',
+        'category' => 'required|in:Welder,IBR Welder,Electrician,Fitter,Helper,Rigger,Assistant Fitter,Grinder,Taker Welder,Gas Cutter,Khallasi Helper,Visual Grinder,Structure Fitter',
         'phone' => 'nullable|required|regex:/^[6-9]\d{9}$/',
         'address' => 'nullable|string',
         'total_salary' => 'nullable|numeric|min:0',
@@ -145,28 +139,72 @@ class LabourController extends Controller
 
         public function edit(Labour $labour)
         {
-            return view('labours.edit', compact('labour'));
+            // return view('labours.edit', compact('labour'));
+            $banks = Bank::orderBy('name')->get();
+            $sites = Site::orderBy('name')->get();
+
+            return view('labours.edit', compact(
+                'labour',
+                'banks',
+                'sites'
+            ));
         }
 
         public function update(Request $request, Labour $labour)
-        {
-            $validated = $request->validate([
-                'name'          => 'required|string|max:255',
-                'employee_id'   => 'required|string|unique:labours,employee_id,' . $labour->id,
-                'category'      => 'required|in:Welder,Fitter,Helper,Rigger',
-                'phone'         => 'nullable|string|max:15',
-                'address'       => 'nullable|string',
-                'total_salary'  => 'required|numeric|min:0',
-                'daily_wage'    => 'required|numeric|min:0',
-                'overtime_rate' => 'required|numeric|min:0',
-                'pf_percentage' => 'required|numeric|min:0|max:100',
-                'joining_date'  => 'required|date',
-                'status'        => 'required|in:active,inactive',
-            ]);
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'employee_id' => 'required|string|unique:labours,employee_id,' . $labour->id,
 
-        $labour->update($validated);
-        return redirect()->route('labours.show', $labour)->with('success', 'Labour updated successfully.');
-    }
+        'category' => 'required|in:Welder,IBR Welder,Electrician,Fitter,Helper,Rigger,Assistant Fitter,Grinder,Taker Welder,Gas Cutter,Khallasi Helper,Visual Grinder,Structure Fitter',
+
+        'phone' => 'nullable|string|max:15',
+        'address' => 'nullable|string',
+
+        'total_salary' => 'nullable|numeric|min:0',
+        'working_days' => 'nullable|integer|min:0',
+        'daily_wage' => 'nullable|numeric|min:0',
+
+        'basic_salary' => 'nullable|numeric|min:0',
+        'hra' => 'nullable|numeric|min:0',
+        'other_allowance' => 'nullable|numeric|min:0',
+
+        'working_hours_per_day' => 'nullable|integer|min:0',
+        'ot_rate_multiplier' => 'nullable|numeric|min:0',
+        'overtime_rate' => 'nullable|numeric|min:0',
+
+        'pf_percentage' => 'nullable|numeric|min:0|max:100',
+
+        'joining_date' => 'required|date',
+        'status' => 'required|in:active,inactive',
+
+        'Account_Number' => 'nullable|string|max:50',
+        'IFSC' => 'nullable|string|max:50',
+
+        'Pan_Card' => [
+            'nullable',
+            'regex:/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/'
+        ],
+
+        'Aadhar_Number' => 'nullable|string|max:50',
+
+        'Nominee_details' => 'nullable|string|max:255',
+
+        'relation' => 'nullable|in:Father,Mother,Wife,Husband,Son,Daughter,Brother,Sister,Guardian',
+
+        'ESIC_Number' => 'nullable|string|max:50',
+        'UAN' => 'nullable|string|max:50',
+
+        'bank_id' => 'nullable|exists:banks,id',
+        'site_id' => 'nullable|exists:sites,id',
+    ]);
+
+    $labour->update($validated);
+
+    return redirect()
+        ->route('labours.show', $labour)
+        ->with('success', 'Labour updated successfully.');
+}
 
     public function destroy(Labour $labour)
     {

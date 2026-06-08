@@ -7,6 +7,7 @@ use App\Models\Attendance;
 use App\Models\SalarySlip;
 use App\Models\Advance;
 use Carbon\Carbon;
+use App\Models\Staff;
 
 class DashboardController extends Controller
 {
@@ -15,11 +16,18 @@ class DashboardController extends Controller
         $today = Carbon::today();
 
         $totalLabours    = Labour::where('status', 'active')->count();
+        $totalStaff      = Staff::where('status', 'active')->count();
+        // dd($totalStaff);
         $presentToday    = Attendance::where('date', $today)->where('status', 'present')->count();
         $absentToday     = Attendance::where('date', $today)->where('status', 'absent')->count();
         $pendingAdvances = Advance::where('is_deducted', false)->sum('amount');
 
         $categoryStats = Labour::where('status', 'active')
+            ->selectRaw('category, count(*) as count')
+            ->groupBy('category')
+            ->pluck('count', 'category');
+
+        $staffCategoryStats = Staff::where('status', 'active')
             ->selectRaw('category, count(*) as count')
             ->groupBy('category')
             ->pluck('count', 'category');
@@ -35,7 +43,7 @@ class DashboardController extends Controller
 
         return view('admin.dashboard', compact(
             'totalLabours', 'presentToday', 'absentToday',
-            'pendingAdvances', 'categoryStats', 'currentMonthSalary', 'recentAttendance'
+            'pendingAdvances', 'categoryStats', 'currentMonthSalary', 'recentAttendance', 'totalStaff', 'staffCategoryStats'
         ));
     }
 }

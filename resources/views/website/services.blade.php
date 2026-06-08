@@ -87,13 +87,13 @@
             <div>
                 <div class="sb-num">01</div>
                 <h2 class="sb-title">Piping Fabrication and Erection</h2>
-                <p class="sb-desc">We fabricate a wide range of structural steel components with precision cutting, welding, and finishing. Our workshop is equipped with modern machinery ensuring quality at every step.</p>
+                <p class="sb-desc">We provide comprehensive industrial piping solutions, from high-precision fabrication to seamless on-site installation and erection. Equipped with advanced machinery and certified welders, we ensure absolute integrity, safety, and compliance with global engineering standards for all fluid and gas transport systems.</p>
                 <ul class="sb-features">
-                    <li>Structural steel beams, columns, and trusses</li>
-                    <li>Industrial frameworks and mezzanine floors</li>
-                    <li>Pressure vessels and storage tanks</li>
-                    <li>Pipe fabrication and skid packages</li>
-                    <li>Staircases, walkways, and platforms</li>
+                    <li>Process and Utility Piping Networks (Carbon Steel, Stainless Steel)s</li>
+                    <li>Pre-Fabricated Pipe Spools and  Skid Packages</li>
+                    <li>High-Pressure Piping and Cross-Country Pipelines</li>
+                    <li>​On-Site Pipe Routing, Alignment, Support Installation, and Erection</li>
+                    <li>S ​Hydrotesting, Non-Destructive  Testing (NDT), and Quality Assurance</li>
                 </ul>
             </div>
         </div>
@@ -103,13 +103,13 @@
             <div>
                 <div class="sb-num">02</div>
                 <h2 class="sb-title">UG Piping works</h2>
-                <p class="sb-desc">Our trained riggers and erectors safely and efficiently assemble steel structures on-site. We handle all types of erection work including heavy lifts using advanced machinery.</p>
+                <p class="sb-desc">We deliver end-to-end underground (UG) piping solutions engineered to withstand subterranean pressure, soil corrosion, and environmental factors. From precise trenching and excavation to advanced anti-corrosive wrapping, laying, and backfilling, we ensure long-term durability and structural safety for critical sub-surface fluid networks.</p>
                 <ul class="sb-features">
-                    <li>Industrial plant and factory erection</li>
-                    <li>Warehouse and shed construction</li>
-                    <li>Heavy equipment installation</li>
-                    <li>Pipe rack and cable tray erection</li>
-                    <li>Crane-assisted heavy lifts</li>
+                    <li>Trenching, Excavation, and Bedding  Preparation</li>
+                    <li>​Industrial Cooling Water, Firewater, and Effluent UG Networks</li>
+                    <li>​Anti-Corrosion Protection (Coal Tar Tape Wrapping, 3LPE, and Cathodic Protection)</li>
+                    <li>Jointing, Welding, and Holiday Testing for Coating Integrity</li>
+                    <li>Hydrotesting, Backfilling, and Soil Compaction Compliance</li>
                 </ul>
             </div>
         </div>
@@ -119,13 +119,13 @@
             <div>
                 <div class="sb-num">03</div>
                 <h2 class="sb-title">Structural Fabrication and Erection</h2>
-                <p class="sb-desc">Complete turnkey construction solutions for industrial clients. We manage everything from site preparation and civil works to final commissioning and handover.</p>
+                <p class="sb-desc">We specialize in heavy-duty structural steel fabrication and erection, delivering robust frameworks for complex industrial infrastructures. Combining precision workshop engineering with highly planned heavy-lifting and site assembly, we build durable, high-load structures that form the backbone of modern factories, warehouses, and process plants.</p>
                 <ul class="sb-features">
-                    <li>Factory and plant construction</li>
-                    <li>Civil foundation and RCC works</li>
-                    <li>Electrical and instrumentation support</li>
-                    <li>Project planning and management</li>
-                    <li>Safety-compliant execution</li>
+                    <li>​Heavy Structural Steel Beams, Columns, Bracings, and Trusses</li>
+                    <li>​Industrial Sheds, Warehouses, and Pre-Engineered Building (PEB) Frameworks</li>
+                    <li>Pipe Racks, Cable Tray Supports, and Technological Structures</li>
+                    <li>​Industrial Platforms, Walkways, Mezzanine Floors, and Safety Staircases</li>
+                    <li>​Crane-Assisted Heavy Lifts, Rigging, and Safe On-Site Assembly</li>
                 </ul>
             </div>
         </div>
@@ -135,13 +135,13 @@
             <div>
                 <div class="sb-num">04</div>
                 <h2 class="sb-title">Boiler Fabrication and Erection</h2>
-                <p class="sb-desc">We provide annual maintenance contracts (AMC) and shutdown maintenance services to keep industrial plants running at peak performance with minimal downtime.</p>
+                <p class="sb-desc">We offer expert engineering solutions for industrial boiler fabrication and on-site erection, ensuring high thermal efficiency and absolute operational safety. Adhering strictly to IBR (Indian Boiler Regulations) and global safety codes, our certified team handles everything from precision pressure part fabrication to complex field installation and commissioning.</p>
                 <ul class="sb-features">
-                    <li>Annual maintenance contracts (AMC)</li>
-                    <li>Shutdown and turnaround maintenance</li>
-                    <li>Equipment repair and retrofitting</li>
-                    <li>Structural repair and painting</li>
-                    <li>Emergency breakdown services</li>
+                    <li> ​Fabrication of Boiler Pressure Parts (Waterwalls, Superheaters, Economizers, and Coils)</li>
+                    <li>Structural Framework, Boiler Casing, and Ducting Fabrication</li>
+                    <li>On-Site Positioning, Alignment, Structural Support, and Boiler Erection</li>
+                    <li>​High-Pressure Piping Integration and Header Interconnections</li>
+                    <li>​Pre-Commissioning Hydrotests, NDT Inspections, and Regulatory (IBR) Approvals</li>
                 </ul>
             </div>
         </div>

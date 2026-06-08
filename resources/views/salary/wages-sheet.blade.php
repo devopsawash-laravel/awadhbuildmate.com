@@ -60,6 +60,15 @@
                     <button type="button" onclick="window.print()" class="btn btn-primary">
                         <i class="fas fa-print"></i> Print
                     </button>
+                    <a href="{{ route('wages.export', [
+                        'site_id' => request('site_id'),
+                        'month'   => $month,
+                        'year'    => $year
+                    ]) }}"
+                    class="btn btn-success">
+                    <i class="fas fa-file-download"></i>
+                    Export Excel {{ date('F', mktime(0,0,0,$month,1)) }}
+                </a>
             </div>
         </div>
 
@@ -117,7 +126,7 @@
 
                     <th colspan="4" class="group-actual">Actual</th>
                     <th colspan="5" class="group-earned">Earned</th>
-                    <th colspan="6" class="group-deduct">Deduction</th>
+                    <th colspan="7" class="group-deduct">Deduction</th>
 
                     <th rowspan="2" class="col-payable">Total<br>Payable</th>
                 </tr>
@@ -133,7 +142,7 @@
                     {{-- Earned (5) --}}
                     <th class="sub-earned">Basic</th>
                     <th class="sub-earned">HRA</th>
-                    <th class="sub-earned">Allow.</th>
+                    <th class="sub-earned">Convye.</th>
                     <th class="sub-earned">OT Amt</th>
                     <th class="sub-earned">Gross</th>
 
@@ -142,6 +151,7 @@
                     <th class="sub-deduct">ESIC</th>
                     <th class="sub-deduct">PT</th>
                     <th class="sub-deduct">ADV</th>
+                    <th class="sub-deduct">LWF</th>
                     <th class="sub-deduct">Others</th>
                     <th class="sub-deduct">Total<br>Ded.</th>
                 </tr>
@@ -166,6 +176,7 @@
                     $totalEsic            = 0;
                     $totalPt              = 0;
                     $totalAdv             = 0;
+                    $totalLWF             = 0;
                     $totalOther           = 0;
                     $grandTotalDeduction  = 0;
                     $grandTotalPayable    = 0;
@@ -196,15 +207,14 @@
 
                     $totalPayable       = $salary->net_salary ?? 0;
 
-                    $presentDays        = $salary->employee_type == 'Staff'
-                                        ? ($salary->paid_days ?? 0) + ($salary->week_off ?? 0)
-                                        : $labourpaidDays;
-                    // dd($presentDays); 
-                    $totalstaffandLabour = $presentDays + $labourpaidDays;
+                    $presentDays = $salary->employee_type == 'Staff'
+                        ? (($salary->paid_days ?? 0) + ($salary->week_off ?? 0))
+                        : $labourpaidDays;
+                    // dd($presentDays);
                     // dd($totalstaffandLabour);
 
                     // Running totals
-                    $totalPaidDays        += $totalstaffandLabour;
+                    $totalPaidDays        += $presentDays;
                     $totalOtHours         += $finalOtHours;
                     $totalActualBasic     += $salary->employee->basic_salary ?? 0;
                     $totalActualHra       += $salary->employee->hra ?? 0;
@@ -219,6 +229,7 @@
                     $totalEsic            += $salary->esic_deduction ?? 0;
                     $totalPt              += $salary->pt_deduction ?? 0;
                     $totalAdv             += $salary->advance_deduction ?? 0;
+                    $totalLWF             += $salary->lwf_deduction ?? 0;
                     $totalOther           += $salary->other_deduction ?? 0;
                     $grandTotalDeduction  += $salary->total_deduction ?? 0;
                     $grandTotalPayable    += $totalPayable;
@@ -256,7 +267,9 @@
                     <td>{{ number_format($salary->esic_deduction ?? 0, 0) }}</td>
                     <td>{{ number_format($salary->pt_deduction ?? 0, 0) }}</td>
                     <td>{{ number_format($salary->advance_deduction ?? 0, 0) }}</td>
+                    <td>{{ number_format($salary->lwf_deduction ?? 0, 0) }}</td>
                     <td>{{ number_format($salary->other_deduction ?? 0, 0) }}</td>
+
                     <td><strong>{{ number_format($salary->total_deduction ?? 0, 0) }}</strong></td>
 
                     {{-- ✅ Total Payable — correct column, no rowspan issue --}}
@@ -285,6 +298,7 @@
                     <td>{{ number_format($totalEsic, 0) }}</td>
                     <td>{{ number_format($totalPt, 0) }}</td>
                     <td>{{ number_format($totalAdv, 0) }}</td>
+                    <td>{{ number_format($totalLWF, 0) }}</td>
                     <td>{{ number_format($totalOther, 0) }}</td>
                     <td>{{ number_format($grandTotalDeduction, 0) }}</td>
                     <td class="td-payable">

@@ -58,7 +58,8 @@
                 <div class="section-tag">Who We Are</div>
                 <h2 class="section-title" style="font-size:42px;margin-bottom:24px">Building India's<br>Industrial Backbone</h2>
                 <p>Made for Quality and Trust.</p>
-                <p>Our mission is to provide dependable and efficient construction services that exceed client expectations through quality, dedication, and transparency..</p>
+                <p>At Awadh Buildmate, we are dedicated to engineering excellence, specializing in high-precision mechanical piping, IBR boiler fabrication, and heavy structural steel erection. We serve as a trusted partner to core industries—including power plants, refineries, chemical units, and manufacturing facilities—by turning complex engineering blueprints into robust, safely executed realities.</p>
+                <p>Our mission is to deliver dependable, high-integrity mechanical and structural contracting services that exceed client expectations. Driven by absolute technical precision, strict regulatory compliance, and transparent project management, we ensure every asset we build is engineered for maximum performance, durability, and operational safety.</p>
                 <a href="{{ route('website.contact') }}" class="btn-primary" style="margin-top:8px"><i class="fas fa-arrow-right"></i> Work With Us</a>
             </div>
         </div>
@@ -90,7 +91,7 @@
     </div>
 </section>
 
-<section class="team-section">
+{{-- <section class="team-section">
     <div class="container">
         <div class="section-tag">Leadership</div>
         <h2 class="section-title">Our Team</h2>
@@ -115,5 +116,5 @@
             </div>
         </div>
     </div>
-</section>
+</section> --}}
 @endsection

@@ -71,7 +71,7 @@
                     <label>Category *</label>
                     <select name="category" id='category' required border: 1px solid #e5e7eb; border-radius: 4px; padding: 8px; width: 100%;>
                         <option value="">Select Category</option>
-                        @foreach(['Welder','Fitter','Helper','Rigger','Assistant Fitter','Grinder','Taker Welder','Gas Cutter','Khallasi Helper','Visual Grinder','Structure Fitter'] as $cat)
+                        @foreach(['Welder','IBR Welder','Electrician','Fitter','Helper','Rigger','Assistant Fitter','Grinder','Taker Welder','Gas Cutter','Khallasi Helper','Visual Grinder','Structure Fitter'] as $cat)
                         <option value="{{ $cat }}" {{ old('category') == $cat ? 'selected' : '' }}>{{ $cat }}</option>
                         @endforeach
                     </select>
@@ -98,7 +98,7 @@
 
             <hr class="divider">
             <div style="font-weight:600;font-size:13px;margin-bottom:14px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;">
-                <i class="fas fa-rupee-sign"></i>&nbsp; Wage & Deduction Settings
+                <i class=""></i>&nbsp; Wage & Deduction Settings
             </div>
 
             

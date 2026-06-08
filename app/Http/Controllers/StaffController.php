@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Staff;
 use App\Models\Bank;
 use App\Models\Site;
+use App\Models\StaffSalarySlip as Salary;
 
 class StaffController extends Controller
 {
@@ -37,7 +38,8 @@ class StaffController extends Controller
         });
     }
 
-    $staff = $q->orderBy('name')->paginate(15);
+    // $staff = $q->orderBy('name')->paginate(15);
+    $staff = $q->orderBy('employee_id', 'asc')->paginate(15);
 
     $sites = Site::orderBy('name')->get();
 
@@ -119,15 +121,17 @@ class StaffController extends Controller
     return redirect()->route('staff.index')->with('success', 'Staff added successfully.');
         }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function show(Staff $staff)
     {
-        //
+        $salarySlips = $staff->salarySlips()
+            ->orderByDesc('year')
+            ->orderByDesc('month')
+            ->get();
+
+        return view('staff.show', compact(
+            'staff',
+            'salarySlips'
+        ));
     }
 
     /**
@@ -161,7 +165,9 @@ class StaffController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $staff = Staff::findOrFail($id);
+        $staff->delete();
+        return redirect()->route('staff.index')->with('success', 'Staff deleted successfully.');
     }
 
     public function generateStaffSalary()

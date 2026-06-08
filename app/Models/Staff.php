@@ -12,6 +12,10 @@ class Staff extends Model
     'basic_salary', 'hra', 'other_allowance', 'pf_percentage','joining_date', 'status', 'Account_Number', 'Aadhar_Number', 
     'Pan_Card', 'IFSC', 'UAN', 'ESIC_Number','Nominee_details', 'relation','bank_id','site_id','education','experience'];
     
+    protected $casts = [
+        'joining_date' => 'date',
+    ];
+    
     public function site()
     {
         return $this->belongsTo(Site::class, 'site_id');
@@ -24,4 +28,9 @@ class Staff extends Model
     {
         return $this->belongsTo(Bank::class);
     }
+    public function advances()
+    {
+        return $this->hasMany(Advance::class);
+    }
+    
 }

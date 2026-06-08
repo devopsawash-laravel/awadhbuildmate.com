@@ -74,9 +74,17 @@
                 <i class="fas fa-search"></i> View
             </button>
         </div>
-
     </form>
-
+        <a href="{{ route('staff-salary.bulkpdfstaff', [
+                'month' => $month,
+                'year' => $year,
+                'site_id' => request('site_id')
+            ]) }}"
+            class="ss-bar-btn ss-bar-btn-download"
+            target="_blank">
+            <i class="fas fa-file-pdf"></i>
+            <span>Download All Payslips</span>
+        </a>
     <div class="ss-bar-separator"></div>
 
     {{-- GENERATE SLIP (separate POST form, inline) --}}
@@ -215,7 +223,6 @@
                 <i class="fas fa-file-signature"></i> Generate Salary Slip
             </button>
         </div>
-
     </form>
 </div>
 
@@ -271,9 +278,9 @@
                         <div class="ss-emp-id">{{ $salary->staff->employee_id }}</div>
                     </td>
 
-                    <td>{{ $salary->staff->site->site_name ?? '—' }}</td>
+                    <td>{{ $salary->staff->site->name ?? '—' }}</td>
 
-                    <td>{{ $salary->staff->department ?? '—' }}</td>
+                    <td>{{ $salary->staff->category ?? '—' }}</td>
 
                     <td class="col-center">{{  $salary->paid_days }} </td>
 
@@ -294,7 +301,7 @@
                                class="ss-action-btn ss-btn-view" title="View">
                                 <i class="fas fa-eye"></i>
                             </a>
-
+                            
                             <a href="{{ route('staff-salary.payslip', $salary->id) }}"
                                class="ss-action-btn ss-btn-pdf" title="Download PDF" target="_blank">
                                 <i class="fas fa-file-pdf"></i>
@@ -486,9 +493,9 @@
 .ss-bar-btn {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     height: 36px;
-    padding: 0 16px;
+    padding: 0 14px;
     font-size: 13px;
     font-weight: 600;
     border-radius: 7px;
@@ -694,6 +701,47 @@
     background:#eff6ff !important;
     color:#2563eb;
     font-weight:700;
+}
+
+/* Bulk download CSS */
+/* Download All Payslips Button */
+.ss-bar-btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 12px 22px;
+    border-radius: 10px;
+
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: #fff !important;
+
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+
+    border: none;
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+}
+
+.ss-bar-btn-download i {
+    font-size: 16px;
+}
+
+.ss-bar-btn-download:hover {
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+    color: #fff !important;
+    text-decoration: none;
+}
+
+.ss-bar-btn-download:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
 }
 </style>
 @push('scripts')
