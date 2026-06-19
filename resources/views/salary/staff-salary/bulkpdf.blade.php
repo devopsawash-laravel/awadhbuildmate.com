@@ -178,10 +178,11 @@
 @foreach($salarySlips as $salary)
 
 @php
-    $paidDays           = $salary->present_days + ($salary->half_days * 0.5) + $salary->week_off_days;
-    $workingHoursPerDay = $salary->staff->working_hours_per_day ?? 8;
-    $finalOtHours       = ($salary->overtime_hours ?? 0) * ($salary->ot_rate_multiplier ?? 1);
-    $totalDays          = $paidDays;
+    $paidDays           = $salary->paid_days + ($salary->half_days * 0.5) + $salary->week_off_days;
+    $weekOff            = $salary->week_off;
+    // $presentdays        = $salary->
+    $totalDays          = $paidDays + $weekOff;
+    $presentDays        = $salary->paid_days;
 
     // Clean OT Days display — remove trailing zeros
     // $otDaysDisplay = rtrim(rtrim(number_format($otDays, 4, '.', ''), '0'), '.');
@@ -241,26 +242,24 @@
     </div>
 
     {{-- WORKING DETAILS --}}
-    <div class="section-heading">Working Details</div>
-    <div style="padding: 0 16px 0 16px; margin-top: 6px;">
-        <table class="info-table">
-            <tr>
-                <td class="lbl">Present Days</td>
-                <td class="val">{{ $salary->staff->present_days }}</td>
-                <td class="lbl">Week Off</td>
-                <td class="val">{{ $salary->staff->week_off_days }}</td>
-            </tr>
-            <tr>
-                <td class="lbl">Paid Days</td>
-                <td class="val">{{ number_format($paidDays, 1) }}</td>
-
-            </tr>
-            <tr>
-                <td class="lbl">Total Days</td>
-                <td class="val">{{ number_format($totalDays, 1) }}</td>
-            </tr>
-        </table>
-    </div>
+    {{-- WORKING DETAILS --}}
+<div class="section-heading">Working Details</div>
+<div style="padding: 0 16px 0 16px; margin-top: 6px;">
+    <table class="info-table">
+        <tr>
+            <td class="lbl">Present Days</td>
+            <td class="val">{{ $presentDays }}</td>
+            <td class="lbl">Week Off</td>
+            <td class="val">{{ $weekOff }}</td>
+        </tr>
+        <tr>
+            <td class="lbl">Paid Days</td>
+            <td class="val">{{ number_format($paidDays, 1) }}</td>
+            <td class="lbl">Total Days</td>
+            <td class="val">{{ number_format($totalDays, 1) }}</td>
+        </tr>
+    </table>
+</div>
 
     {{-- EARNINGS & DEDUCTIONS — table-based two column layout for PDF compat --}}
     <div style="padding: 14px 16px 16px 16px;">

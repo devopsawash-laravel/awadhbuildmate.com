@@ -1,414 +1,492 @@
 @extends('layouts.app')
 
-@section('title', 'Saved Invoices — Awadh Buildmate')
+@section('title', 'Invoices — Awadh Buildmate')
 
 @push('styles')
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --accent:        #D85A30;
-  --accent-light:  #FDF0EB;
-  --accent-border: #F5C4B3;
+  --brand:         #C2410C;
+  --brand-mid:     #EA580C;
+  --brand-light:   #FFF7ED;
+  --brand-border:  #FDBA74;
+
   --surface:       #FFFFFF;
-  --surface-2:     #F8F7F5;
-  --surface-3:     #F1EFE8;
-  --border:        rgba(0,0,0,0.08);
-  --border-md:     rgba(0,0,0,0.14);
-  --text-1:        #1A1A18;
-  --text-2:        #5F5E5A;
-  --text-3:        #888780;
-  --green:         #3B6D11;
-  --green-bg:      #EAF3DE;
-  --red:           #A32D2D;
-  --red-bg:        #FCEBEB;
-  --radius-sm:     6px;
-  --radius-md:     10px;
-  --radius-lg:     14px;
-  --shadow-sm:     0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --surface-2:     #FAFAF9;
+  --surface-3:     #F5F0EB;
+  --border:        #E7E3DC;
+  --border-md:     #D6CFC5;
+
+  --text-1:        #111827;
+  --text-2:        #4B5563;
+  --text-3:        #9CA3AF;
+
+  --green:         #065F46;
+  --green-bg:      #D1FAE5;
+  --amber:         #92400E;
+  --amber-bg:      #FEF3C7;
+  --red:           #991B1B;
+  --red-bg:        #FEE2E2;
+
+  --radius-sm:     5px;
+  --radius-md:     8px;
+  --radius-lg:     12px;
+  --shadow-xs:     0 1px 2px rgba(0,0,0,0.05);
+  --shadow-sm:     0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:     0 4px 12px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.05);
 }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   background: var(--surface-2);
   color: var(--text-1);
   min-height: 100vh;
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 13.5px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ─── TOPBAR ─── */
+/* ═══ TOPBAR ═══ */
 .topbar {
-  position: sticky; top: 0; z-index: 100;
+  position: sticky; top: 0; z-index: 200;
   background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 0 32px;
+  height: 60px;
   display: flex; align-items: center; justify-content: space-between;
-  height: 56px;
-  box-shadow: var(--shadow-sm);
+  padding: 0 32px;
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-xs);
 }
-.topbar-brand { display: flex; align-items: center; gap: 10px; }
- .topbar-logo {
-  width: auto;
-  height: 32px;
-  background: transparent;
-  border-radius: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
+.topbar-left { display: flex; align-items: center; gap: 12px; }
+.topbar-logo {
+  width: 44px; height: 44px; border-radius: 10px;
+  overflow: hidden; flex-shrink: 0;
+  border: 1px solid var(--border);
 }
-.topbar-name { font-size: 15px; font-weight: 600; color: var(--text-1); }
+.topbar-logo img { width: 100%; height: 100%; object-fit: cover; }
+.topbar-name { font-size: 15px; font-weight: 700; color: var(--text-1); letter-spacing: -0.01em; }
 .topbar-sub  { font-size: 11px; color: var(--text-3); margin-top: 1px; }
-
-/* ─── PAGE ─── */
-.page-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
-
-/* ─── PAGE HEADER ─── */
-.page-header {
-  display: flex; align-items: flex-end; justify-content: space-between;
-  margin-bottom: 24px; gap: 16px; flex-wrap: wrap;
-}
-.page-eyebrow {
-  font-size: 10.5px; font-weight: 700; letter-spacing: 1.5px;
-  text-transform: uppercase; color: var(--accent); margin-bottom: 4px;
-}
-.page-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px; font-weight: 700; color: var(--text-1); line-height: 1.15;
-}
-.page-count {
-  display: inline-flex; align-items: center; gap: 5px;
-  margin-top: 6px; font-size: 12px; color: var(--text-3);
-}
-.page-count strong { color: var(--text-2); font-weight: 600; }
+.topbar-divider { display: none; }
+.topbar-nav     { display: none; }
 
 .btn {
-  display: inline-flex; align-items: center; gap: 7px;
+  display: inline-flex; align-items: center; gap: 6px;
   border: none; border-radius: var(--radius-md);
-  padding: 10px 18px; font-size: 13px; font-weight: 600;
-  cursor: pointer; font-family: 'DM Sans', sans-serif;
-  text-decoration: none;
-  transition: transform 0.12s, background 0.15s;
+  padding: 8px 16px; font-size: 12.5px; font-weight: 600;
+  cursor: pointer; font-family: 'Inter', sans-serif;
+  text-decoration: none; letter-spacing: 0.01em;
+  transition: all 0.15s;
 }
-.btn:active { transform: scale(0.98); }
+.btn-white {
+  background: #fff; color: var(--brand);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+}
+.btn-white:hover { background: var(--brand-light); color: var(--brand); }
 .btn-primary {
-  background: var(--accent); color: #fff;
-  box-shadow: 0 2px 8px rgba(216,90,48,0.28);
+  background: var(--brand-mid); color: #fff;
+  box-shadow: 0 2px 8px rgba(234,88,12,0.35);
 }
-.btn-primary:hover { background: #C2410C; }
+.btn-primary:hover { background: var(--brand); }
 
-/* ─── STATS ─── */
+/* ═══ PAGE LAYOUT ═══ */
+.page-wrap { max-width: 1180px; margin: 0 auto; padding: 28px 24px 48px; }
+
+/* ═══ BREADCRUMB + HEADER ═══ */
+.breadcrumb {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11.5px; color: var(--text-3); margin-bottom: 16px;
+}
+.breadcrumb i { font-size: 12px; }
+.breadcrumb a { color: var(--text-3); text-decoration: none; }
+.breadcrumb a:hover { color: var(--brand-mid); }
+.breadcrumb span { color: var(--text-2); font-weight: 500; }
+
+.page-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px; gap: 16px; flex-wrap: wrap;
+}
+.page-title {
+  font-size: 22px; font-weight: 700; color: var(--text-1);
+  letter-spacing: -0.03em; line-height: 1.2;
+}
+.page-subtitle {
+  font-size: 12.5px; color: var(--text-3); margin-top: 4px; font-weight: 400;
+}
+.page-header-right { display: flex; align-items: center; gap: 10px; }
+
+/* ═══ STATS ═══ */
 .stats-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 12px; margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px; margin-bottom: 24px;
 }
 .stat-card {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius-md); padding: 16px 18px;
-  display: flex; align-items: center; gap: 14px;
+  border-radius: var(--radius-lg); padding: 18px 20px;
+  box-shadow: var(--shadow-xs);
+  position: relative; overflow: hidden;
 }
-.stat-icon {
-  width: 38px; height: 38px; flex-shrink: 0;
-  border-radius: var(--radius-sm);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px;
+.stat-card::before {
+  content: ''; position: absolute; top: 0; left: 0;
+  width: 3px; height: 100%;
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
 }
-.stat-icon.orange { background: var(--accent-light); color: var(--accent); }
-.stat-icon.green  { background: var(--green-bg);     color: var(--green); }
-.stat-icon.gray   { background: var(--surface-3);    color: var(--text-2); }
-.stat-label { font-size: 11px; color: var(--text-3); font-weight: 500; margin-bottom: 3px; }
-.stat-val   { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 700; color: var(--text-1); }
+.stat-card.blue::before  { background: var(--brand-mid); }
+.stat-card.gold::before  { background: var(--gold); }
+.stat-card.green::before { background: #10B981; }
+.stat-card.red::before   { background: #EF4444; }
 
-/* ─── TOOLBAR ─── */
+.stat-inner { display: flex; align-items: flex-start; justify-content: space-between; }
+.stat-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center; font-size: 17px;
+}
+.stat-card.blue  .stat-icon { background: var(--brand-light); color: var(--brand-mid); }
+.stat-card.gold  .stat-icon { background: var(--gold-bg);     color: var(--gold); }
+.stat-card.green .stat-icon { background: #D1FAE5;             color: #059669; }
+.stat-card.red   .stat-icon { background: #FEE2E2;             color: #EF4444; }
+.stat-label { font-size: 11px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 5px; }
+.stat-val { font-family: 'JetBrains Mono', monospace; font-size: 20px; font-weight: 600; color: var(--text-1); letter-spacing: -0.02em; }
+.stat-meta { font-size: 11px; color: var(--text-3); margin-top: 3px; }
+
+/* ═══ TOOLBAR ═══ */
 .toolbar {
   display: flex; align-items: center; gap: 10px;
-  margin-bottom: 14px; flex-wrap: wrap;
+  margin-bottom: 12px; flex-wrap: wrap;
 }
-.search-wrap { position: relative; flex: 1; min-width: 220px; }
+.search-wrap { position: relative; flex: 1; min-width: 240px; max-width: 380px; }
 .search-wrap i {
-  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
-  color: var(--text-3); font-size: 15px; pointer-events: none;
+  position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+  color: var(--text-3); font-size: 14px; pointer-events: none;
 }
 .search-wrap input {
   width: 100%; height: 36px;
-  border: 1px solid var(--border-md); border-radius: var(--radius-sm);
+  border: 1px solid var(--border-md); border-radius: var(--radius-md);
   padding: 0 10px 0 34px; font-size: 13px;
-  font-family: 'DM Sans', sans-serif; color: var(--text-1);
+  font-family: 'Inter', sans-serif; color: var(--text-1);
   background: var(--surface);
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 .search-wrap input:focus {
-  outline: none; border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(216,90,48,0.10);
+  outline: none; border-color: var(--brand-mid);
+  box-shadow: 0 0 0 3px rgba(234,88,12,0.12);
 }
-.toolbar-count { font-size: 12px; color: var(--text-3); white-space: nowrap; }
+.search-wrap input::placeholder { color: var(--text-3); }
+.toolbar-right { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.toolbar-count {
+  font-size: 12px; color: var(--text-3);
+  background: var(--surface-3); border: 1px solid var(--border);
+  border-radius: 999px; padding: 4px 12px; white-space: nowrap; font-weight: 500;
+}
 
-/* ─── TABLE ─── */
+/* ═══ TABLE CARD ═══ */
 .table-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-lg); overflow: hidden;
   box-shadow: var(--shadow-sm);
 }
+
 .inv-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.inv-table thead tr {
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+}
 .inv-table thead th {
-  padding: 11px 16px; font-size: 10px; font-weight: 700;
+  padding: 10px 16px; font-size: 10.5px; font-weight: 700;
   color: var(--text-3); text-transform: uppercase; letter-spacing: 0.8px;
-  background: var(--surface-2); border-bottom: 1px solid var(--border);
   text-align: left; white-space: nowrap;
 }
-.inv-table thead th.r { text-align: left; }
+.inv-table thead th.r { text-align: center; }
+
 .inv-table tbody tr {
   border-bottom: 1px solid var(--border);
-  transition: background 0.12s;
+  transition: background 0.1s;
 }
 .inv-table tbody tr:last-child { border-bottom: none; }
-.inv-table tbody tr:hover { background: var(--accent-light); }
+.inv-table tbody tr:hover { background: #FAFBFF; }
 .inv-table tbody td { padding: 13px 16px; vertical-align: middle; }
 .inv-table tbody td.r { text-align: right; }
 
+/* Cell styles */
 .cell-billno {
-  font-family: 'DM Mono', monospace; font-size: 11.5px; font-weight: 600;
-  color: var(--accent); background: var(--accent-light);
-  border: 1px solid var(--accent-border);
-  border-radius: 4px; padding: 2px 8px; display: inline-block;
+  font-family: 'JetBrains Mono', monospace; font-size: 11.5px; font-weight: 600;
+  color: var(--brand); background: var(--brand-light);
+  border: 1px solid var(--brand-border);
+  border-radius: 4px; padding: 3px 8px; display: inline-block; letter-spacing: 0.01em;
 }
-.cell-date  { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text-3); }
+.cell-date { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--text-3); }
 .cell-party-name { font-weight: 600; font-size: 13px; color: var(--text-1); }
 .cell-party-co   { font-size: 11.5px; color: var(--text-3); margin-top: 1px; }
-.cell-amount { font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: var(--text-1); }
-.cell-grand  { font-family: 'DM Mono', monospace; font-size: 13.5px; font-weight: 700; color: var(--accent); }
+.cell-grand {
+  font-family: 'JetBrains Mono', monospace; font-size: 13px;
+  font-weight: 600; color: var(--text-1);
+}
+.cell-pending {
+  font-family: 'JetBrains Mono', monospace; font-size: 12.5px;
+  font-weight: 600; color: var(--red);
+}
 
-.actions { display: flex; gap: 6px; text-align: right; }
+/* Received form inline */
+.received-form { display: flex; align-items: center; gap: 7px; justify-content: flex-end; }
+.received-input {
+  width: 110px; height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--border-md); border-radius: var(--radius-sm);
+  font-size: 12.5px; font-family: 'JetBrains Mono', monospace;
+  color: var(--text-1); background: var(--surface);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  text-align: right;
+}
+.received-input:focus {
+  outline: none; border-color: var(--brand-mid);
+  box-shadow: 0 0 0 3px rgba(234,88,12,0.1);
+}
+.save-btn {
+  height: 32px; padding: 0 12px;
+  border: 1px solid var(--border-md); border-radius: var(--radius-sm);
+  background: var(--surface-3); color: var(--text-2);
+  font-size: 11.5px; font-weight: 600; font-family: 'Inter', sans-serif;
+  cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+.save-btn:hover {
+  background: var(--brand); color: #fff; border-color: var(--brand);
+}
+
+/* Badge */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 999px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
+}
+.badge-dot {
+  width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+}
+.badge-success { background: var(--green-bg); color: var(--green); }
+.badge-success .badge-dot { background: #10B981; }
+.badge-warning { background: var(--amber-bg); color: var(--amber); }
+.badge-warning .badge-dot { background: #F59E0B; }
+.badge-danger  { background: var(--red-bg);   color: var(--red); }
+.badge-danger .badge-dot  { background: #EF4444; }
+
+/* Action buttons */
+.actions { display: flex; gap: 5px; justify-content: flex-end; align-items: center; }
 .act-btn {
   display: inline-flex; align-items: center; gap: 4px;
-  padding: 5px 10px; border-radius: var(--radius-sm);
-  font-size: 12px; font-weight: 600; cursor: pointer;
-  font-family: 'DM Sans', sans-serif; text-decoration: none;
+  padding: 5px 10px; height: 30px;
+  border-radius: var(--radius-sm); font-size: 11.5px; font-weight: 600;
+  cursor: pointer; font-family: 'Inter', sans-serif; text-decoration: none;
   border: 1px solid var(--border-md);
   background: var(--surface-3); color: var(--text-2);
-  transition: background 0.15s, color 0.15s;
+  transition: all 0.15s; white-space: nowrap;
 }
-.act-btn:hover { background: var(--surface); color: var(--text-1); }
-.act-btn.view  { background: var(--accent-light); color: var(--accent); border-color: var(--accent-border); }
-.act-btn.view:hover { background: var(--accent); color: #fff; }
-.act-btn.del   { color: var(--red); border-color: #F7C1C1; background: var(--red-bg); }
-.act-btn.del:hover { background: #F7C1C1; }
+.act-btn:hover { background: var(--surface); color: var(--text-1); border-color: var(--border-md); }
+.act-btn.view {
+  background: var(--brand-light); color: var(--brand);
+  border-color: var(--brand-border);
+}
+.act-btn.view:hover { background: var(--brand); color: #fff; border-color: var(--brand); }
+.act-btn.del {
+  color: var(--red); border-color: #FECACA; background: var(--red-bg);
+  padding: 5px 8px;
+}
+.act-btn.del:hover { background: #FCA5A5; color: var(--red); }
 
-/* ─── EMPTY ─── */
+/* ═══ EMPTY ═══ */
 .empty-state {
   display: flex; flex-direction: column; align-items: center;
-  justify-content: center; padding: 72px 24px; text-align: center;
+  justify-content: center; padding: 80px 24px; text-align: center;
 }
 .empty-icon {
-  width: 64px; height: 64px; background: var(--surface-3); border-radius: 50%;
+  width: 60px; height: 60px; background: var(--surface-3); border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 28px; margin-bottom: 16px; color: var(--text-3);
+  font-size: 26px; margin-bottom: 14px; color: var(--text-3);
 }
-.empty-title { font-size: 16px; font-weight: 700; color: var(--text-2); margin-bottom: 6px; }
-.empty-sub   { font-size: 13px; color: var(--text-3); margin-bottom: 20px; }
+.empty-title { font-size: 15px; font-weight: 700; color: var(--text-2); margin-bottom: 5px; }
+.empty-sub   { font-size: 13px; color: var(--text-3); margin-bottom: 18px; }
 
 .no-results {
   padding: 40px 24px; text-align: center;
   font-size: 13px; color: var(--text-3); display: none;
 }
-.no-results i { font-size: 28px; margin-bottom: 8px; display: block; opacity: 0.4; }
+.no-results i { font-size: 26px; margin-bottom: 8px; display: block; opacity: 0.35; }
 
-/* ─── PAGINATION ─── */
+/* ═══ PAGINATION ═══ */
 .pagination-wrap {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 20px; border-top: 1px solid var(--border);
+  padding: 12px 20px; border-top: 1px solid var(--border);
   background: var(--surface-2); font-size: 12px; color: var(--text-3);
   flex-wrap: wrap; gap: 10px;
 }
 .pagination-wrap nav { display: flex; }
-.pagination-wrap .pagination { display: flex; gap: 4px; list-style: none; margin: 0; }
+.pagination-wrap .pagination { display: flex; gap: 3px; list-style: none; margin: 0; }
 .pagination-wrap .pagination li > a,
 .pagination-wrap .pagination li > span {
   display: inline-flex; align-items: center; justify-content: center;
-  min-width: 32px; height: 32px; padding: 0 8px;
+  min-width: 30px; height: 30px; padding: 0 8px;
   border: 1px solid var(--border-md); border-radius: var(--radius-sm);
   font-size: 12px; font-weight: 600; text-decoration: none;
   color: var(--text-2); background: var(--surface);
   transition: background 0.15s, color 0.15s;
 }
 .pagination-wrap .pagination li > a:hover {
-  background: var(--accent-light); color: var(--accent); border-color: var(--accent-border);
+  background: var(--brand-light); color: var(--brand); border-color: var(--brand-border);
 }
 .pagination-wrap .pagination li.active > span {
-  background: var(--accent); color: #fff; border-color: var(--accent);
+  background: var(--brand); color: #fff; border-color: var(--brand);
 }
 .pagination-wrap .pagination li.disabled > span { opacity: 0.4; }
 
-/* logo */
-.topbar-logo img {
-    height: 45px;
-    width: 45px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-/* Success */
-/* ─── SUCCESS TOAST ─── */
+/* ═══ TOAST ═══ */
 .toast {
-  position: fixed; bottom: 32px; right: 32px; z-index: 9999;
-  display: flex; align-items: center; gap: 14px;
-  background: #fff; border: 1px solid #C6E6C3;
-  border-left: 5px solid #3B6D11;
-  border-radius: var(--radius-md);
-  padding: 16px 20px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-  min-width: 320px; max-width: 420px;
+  position: fixed; bottom: 28px; right: 28px; z-index: 9999;
+  display: flex; align-items: flex-start; gap: 12px;
+  background: #fff; border: 1px solid #A7F3D0;
+  border-left: 4px solid #10B981;
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.05);
+  min-width: 300px; max-width: 400px;
+  animation: slideIn 0.3s cubic-bezier(.21,1.02,.73,1) forwards;
   overflow: hidden;
-  animation: slideIn 0.35s cubic-bezier(.21,1.02,.73,1) forwards;
 }
-.toast.hide { animation: slideOut 0.3s ease forwards; }
+.toast.hide { animation: slideOut 0.25s ease forwards; }
 .toast-icon {
-  width: 38px; height: 38px; flex-shrink: 0;
-  background: var(--green-bg); border-radius: 50%;
+  width: 34px; height: 34px; flex-shrink: 0;
+  background: #D1FAE5; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 20px; color: var(--green);
+  font-size: 17px; color: #065F46;
 }
-.toast-title { font-size: 13.5px; font-weight: 700; color: var(--text-1); margin-bottom: 2px; }
-.toast-sub   { font-size: 12px; color: var(--text-3); }
+.toast-title { font-size: 13px; font-weight: 700; color: var(--text-1); margin-bottom: 2px; }
+.toast-sub   { font-size: 11.5px; color: var(--text-3); }
 .toast-close {
   margin-left: auto; background: none; border: none;
-  cursor: pointer; color: var(--text-3); font-size: 18px;
-  padding: 4px; line-height: 1;
+  cursor: pointer; color: var(--text-3); font-size: 16px;
+  padding: 2px; line-height: 1; flex-shrink: 0;
 }
 .toast-close:hover { color: var(--text-1); }
 .toast-progress {
   position: absolute; bottom: 0; left: 0;
-  height: 3px; background: var(--green);
-  width: 100%;
+  height: 2px; background: #10B981;
   animation: progress 4s linear forwards;
 }
 @keyframes slideIn {
-  from { opacity: 0; transform: translateY(20px) scale(0.97); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
+  from { opacity: 0; transform: translateX(16px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 @keyframes slideOut {
-  from { opacity: 1; transform: translateY(0); }
-  to   { opacity: 0; transform: translateY(16px); }
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(16px); }
 }
 @keyframes progress {
-  from { width: 100%; }
-  to   { width: 0%; }
-}
-{{-- Status/Pending/Successs --}}
-.badge-success{
-    background:#dcfce7;
-    color:#166534;
-    padding:5px 10px;
-    border-radius:999px;
-    font-size:12px;
-    font-weight:600;
+  from { width: 100%; } to { width: 0%; }
 }
 
-.badge-warning{
-    background:#fef3c7;
-    color:#92400e;
-    padding:5px 10px;
-    border-radius:999px;
-    font-size:12px;
-    font-weight:600;
-}
-
-.badge-danger{
-    background:#fee2e2;
-    color:#991b1b;
-    padding:5px 10px;
-    border-radius:999px;
-    font-size:12px;
-    font-weight:600;
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 768px) {
+  .topbar { padding: 0 16px; }
+  .topbar-nav { display: none; }
+  .page-wrap { padding: 20px 14px 40px; }
+  .stats-row { grid-template-columns: 1fr 1fr; }
+  .inv-table { font-size: 12px; }
+  .inv-table thead th:nth-child(2),
+  .inv-table tbody td:nth-child(2) { display: none; }
+  .received-input { width: 80px; }
 }
 </style>
-
 @endpush
 
 @section('content')
 
 <header class="topbar">
-  <div class="topbar-brand">
-   <div class="topbar-logo">
-        <img src="/images/projects/logo.png" alt="AB Logo">
-   </div>
+  <div class="topbar-left">
+    <div class="topbar-logo">
+      <img src="/images/projects/logo.png" alt="Awadh Buildmate">
+    </div>
     <div>
       <div class="topbar-name">Awadh Buildmate</div>
       <div class="topbar-sub">Made For Quality and Trust</div>
     </div>
   </div>
   <a href="{{ route('invoices.create') }}" class="btn btn-primary">
-    <i class="ti ti-plus" aria-hidden="true"></i> New Invoice
+    <i class="ti ti-plus" style="font-size:14px;"></i> New Invoice
   </a>
 </header>
 
 <div class="page-wrap">
 
-  <div class="page-header">
-    <div>
-      <div class="page-eyebrow">Awadh Buildmate</div>
-      <div class="page-title">Made For Quality and Trust</div>
-      <div class="page-count">
-        <i class="ti ti-file-invoice" style="font-size:13px;" aria-hidden="true"></i>
-        <strong>{{ $invoices->total() }}</strong> invoice{{ $invoices->total() !== 1 ? 's' : '' }} total
-      </div>
-    </div>
-    {{-- <a href="{{ route('invoices.create') }}" class="btn btn-primary">
-      <i class="ti ti-plus" aria-hidden="true"></i> New Invoice
-    </a> --}}
-  </div>
 
-  {{-- STATS --}}
+
+  {{-- Stats --}}
   @php
-    $allInvoices = \App\Models\Invoice::all();
-    $totalBill   = $allInvoices->sum('bill_amount');
-    // $totalGrand  = $allInvoices->sum('grand_total');
-    $totalReceivable = $allInvoices->sum(function ($invoice) {
-        return max(0, $invoice->grand_total - $invoice->received_amount);
-    });
+    $allInvoices     = \App\Models\Invoice::all();
+    $totalBill       = $allInvoices->sum('grand_total');
+    $totalReceived   = $allInvoices->sum('received_amount');
+    $totalReceivable = $allInvoices->sum(fn($i) => max(0, $i->grand_total - $i->received_amount));
+    $paidCount       = $allInvoices->where('payment_status', 'Received')->count();
   @endphp
+
   <div class="stats-row">
-    <div class="stat-card">
-      <div class="stat-icon orange"><i class="ti ti-receipt-2" aria-hidden="true"></i></div>
-      <div>
-        <div class="stat-label">Total Invoices</div>
-        <div class="stat-val">{{ $invoices->total() }}</div>
+    <div class="stat-card blue">
+      <div class="stat-inner">
+        <div>
+          <div class="stat-label">Total Invoices</div>
+          <div class="stat-val">{{ $invoices->total() }}</div>
+          <div class="stat-meta">{{ $paidCount }} fully paid</div>
+        </div>
+        <div class="stat-icon"><i class="ti ti-file-invoice"></i></div>
       </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-icon gray"><i class="ti ti-report-money" aria-hidden="true"></i></div>
-      <div>
-        <div class="stat-label">Total Bill Amount</div>
-        <div class="stat-val">₹ {{ number_format($totalBill, 0, '.', ',') }}</div>
+    <div class="stat-card gold">
+      <div class="stat-inner">
+        <div>
+          <div class="stat-label">Total Billed</div>
+          <div class="stat-val">₹{{ number_format($totalBill, 0) }}</div>
+          <div class="stat-meta">across all invoices</div>
+        </div>
+        <div class="stat-icon"><i class="ti ti-report-money"></i></div>
       </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-icon green"><i class="ti ti-cash" aria-hidden="true"></i></div>
-      <div>
-        <div class="stat-label">Total Receivable</div>
-        {{-- <div class="stat-val">₹ {{ number_format($totalGrand, 0, '.', ',') }}</div> --}}
-        <div class="stat-val">₹ {{ number_format($totalReceivable, 0, '.', ',') }}</div>
+    <div class="stat-card green">
+      <div class="stat-inner">
+        <div>
+          <div class="stat-label">Received</div>
+          <div class="stat-val">₹{{ number_format($totalReceived, 0) }}</div>
+          <div class="stat-meta">payments collected</div>
+        </div>
+        <div class="stat-icon"><i class="ti ti-circle-check"></i></div>
+      </div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-inner">
+        <div>
+          <div class="stat-label">Outstanding</div>
+          <div class="stat-val">₹{{ number_format($totalReceivable, 0) }}</div>
+          <div class="stat-meta">yet to collect</div>
+        </div>
+        <div class="stat-icon"><i class="ti ti-clock-dollar"></i></div>
       </div>
     </div>
   </div>
 
-  {{-- TOOLBAR --}}
+  {{-- Toolbar --}}
   <div class="toolbar">
     <div class="search-wrap">
-      <i class="ti ti-search" aria-hidden="true"></i>
-      <input type="text" id="searchInput" placeholder="Search by bill no, party name…" oninput="filterTable(this.value)">
+      <i class="ti ti-search"></i>
+      <input type="text" id="searchInput" placeholder="Search by bill no., client name…" oninput="filterTable(this.value)">
     </div>
-    <span class="toolbar-count" id="visibleCount">
-      Showing {{ $invoices->count() }} of {{ $invoices->total() }}
-    </span>
+    <div class="toolbar-right">
+      <span class="toolbar-count" id="visibleCount">
+        {{ $invoices->count() }} of {{ $invoices->total() }} invoices
+      </span>
+    </div>
   </div>
 
-  {{-- TABLE --}}
+  {{-- Table --}}
   <div class="table-card">
     @if($invoices->count())
 
@@ -418,10 +496,9 @@ body {
           <th>Bill No.</th>
           <th>Date</th>
           <th>Client</th>
-          {{-- <th class="r">Bill Amount</th> --}}
-          <th class="r">Bill Amount</th>
+          <th class="r">Grand Total</th>
           <th class="r">Received</th>
-          <th class="r">Pending</th>
+          <th class="r">Outstanding</th>
           <th>Status</th>
           <th class="r">Actions</th>
         </tr>
@@ -429,77 +506,82 @@ body {
       <tbody id="tableBody">
         @foreach($invoices as $invoice)
         <tr data-search="{{ strtolower($invoice->bill_no . ' ' . $invoice->to_name . ' ' . ($invoice->to_co ?? '')) }}">
-          <td><span class="cell-billno"># {{ $invoice->bill_no }}</span></td>
+
+          <td><span class="cell-billno">#{{ $invoice->bill_no }}</span></td>
+
           <td><span class="cell-date">{{ \Carbon\Carbon::parse($invoice->bill_date)->format('d M Y') }}</span></td>
+
           <td>
             <div class="cell-party-name">{{ $invoice->to_name }}</div>
             @if($invoice->to_co)
-            <div class="cell-party-co">{{ $invoice->to_co }}</div>
+              <div class="cell-party-co">{{ $invoice->to_co }}</div>
             @endif
           </td>
-          {{-- <td class="r"><span class="cell-amount">₹ {{ number_format($invoice->bill_amount, 0, '.', ',') }}</span></td> --}}
-          <td class="r"><span class="cell-grand">₹ {{ number_format($invoice->grand_total, 0, '.', ',') }}</span></td>
+
           <td class="r">
-        <form action="{{ route('invoice.update-payment', $invoice->id) }}" method="POST" style="display:flex; gap:8px;">
-        @csrf
+            <span class="cell-grand">₹{{ number_format($invoice->grand_total, 0) }}</span>
+          </td>
 
-        <input
-            type="number"
-            name="received_amount"
-            value="{{ $invoice->received_amount }}"
-            min="0"
-            max="{{ $invoice->grand_total }}"
-            step="0.01"
-            style="
-                width:120px;
-                padding:6px 10px;
-                border:1px solid #ddd;
-                border-radius:8px;
-            "
-        >
+          <td class="r">
+            <form action="{{ route('invoice.update-payment', $invoice->id) }}" method="POST" class="received-form">
+              @csrf
+              <input
+                type="number"
+                name="received_amount"
+                value="{{ $invoice->received_amount }}"
+                min="0"
+                max="{{ $invoice->grand_total }}"
+                step="0.01"
+                class="received-input"
+              >
+              <button type="submit" class="save-btn">Save</button>
+            </form>
+          </td>
 
-        <button type="submit" class="act-btn">
-            Save
-        </button>
-    </form>
-</td>
+          <td class="r">
+            @php $pending = max(0, $invoice->grand_total - $invoice->received_amount); @endphp
+            @if($pending > 0)
+              <span class="cell-pending">₹{{ number_format($pending, 0) }}</span>
+            @else
+              <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-3);">—</span>
+            @endif
+          </td>
 
-    <td class="r">
-        ₹ {{ number_format(max(0, $invoice->grand_total - $invoice->received_amount), 0, '.', ',') }}
-    </td>
-    <td>
-        @if($invoice->payment_status == 'Received')
-            <span class="badge-success">Received</span>
-        @elseif($invoice->payment_status == 'Partial')
-            <span class="badge-warning">Partial</span>
-        @else
-            <span class="badge-danger">Pending</span>
-        @endif
-    </td>
+          <td>
+            @if($invoice->payment_status == 'Received')
+              <span class="badge badge-success"><span class="badge-dot"></span> Received</span>
+            @elseif($invoice->payment_status == 'Partial')
+              <span class="badge badge-warning"><span class="badge-dot"></span> Partial</span>
+            @else
+              <span class="badge badge-danger"><span class="badge-dot"></span> Pending</span>
+            @endif
+          </td>
+
           <td class="r">
             <div class="actions">
               <a href="{{ route('invoice.show', $invoice->id) }}" class="act-btn view">
-                <i class="ti ti-eye" aria-hidden="true"></i> View
+                <i class="ti ti-eye" style="font-size:13px;"></i> View
               </a>
-              {{-- <a href="{{ route('invoice.edit', $invoice->id) }}" class="act-btn">
-                <i class="ti ti-edit" aria-hidden="true"></i> Edit
-              </a> --}}
+              <a href="{{ route('invoice.edit', $invoice->id) }}" class="act-btn view">
+                <i class="ti ti-pen" style="font-size:13px;"></i> Edit
+              </a>
               <form action="{{ route('invoice.destroy', $invoice->id) }}" method="POST"
-                    onsubmit="return confirm('Delete invoice #{{ $invoice->bill_no }}?')">
+                    onsubmit="return confirm('Delete invoice #{{ $invoice->bill_no }}? This cannot be undone.')">
                 @csrf @method('DELETE')
-                <button type="submit" class="act-btn del" title="Delete">
-                  <i class="ti ti-trash" aria-hidden="true"></i>
+                <button type="submit" class="act-btn del" title="Delete invoice">
+                  <i class="ti ti-trash" style="font-size:13px;"></i>
                 </button>
               </form>
             </div>
           </td>
+
         </tr>
         @endforeach
       </tbody>
     </table>
 
     <div class="no-results" id="noResults">
-      <i class="ti ti-search-off" aria-hidden="true"></i>
+      <i class="ti ti-search-off"></i>
       No invoices match your search.
     </div>
 
@@ -510,25 +592,26 @@ body {
 
     @else
     <div class="empty-state">
-      <div class="empty-icon"><i class="ti ti-receipt-off" aria-hidden="true"></i></div>
+      <div class="empty-icon"><i class="ti ti-file-off"></i></div>
       <div class="empty-title">No invoices yet</div>
-      <div class="empty-sub">Create your first invoice to get started.</div>
+      <div class="empty-sub">Create your first invoice to start tracking payments.</div>
       <a href="{{ route('invoices.create') }}" class="btn btn-primary">
-        <i class="ti ti-plus" aria-hidden="true"></i> Create Invoice
+        <i class="ti ti-plus" style="font-size:14px;"></i> Create Invoice
       </a>
     </div>
     @endif
   </div>
 
 </div>
+
 @if(session('success'))
 <div class="toast" id="toast">
   <div class="toast-icon"><i class="ti ti-circle-check"></i></div>
   <div>
-    <div class="toast-title">Invoice Saved!</div>
+    <div class="toast-title">Invoice Saved</div>
     <div class="toast-sub">{{ session('success') }}</div>
   </div>
-  <button class="toast-close" onclick="dismissToast()">
+  <button class="toast-close" onclick="dismissToast()" aria-label="Close">
     <i class="ti ti-x"></i>
   </button>
   <div class="toast-progress"></div>
@@ -554,15 +637,17 @@ function filterTable(q) {
     (visible === 0 && term) ? 'block' : 'none';
 
   document.getElementById('visibleCount').textContent = term
-    ? `Showing ${visible} result${visible !== 1 ? 's' : ''}`
-    : `Showing {{ $invoices->count() }} of {{ $invoices->total() }}`;
-} 
+    ? `${visible} result${visible !== 1 ? 's' : ''} found`
+    : `{{ $invoices->count() }} of {{ $invoices->total() }} invoices`;
+}
+
 function dismissToast() {
   const t = document.getElementById('toast');
   if (!t) return;
   t.classList.add('hide');
-  setTimeout(() => t.remove(), 300);
+  setTimeout(() => t.remove(), 250);
 }
+
 @if(session('success'))
   setTimeout(dismissToast, 4000);
 @endif

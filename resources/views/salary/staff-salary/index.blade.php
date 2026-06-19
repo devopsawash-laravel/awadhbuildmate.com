@@ -19,9 +19,10 @@
 
 {{-- ───────── COMBINED FILTER + GENERATE BAR ───────── --}}
 <div class="ss-bar-card">
+
+    {{-- ROW 1: Filter form --}}
     <form method="GET" action="{{ route('staff-salary.index') }}" class="ss-bar-form" id="filterForm">
 
-        
         {{-- SITE --}}
         <div class="ss-bar-group">
             <label class="ss-bar-label">SITE</label>
@@ -75,154 +76,95 @@
             </button>
         </div>
     </form>
-        <a href="{{ route('staff-salary.bulkpdfstaff', [
-                'month' => $month,
-                'year' => $year,
-                'site_id' => request('site_id')
-            ]) }}"
-            class="ss-bar-btn ss-bar-btn-download"
-            target="_blank">
-            <i class="fas fa-file-pdf"></i>
-            <span>Download All Payslips</span>
-        </a>
-    <div class="ss-bar-separator"></div>
 
-    {{-- GENERATE SLIP (separate POST form, inline) --}}
+    {{-- Full-width separator between rows --}}
+    <div class="ss-row-separator"></div>
+
+    {{-- ROW 2: Generate form + Download button together --}}
     <form action="{{ route('staff-salary.generate') }}" method="POST" class="ss-bar-form ss-gen-form">
         @csrf
         <input type="hidden" name="month" value="{{ request('month', now()->month) }}">
         <input type="hidden" name="year"  value="{{ request('year',  now()->year)  }}">
 
         {{-- STAFF --}}
-{{-- STAFF --}}
-<div class="ss-bar-group ss-bar-staff">
+        <div class="ss-bar-group ss-bar-staff">
+            <label class="ss-bar-label">SELECT STAFF</label>
+            <select name="staff_id" id="staff_id" class="ss-bar-select" required>
+                <option value="">— Choose Staff —</option>
+                @foreach($staffs as $staff)
+                    <option value="{{ $staff->id }}"
+                            data-working-days="{{ $staff->working_days ?? 30 }}"
+                            data-total-salary="{{ $staff->total_salary ?? 0 }}">
+                        {{ $staff->name }} ({{ $staff->employee_id }})
+                    </option>
+                @endforeach
+            </select>
+        </div>
 
-    <label class="ss-bar-label">
-        SELECT STAFF
-    </label>
+        <div class="ss-bar-divider"></div>
 
-    <select name="staff_id"
-            id="staff_id"
-            class="ss-bar-select"
-            required>
+        {{-- TOTAL SALARY --}}
+        <div class="ss-bar-group">
+            <label class="ss-bar-label">TOTAL SALARY</label>
+            <input type="number" name="total_salary" id="total_salary"
+                   class="ss-days-input" min="0" placeholder="Salary" required>
+        </div>
 
-            
-        <option value="">
-            — Choose Staff —
-        </option>
+        <div class="ss-bar-divider"></div>
 
-        @foreach($staffs as $staff)
+        {{-- DAILY WAGE --}}
+        <div class="ss-bar-group">
+            <label class="ss-bar-label">DAILY WAGE</label>
+            <input type="text" id="daily_wage" class="ss-days-input ss-readonly" readonly>
+        </div>
 
-            <option value="{{ $staff->id }}"
-                    data-working-days="{{ $staff->working_days ?? 30 }}"
-                    data-total-salary="{{ $staff->total_salary ?? 0 }}">
+        <div class="ss-bar-divider"></div>
 
-                {{ $staff->name }}
-                ({{ $staff->employee_id }})
+        {{-- PRESENT DAYS --}}
+        <div class="ss-bar-group">
+            <label class="ss-bar-label">PRESENT DAYS</label>
+            <input type="number" name="present_days" id="present_days"
+                   class="ss-days-input" min="0" max="31" placeholder="Days" required>
+        </div>
 
-            </option>
+        <div class="ss-bar-divider"></div>
 
-        @endforeach
+        {{-- WEEK OFF --}}
+        <div class="ss-bar-group">
+            <label class="ss-bar-label">WEEK OFF</label>
+            <input type="number" name="week_off" id="week_off"
+                   class="ss-days-input" min="0" value="0" placeholder="Week Off">
+        </div>
 
-    </select>
+        <div class="ss-bar-divider"></div>
 
-</div>
+        {{-- ESTIMATED SALARY --}}
+        <div class="ss-bar-group">
+            <label class="ss-bar-label">ESTIMATED SALARY</label>
+            <input type="text" id="estimated_salary" class="ss-days-input ss-readonly" readonly>
+        </div>
 
-<div class="ss-bar-divider"></div>
+        <div class="ss-bar-divider"></div>
 
-{{-- TOTAL SALARY --}}
-<div class="ss-bar-group">
-
-    <label class="ss-bar-label">
-        TOTAL SALARY
-    </label>
-
-    <input type="number"
-           name="total_salary"
-           id="total_salary"
-           class="ss-days-input"
-           min="0"
-           placeholder="Salary"
-           required>
-
-</div>
-
-<div class="ss-bar-divider"></div>
-
-{{-- DAILY WAGE --}}
-<div class="ss-bar-group">
-
-    <label class="ss-bar-label">
-        DAILY WAGE
-    </label>
-
-    <input type="text"
-           id="daily_wage"
-           class="ss-days-input ss-readonly"
-           readonly>
-
-</div>
-
-<div class="ss-bar-divider"></div>
-
-{{-- PRESENT DAYS --}}
-<div class="ss-bar-group">
-
-    <label class="ss-bar-label">
-        PRESENT DAYS
-    </label>
-
-    <input type="number"
-           name="present_days"
-           id="present_days"
-           class="ss-days-input"
-           min="0"
-           max="31"
-           placeholder="Days"
-           required>
-
-</div>
-
-<div class="ss-bar-divider"></div>
-
-{{-- WEEK OFF --}}
-<div class="ss-bar-group">
-
-    <label class="ss-bar-label">
-        WEEK OFF
-    </label>
-
-    <input type="number"
-           name="week_off"
-           id="week_off"
-           class="ss-days-input"
-           min="0"
-           value="0"
-           placeholder="Week Off">
-
-</div>
-
-<div class="ss-bar-divider"></div>
-
-{{-- ESTIMATED SALARY --}}
-<div class="ss-bar-group">
-
-    <label class="ss-bar-label">
-        ESTIMATED SALARY
-    </label>
-
-    <input type="text"
-           id="estimated_salary"
-           class="ss-days-input ss-readonly"
-           readonly>
-
-</div>
-        {{-- GENERATE --}}
-        <div class="ss-bar-group ss-bar-group-btn">
-            <button type="submit" class="ss-bar-btn ss-bar-btn-generate">
-                <i class="fas fa-file-signature"></i> Generate Salary Slip
+        {{-- GENERATE + DOWNLOAD side by side --}}
+    
+            <a href="{{ route('staff-salary.bulkpdfstaff', [
+                    'month'   => $month,
+                    'year'    => $year,
+                    'site_id' => request('site_id')
+                ]) }}"
+                class="ss-glossy-btn ss-glossy-btn-blue"
+                target="_blank">
+                <i class="fas fa-file-pdf"></i>
+                <span>Download All Payslips</span>
+            </a>
+    <div class="ss-bar-group ss-bar-group-btn ss-btn-pair">
+            <button type="submit" class="ss-glossy-btn ss-glossy-btn-green">
+                <i class="fas fa-file-signature"></i>
+                <span>Generate Salary Slip</span>
             </button>
         </div>
+
     </form>
 </div>
 
@@ -258,6 +200,7 @@
         <table class="ss-table">
             <thead>
                 <tr>
+                    <th>SR.NO</th>
                     <th>STAFF</th>
                     <th>SITE</th>
                     <th>DEPARTMENT</th>
@@ -272,6 +215,7 @@
             <tbody>
                 @forelse($salarySlips as $salary)
                 <tr>
+                    <td class="col-center">{{ $loop->iteration }}</td>
 
                     <td>
                         <div class="ss-emp-name">{{ $salary->staff->name }}</div>
@@ -507,12 +451,107 @@
 }
 .ss-bar-btn:active { transform: scale(0.97); }
 
+/* ─── VIEW BUTTON (Glossy Teal) ─── */
 .ss-bar-btn-view {
-    background: #fff;
-    color: #374151;
-    border-color: #d1d5db;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 20px;
+    min-height: 38px;
+    width: max-content;
+    flex-shrink: 0;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff !important;
+    cursor: pointer;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    line-height: 1.3;
+
+    background: linear-gradient(180deg,
+        #5eead4 0%,
+        #14b8a6 30%,
+        #0d9488 60%,
+        #0f766e 100%
+    );
+
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.45) inset,
+        0 -1px 0 rgba(0,0,0,0.3) inset,
+        0 0 0 1px #0f6460,
+        0 4px 14px rgba(13,148,136,0.55),
+        0 1px 3px rgba(0,0,0,0.3);
+
+    transition: box-shadow 0.15s, transform 0.15s, filter 0.15s;
 }
-.ss-bar-btn-view:hover { background: #f1f5f9; border-color: #94a3b8; }
+
+.ss-bar-btn-view::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 52%;
+    background: linear-gradient(180deg,
+        rgba(255,255,255,0.40) 0%,
+        rgba(255,255,255,0.05) 100%
+    );
+    border-radius: 10px 10px 60% 60%;
+    pointer-events: none;
+}
+
+.ss-bar-btn-view::after {
+    content: '';
+    position: absolute;
+    top: -60%; left: -60%;
+    width: 40%; height: 200%;
+    background: linear-gradient(105deg,
+        transparent 35%,
+        rgba(255,255,255,0.26) 50%,
+        transparent 65%
+    );
+    transform: skewX(-15deg);
+    animation: gloss-sweep 2.8s ease-in-out infinite;
+    pointer-events: none;
+}
+
+.ss-bar-btn-view i {
+    font-size: 15px;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+    position: relative;
+    z-index: 1;
+}
+
+.ss-bar-btn-view:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+    color: #fff !important;
+    text-decoration: none;
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.45) inset,
+        0 -1px 0 rgba(0,0,0,0.3) inset,
+        0 0 0 1px #0f6460,
+        0 8px 24px rgba(13,148,136,0.65),
+        0 2px 6px rgba(0,0,0,0.25);
+}
+
+.ss-bar-btn-view:active {
+    filter: brightness(0.95);
+    transform: translateY(1px);
+    background: linear-gradient(180deg,
+        #0f766e 0%,
+        #0d9488 50%,
+        #5eead4 100%
+    );
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.3) inset,
+        0 -1px 0 rgba(0,0,0,0.3) inset,
+        0 0 0 1px #0f6460,
+        0 2px 8px rgba(13,148,136,0.4);
+}
 
 .ss-bar-btn-generate {
     background: #2563eb;
@@ -713,35 +752,270 @@
     padding: 12px 22px;
     border-radius: 10px;
 
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-    color: #fff !important;
+    background: linear-gradient(180deg,
+        #5b9bff 0%,
+        #2563eb 45%,
+        #1a4fc7 100%
+    );
 
+    color: #fff !important;
     font-size: 14px;
     font-weight: 600;
     text-decoration: none;
-
     border: none;
     cursor: pointer;
 
+    position: relative;
+    overflow: hidden;
+
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    box-shadow:
+        0 4px 15px rgba(37, 99, 235, 0.4),
+        0 1px 0 rgba(255,255,255,0.15) inset,
+        0 -1px 0 rgba(0,0,0,0.2) inset;
+}
+
+/* Glossy shine overlay */
+.ss-bar-btn-download::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 50%;
+    background: linear-gradient(180deg,
+        rgba(255,255,255,0.35) 0%,
+        rgba(255,255,255,0.08) 100%
+    );
+    border-radius: 10px 10px 50% 50%;
+    pointer-events: none;
+}
+
+/* Moving shimmer sweep */
+.ss-bar-btn-download::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -75%;
+    width: 50%;
+    height: 200%;
+    background: linear-gradient(105deg,
+        transparent 40%,
+        rgba(255,255,255,0.25) 50%,
+        transparent 60%
+    );
+    transform: skewX(-15deg);
+    animation: gloss-sweep 3s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes gloss-sweep {
+    0%   { left: -75%; }
+    60%  { left: 125%; }
+    100% { left: 125%; }
 }
 
 .ss-bar-btn-download i {
     font-size: 16px;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
 }
 
 .ss-bar-btn-download:hover {
-    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    background: linear-gradient(180deg,
+        #74aeff 0%,
+        #2f6ef5 45%,
+        #1e50d4 100%
+    );
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+    box-shadow:
+        0 8px 25px rgba(37, 99, 235, 0.5),
+        0 1px 0 rgba(255,255,255,0.2) inset,
+        0 -1px 0 rgba(0,0,0,0.2) inset;
     color: #fff !important;
     text-decoration: none;
 }
 
 .ss-bar-btn-download:active {
-    transform: translateY(0);
-    box-shadow: 0 3px 8px rgba(37, 99, 235, 0.25);
+    transform: translateY(1px);
+    box-shadow:
+        0 2px 8px rgba(37, 99, 235, 0.3),
+        0 1px 0 rgba(255,255,255,0.1) inset;
+    background: linear-gradient(180deg,
+        #1a4fc7 0%,
+        #2563eb 55%,
+        #5b9bff 100%
+    );
+}
+/* ─── ROW SEPARATOR (between filter row and generate row) ─── */
+.ss-row-separator {
+    width: 100%;
+    height: 1px;
+    background: #e2e8f0;
+    margin: 4px 0;
+}
+
+/* ─── BUTTON PAIR ─── */
+.ss-btn-pair {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: nowrap;
+}
+
+/* ─── GLOSSY BUTTON BASE ─── */
+/* ─── GLOSSY BUTTON BASE ─── */
+.ss-glossy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 20px;
+    min-height: 38px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff !important;
+    cursor: pointer;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    line-height: 1.3;
+    width: max-content;        /* ← KEY FIX: button sizes to its own text */
+    flex-shrink: 0;            /* ← never shrink below text width */
+    transition: box-shadow 0.15s, transform 0.15s, filter 0.15s;
+}
+
+/* Top glass dome */
+.ss-glossy-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 52%;
+    background: linear-gradient(180deg,
+        rgba(255,255,255,0.40) 0%,
+        rgba(255,255,255,0.05) 100%
+    );
+    border-radius: 10px 10px 60% 60%;
+    pointer-events: none;
+}
+
+/* Sweep shimmer */
+.ss-glossy-btn::after {
+    content: '';
+    position: absolute;
+    top: -60%; left: -60%;
+    width: 40%; height: 200%;
+    background: linear-gradient(105deg,
+        transparent 35%,
+        rgba(255,255,255,0.26) 50%,
+        transparent 65%
+    );
+    transform: skewX(-15deg);
+    animation: gloss-sweep 2.8s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes gloss-sweep {
+    0%   { left: -60%; }
+    55%  { left: 130%; }
+    100% { left: 130%; }
+}
+
+.ss-glossy-btn i {
+    font-size: 15px;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+    position: relative; z-index: 1;
+}
+.ss-glossy-btn span { position: relative; z-index: 1; }
+
+.ss-glossy-btn:hover  { filter: brightness(1.1); transform: translateY(-2px); }
+.ss-glossy-btn:active { filter: brightness(0.95); transform: translateY(1px); }
+
+/* ─── BLUE variant (Download) ─── */
+.ss-glossy-btn-blue {
+    background: linear-gradient(180deg, #6eb0ff 0%, #3b82f6 30%, #2563eb 60%, #1d4ed8 100%);
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.45) inset,
+        0 -1px 0 rgba(0,0,0,0.3) inset,
+        0 0 0 1px #1a40b8,
+        0 4px 14px rgba(37,99,235,0.5);
+}
+.ss-glossy-btn-blue:hover {
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.45) inset,
+        0 -1px 0 rgba(0,0,0,0.3) inset,
+        0 0 0 1px #1a40b8,
+        0 8px 24px rgba(37,99,235,0.6);
+    color: #fff !important;
+    text-decoration: none;
+}
+
+/* ─── GREEN variant (Generate) ─── */
+.ss-glossy-btn-green {
+    background: linear-gradient(180deg, #4ade80 0%, #22c55e 30%, #16a34a 60%, #15803d 100%);
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.45) inset,
+        0 -1px 0 rgba(0,0,0,0.3) inset,
+        0 0 0 1px #166534,
+        0 4px 14px rgba(22,163,74,0.5);
+}
+.ss-glossy-btn-green:hover {
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.45) inset,
+        0 -1px 0 rgba(0,0,0,0.3) inset,
+        0 0 0 1px #166534,
+        0 8px 24px rgba(22,163,74,0.6);
+    color: #fff !important;
+    text-decoration: none;
+}
+.ss-bar-group-btn {
+    display: flex;
+    align-items: center;
+}
+
+.ss-bar-btn-view {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 22px;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+
+    background: linear-gradient(175deg, #fb923c 0%, #ea580c 55%, #c2410c 100%);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(234, 88, 12, 0.35),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.ss-bar-btn-view::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    border-radius: 10px 10px 50% 50% / 10px 10px 6px 6px;
+    pointer-events: none;
+}
+
+.ss-bar-btn-view:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+    box-shadow: 0 8px 20px rgba(234, 88, 12, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    color: #fff;
+}
+
+.ss-bar-btn-view:active {
+    transform: scale(0.97);
+    filter: brightness(0.96);
+    box-shadow: 0 2px 6px rgba(234, 88, 12, 0.3);
 }
 </style>
 @push('scripts')

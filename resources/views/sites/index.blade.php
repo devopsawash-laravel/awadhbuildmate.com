@@ -136,13 +136,6 @@
     overflow: hidden;
 }
 
-.site-progress-fill {
-    height: 100%;
-    border-radius: 99px;
-    background: var(--primary);
-    transition: width 1s ease;
-}
-
 /* Stats row */
 .site-stats {
     display: grid;
@@ -203,14 +196,85 @@
 }
 
 .empty-sites i { font-size: 48px; opacity: 0.2; margin-bottom: 16px; display: block; }
+/* Progress bar  */
+.site-card-top{
+    position: relative;
+    padding: 22px;
+}
+
+.site-top-right{
+    position: absolute;
+    top: 22px;
+    right: 22px;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:8px;
+}
+
+.site-edit-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:32px;
+    height:32px;
+    border-radius:8px;
+    background:#ea580c;
+    color:#fff;
+    text-decoration:none;
+}
+
+.site-top-right{
+    position: absolute;
+    top: 22px;
+    right: 22px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.site-edit-btn{
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+
+    padding: 7px 14px;
+    border-radius: 8px;
+
+    background: linear-gradient(135deg,#ea580c,#f97316);
+    color: #fff !important;
+
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+
+    box-shadow: 0 4px 10px rgba(234,88,12,.25);
+    transition: all .2s ease;
+}
+
+.site-edit-btn:hover{
+    transform: translateY(-1px);
+    background: linear-gradient(135deg,#c2410c,#ea580c);
+    color:#fff;
+}
+.site-progress-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, #ea580c, #f97316);
+    transition: width 1s ease;
+    box-shadow: 0 0 8px rgba(249, 115, 22, 0.35);
+}
 </style>
 @endpush
 
 <div class="sites-grid">
-
+{{-- {{ dd(get_class($sites)) }} --}}
 @forelse($sites as $site)
 
-<a href="{{ route('sites.show', $site) }}" class="site-card">
+{{-- ✅ Use a div instead of <a> to avoid nested anchor issue --}}
+<div class="site-card" onclick="window.location='{{ route('sites.show', $site) }}'">
 
     {{-- Card Top --}}
     <div class="site-card-top">
@@ -220,163 +284,71 @@
             <i class="fas fa-map-marker-alt"></i>
         </div>
 
-        {{-- Status --}}
-        <div class="site-status {{ strtolower($site->status) }}">
+        {{-- Status + Edit --}}
+        <div class="site-top-right">
 
-            <span class="site-status-dot"></span>
+            <div class="site-status {{ strtolower($site->status) }}">
+                <span class="site-status-dot"></span>
+                {{ ucfirst($site->status) }}
+            </div>
 
-            {{ ucfirst($site->status) }}
+            {{-- ✅ Only ONE edit button, stopPropagation prevents card click --}}
+            <a href="{{ route('sites.edit', $site->id) }}"
+               onclick="event.stopPropagation();"
+               class="site-edit-btn">
+                <i class="fas fa-pen"></i>
+            </a>
 
         </div>
-
     </div>
 
     {{-- Card Body --}}
     <div class="site-card-body">
-
-        {{-- Client --}}
-        <div class="site-client">
-
-            {{ $site->client_name ?? 'Client' }}
-
-        </div>
-
-        {{-- Site Name --}}
-        <div class="site-name">
-
-            {{ $site->name }}
-
-        </div>
-
-        {{-- Location --}}
+        <div class="site-client">{{ $site->client_name ?? 'Client' }}</div>
+        <div class="site-name">{{ $site->name }}</div>
         <div class="site-location">
-
             <i class="fas fa-map-marker-alt"></i>
-
             {{ $site->location }}
-
         </div>
-
-        {{-- Progress --}}
         <div class="site-progress-wrap">
-
             <div class="site-progress-top">
-
-                <span>
-
-                    <i class="fas fa-calendar-alt"></i>
-
-                    {{ \Carbon\Carbon::parse($site->start_date)->format('M Y') }}
-
-                </span>
-
-                <span>
-
-                    {{ $site->progress ?? 0 }}% time elapsed
-
-                </span>
-
-                <span>
-
-                    {{ \Carbon\Carbon::parse($site->end_date)->format('M Y') }}
-
-                </span>
-
+                <span><i class="fas fa-calendar-alt"></i> {{ \Carbon\Carbon::parse($site->start_date)->format('M Y') }}</span>
+                <span>{{ $site->progress ?? 0 }}% time elapsed</span>
+                <span>{{ \Carbon\Carbon::parse($site->expected_end_date)->format('M Y') }}</span>
             </div>
-
             <div class="site-progress-track">
-
-                <div class="site-progress-fill"
-                     style="width:{{ $site->progress ?? 0 }}%">
-                </div>
-
+                <div class="site-progress-fill" style="width:{{ $site->progress ?? 0 }}%"></div>
             </div>
-
         </div>
-
     </div>
 
     {{-- Stats --}}
     <div class="site-stats">
-
-        {{-- Projects --}}
         <div class="site-stat">
-
-            <div class="ss-num">
-
-                {{ $site->projects_count ?? 0 }}
-
-            </div>
-
-            <div class="ss-label">
-
-                Projects
-
-            </div>
-
+            <div class="ss-num">{{ $site->projects_count ?? 0 }}</div>
+            <div class="ss-label">Projects</div>
         </div>
-
-        {{-- Ongoing --}}
         <div class="site-stat">
-
-            <div class="ss-num">
-
-                {{ $site->ongoing_projects ?? 0 }}
-
-            </div>
-
-            <div class="ss-label">
-
-                Ongoing
-
-            </div>
-
+            <div class="ss-num">{{ $site->ongoing_projects ?? 0 }}</div>
+            <div class="ss-label">Ongoing</div>
         </div>
-
-        {{-- Labours --}}
         <div class="site-stat">
-
-            <div class="ss-num">
-
-                {{ $site->labours_count ?? 0 }}
-
-            </div>
-
-            <div class="ss-label">
-
-                Labours
-
-            </div>
-
+            <div class="ss-num">{{ $site->worked_labours ?? 0 }}</div>
+            <div class="ss-label">Labours</div>
         </div>
-
     </div>
 
-    {{-- Arrow --}}
-    <div class="site-arrow">
-
-        <i class="fas fa-arrow-right"></i>
-
-    </div>
-
-</a>
-
-@empty
-
-<div class="empty-sites">
-
-    <i class="fas fa-map-marked-alt"></i>
-
-    <h3>No Sites Found</h3>
-
-    <p>
-        Create your first site to start managing projects.
-    </p>
+    <div class="site-arrow"><i class="fas fa-arrow-right"></i></div>
 
 </div>
 
+@empty
+    <div class="empty-sites">
+        <i class="fas fa-map-marked-alt"></i>
+        <h3>No Sites Found</h3>
+        <p>Create your first site to start managing projects.</p>
+    </div>
 @endforelse
-
 </div>
 
     <div class="empty-sites">

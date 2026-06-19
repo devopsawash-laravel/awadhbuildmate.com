@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Invoice Creator — Awadh Buildmate')
+@section('title', 'Edit Invoice #{{ $invoice->bill_no }} — Awadh Buildmate')
 
 @push('styles')
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,16 +55,17 @@ body {
   box-shadow: var(--shadow-sm);
 }
 .topbar-brand { display: flex; align-items: center; gap: 10px; }
-/* .topbar-logo {
-  width: 32px; height: 32px;
-  background: var(--accent);
-  border-radius: var(--radius-sm);
-  display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 15px; font-weight: 700;
-} */
 .topbar-name { font-size: 15px; font-weight: 600; color: var(--text-1); }
 .topbar-sub  { font-size: 11px; color: var(--text-3); margin-top: 1px; }
 .topbar-actions { display: flex; gap: 8px; align-items: center; }
+
+/* ─── EDIT BADGE ─── */
+.edit-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #FFF4E5; border: 1px solid #FDD49A;
+  border-radius: var(--radius-md); padding: 5px 12px;
+  font-size: 12px; font-weight: 600; color: #92510B;
+}
 
 /* ─── LAYOUT ─── */
 .app-layout {
@@ -203,7 +204,6 @@ body {
 }
 .btn-ghost:hover { background: var(--surface); color: var(--text-1); }
 
-/* show invoices button */
 .btn-show {
   display: inline-flex; align-items: center; gap: 6px;
   background: var(--surface-3);
@@ -273,7 +273,8 @@ body {
 }
 .inv-meta-row strong { color: var(--text-1); font-weight: 600; font-family: 'DM Mono', monospace; }
 .inv-to-strip { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--surface-3); }
-.inv-to-cell { padding: 16px 32px; }
+/* .inv-to-cell { padding: 16px 32px; } */
+.inv-to-cell { padding: 16px 20px; }
 .inv-to-cell:first-child { border-right: 1px solid var(--surface-3); }
 .inv-cell-label {
   font-size: 9px; font-weight: 700; color: var(--text-3);
@@ -331,8 +332,16 @@ body {
   background: var(--accent-light); border-left: 3px solid var(--accent-border);
   border-radius: 0 4px 4px 0; font-size: 11.5px; color: #7C3516; line-height: 1.5;
 }
-.inv-sign-block { text-align: right; }
+.inv-sign-block {
+  position: relative; text-align: center; width: 250px;
+}
 .inv-sign-for { font-size: 11px; color: var(--text-3); margin-bottom: 40px; }
+.inv-sign-images { position: relative; height: 120px; margin-bottom: 0; }
+.stamp-img {
+  position: absolute; right: 0;
+  height: 150px; width: auto;
+  opacity: 0.9; z-index: 1; background: transparent; mix-blend-mode: multiply;
+}
 .inv-sign-line {
   border-top: 1.5px solid var(--text-2); padding-top: 6px;
   font-size: 13px; font-weight: 700; color: var(--text-1);
@@ -346,194 +355,6 @@ body {
 }
 .inv-bottombar span:last-child { font-weight: 600; color: #fff; font-family: 'DM Mono', monospace; }
 
-/* ─── DRAWER ─── */
-.drawer-backdrop {
-  position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,0); 
-  pointer-events: none;
-  transition: background 0.3s ease;
-}
-.drawer-backdrop.open {
-  background: rgba(0,0,0,0.35);
-  pointer-events: all;
-}
-.drawer {
-  position: fixed; top: 0; right: 0; bottom: 0; z-index: 201;
-  width: 480px;
-  background: var(--surface);
-  box-shadow: -8px 0 40px rgba(0,0,0,0.14);
-  display: flex; flex-direction: column;
-  transform: translateX(100%);
-  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.drawer.open { transform: translateX(0); }
-
-.drawer-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 18px 24px;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
-  flex-shrink: 0;
-}
-.drawer-title-group { display: flex; align-items: center; gap: 10px; }
-.drawer-icon {
-  width: 34px; height: 34px;
-  background: var(--accent-light);
-  border-radius: var(--radius-sm);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--accent); font-size: 16px;
-}
-.drawer-title { font-size: 15px; font-weight: 700; color: var(--text-1); }
-.drawer-subtitle { font-size: 11px; color: var(--text-3); margin-top: 1px; }
-.drawer-close {
-  width: 32px; height: 32px;
-  background: var(--surface-3); border: 1px solid var(--border-md);
-  border-radius: var(--radius-sm); cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text-2); font-size: 15px; transition: background 0.15s;
-}
-.drawer-close:hover { background: var(--red-bg); color: var(--red); border-color: #F7C1C1; }
-
-.drawer-search {
-  padding: 14px 24px 12px;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.drawer-search-inner {
-  position: relative;
-}
-.drawer-search-inner i {
-  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
-  color: var(--text-3); font-size: 15px; pointer-events: none;
-}
-.drawer-search input {
-  width: 100%; height: 36px;
-  border: 1px solid var(--border-md);
-  border-radius: var(--radius-sm);
-  padding: 0 10px 0 34px;
-  font-size: 13px; font-family: 'DM Sans', sans-serif;
-  color: var(--text-1); background: var(--surface-2);
-}
-.drawer-search input:focus {
-  outline: none; border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(216,90,48,0.10);
-  background: var(--surface);
-}
-
-.drawer-body {
-  flex: 1; overflow-y: auto; padding: 16px 24px;
-}
-.drawer-body::-webkit-scrollbar { width: 4px; }
-.drawer-body::-webkit-scrollbar-thumb { background: var(--border-md); border-radius: 4px; }
-
-/* ─── Invoice Cards in Drawer ─── */
-.inv-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  margin-bottom: 12px;
-  overflow: hidden;
-  transition: box-shadow 0.2s, border-color 0.2s;
-}
-.inv-card:hover { box-shadow: var(--shadow-md); border-color: var(--accent-border); }
-
-.inv-card-head {
-  display: flex; align-items: flex-start; justify-content: space-between;
-  padding: 14px 16px 10px;
-  border-bottom: 1px solid var(--surface-3);
-  background: var(--surface);
-}
-.inv-card-left { flex: 1; min-width: 0; }
-.inv-card-billno {
-  font-family: 'DM Mono', monospace;
-  font-size: 11px; font-weight: 600;
-  color: var(--accent);
-  background: var(--accent-light);
-  border: 1px solid var(--accent-border);
-  border-radius: 4px; padding: 2px 7px;
-  display: inline-block; margin-bottom: 5px;
-}
-.inv-card-client { font-size: 14px; font-weight: 700; color: var(--text-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.inv-card-co { font-size: 12px; color: var(--text-2); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.inv-card-date {
-  font-size: 11px; color: var(--text-3);
-  font-family: 'DM Mono', monospace;
-  white-space: nowrap; margin-left: 12px; flex-shrink: 0;
-  padding-top: 2px;
-}
-
-.inv-card-amounts {
-  display: grid; grid-template-columns: 1fr 1fr 1fr;
-  gap: 0; background: var(--surface-2);
-}
-.inv-card-amt {
-  padding: 10px 14px;
-  border-right: 1px solid var(--border);
-  text-align: center;
-}
-.inv-card-amt:last-child { border-right: none; }
-.inv-card-amt-label { font-size: 9.5px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 3px; }
-.inv-card-amt-val { font-family: 'DM Mono', monospace; font-size: 12.5px; font-weight: 600; color: var(--text-1); }
-.inv-card-amt-val.red { color: var(--red); }
-.inv-card-amt-val.accent { color: var(--accent); font-size: 13.5px; }
-
-.inv-card-deductions {
-  display: grid; grid-template-columns: 1fr 1fr 1fr;
-  gap: 0; border-top: 1px dashed var(--border-md);
-  background: var(--surface);
-}
-.inv-card-ded {
-  padding: 8px 14px;
-  border-right: 1px solid var(--border);
-  text-align: center;
-}
-.inv-card-ded:last-child { border-right: none; }
-.inv-card-ded-label { font-size: 9px; font-weight: 600; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
-.inv-card-ded-val { font-family: 'DM Mono', monospace; font-size: 11.5px; font-weight: 600; color: var(--red); }
-
-.inv-card-grand {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 16px;
-  background: var(--accent);
-}
-.inv-card-grand-label { font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.8); letter-spacing: 0.5px; text-transform: uppercase; }
-.inv-card-grand-val { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 700; color: #fff; }
-
-.inv-card-actions {
-  display: flex; gap: 6px;
-  padding: 10px 16px;
-  border-top: 1px solid var(--border);
-  background: var(--surface);
-}
-.inv-card-btn {
-  display: inline-flex; align-items: center; gap: 5px;
-  border-radius: var(--radius-sm);
-  padding: 6px 12px;
-  font-size: 12px; font-weight: 600;
-  cursor: pointer; text-decoration: none;
-  font-family: 'DM Sans', sans-serif;
-  border: 1px solid var(--border-md);
-  background: var(--surface-3); color: var(--text-2);
-  transition: background 0.15s;
-}
-.inv-card-btn:hover { background: var(--surface); color: var(--text-1); }
-.inv-card-btn.primary {
-  background: var(--accent-light); color: var(--accent);
-  border-color: var(--accent-border);
-}
-.inv-card-btn.primary:hover { background: var(--accent); color: #fff; }
-.inv-card-btn.danger { color: var(--red); border-color: #F7C1C1; background: var(--red-bg); }
-.inv-card-btn.danger:hover { background: #F7C1C1; }
-
-/* drawer empty state */
-.drawer-empty {
-  display: flex; flex-direction: column; align-items: center;
-  justify-content: center; padding: 48px 24px; text-align: center;
-  color: var(--text-3);
-}
-.drawer-empty i { font-size: 40px; margin-bottom: 12px; opacity: 0.4; }
-.drawer-empty p { font-size: 13px; }
-
 /* ─── STATUS PILL ─── */
 .status-pill {
   font-size: 11px; font-weight: 600;
@@ -546,7 +367,7 @@ body {
 /* ─── PRINT ─── */
 @media print {
   body { background: #fff; }
-  .topbar, .form-panel, .drawer, .drawer-backdrop { display: none !important; }
+  .topbar, .form-panel { display: none !important; }
   .app-layout { display: block; }
   .preview-panel { height: auto; overflow: visible; padding: 0; background: #fff; }
   .invoice-doc { box-shadow: none; border-radius: 0; max-width: 100%; }
@@ -561,14 +382,8 @@ body {
 .form-panel::-webkit-scrollbar-thumb,
 .preview-panel::-webkit-scrollbar-thumb { background: var(--border-md); border-radius: 4px; }
 
-.topbar-logo img {
-    height: 45px;
-    width: 45px;
-    border-radius: 50%;
-    object-fit: cover;
-}
+.topbar-logo img { height: 45px; width: 45px; border-radius: 50%; object-fit: cover; }
 
-/* Pop up of success after saving invoice */
 /* ─── SUCCESS TOAST ─── */
 .toast {
   position: fixed; bottom: 32px; right: 32px; z-index: 9999;
@@ -581,9 +396,7 @@ body {
   min-width: 320px; max-width: 420px;
   animation: slideIn 0.35s cubic-bezier(.21,1.02,.73,1) forwards;
 }
-.toast.hide {
-  animation: slideOut 0.3s ease forwards;
-}
+.toast.hide { animation: slideOut 0.3s ease forwards; }
 .toast-icon {
   width: 38px; height: 38px; flex-shrink: 0;
   background: var(--green-bg); border-radius: 50%;
@@ -612,159 +425,18 @@ body {
   from { opacity: 1; transform: translateY(0); }
   to   { opacity: 0; transform: translateY(16px); }
 }
-@keyframes progress {
-  from { width: 100%; }
-  to   { width: 0%; }
-}
-
-/* Signature and stamp */
-.inv-sign-block {
-    position: relative;
-    text-align: center;
-    width: 250px;
-}
-
-.inv-sign-images {
-    position: relative;
-    height: 120px;
-    margin-bottom: 0;
-}
-.stamp-img {
-    position: absolute;
-    right: 0;
-    /* top: -0px; */
-    height: 150px; /* increase size */
-    width: auto;
-    opacity: 0.9;
-    z-index: 1;
-    background: transparent;
-    mix-blend-mode: multiply;
-}
+@keyframes progress { from { width: 100%; } to { width: 0%; } }
 </style>
 @endpush
 
 @section('content')
 
-<!-- ─── DRAWER BACKDROP ─── -->
-<div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
-
-<!-- ─── INVOICES DRAWER ─── -->
-<div class="drawer" id="invoicesDrawer" role="dialog" aria-label="Invoice list">
-  <div class="drawer-header">
-    <div class="drawer-title-group">
-      <div class="drawer-icon"><i class="ti ti-receipt-2" aria-hidden="true"></i></div>
-      <div>
-        <div class="drawer-title">All Invoices</div>
-        <div class="drawer-subtitle">{{ $invoices->count() }} invoice{{ $invoices->count() !== 1 ? 's' : '' }} saved</div>
-      </div>
-    </div>
-    <button class="drawer-close" onclick="closeDrawer()" aria-label="Close drawer">
-      <i class="ti ti-x" aria-hidden="true"></i>
-    </button>
-  </div>
-
-  <div class="drawer-search">
-    <div class="drawer-search-inner">
-      <i class="ti ti-search" aria-hidden="true"></i>
-      <input type="text" id="drawerSearch" placeholder="Search by client, bill no…" oninput="filterCards(this.value)">
-    </div>
-  </div>
-
-  <div class="drawer-body" id="drawerBody">
-    @forelse($invoices as $inv)
-    @php
-      $subtotal   = $inv->total_amount;
-      $gstAmt     = $inv->gst_amount;
-      $billAmt    = $inv->bill_amount;
-      $deposit    = $inv->total_deduction - ($inv->bill_amount * ($inv->tds_rate ?? 5) / 100);
-      $tdsAmt     = $inv->bill_amount * (($inv->tds_rate ?? 5) / 100);
-      $totalDed   = $inv->total_deduction;
-      $grand      = $inv->grand_total;
-    @endphp
-
-    <div class="inv-card" data-search="{{ strtolower($inv->to_name . ' ' . $inv->bill_no . ' ' . $inv->to_co) }}">
-
-      <div class="inv-card-head">
-        <div class="inv-card-left">
-          <div class="inv-card-billno"># {{ $inv->bill_no }}</div>
-          <div class="inv-card-client">{{ $inv->to_name }}</div>
-          @if($inv->to_co)
-          <div class="inv-card-co">{{ $inv->to_co }}</div>
-          @endif
-        </div>
-        <div class="inv-card-date">{{ \Carbon\Carbon::parse($inv->bill_date)->format('d M Y') }}</div>
-      </div>
-
-      <div class="inv-card-amounts">
-        <div class="inv-card-amt">
-          <div class="inv-card-amt-label">Subtotal</div>
-          <div class="inv-card-amt-val">₹ {{ number_format($subtotal, 0, '.', ',') }}</div>
-        </div>
-        <div class="inv-card-amt">
-          <div class="inv-card-amt-label">GST ({{ $inv->gst_rate ?? 18 }}%)</div>
-          <div class="inv-card-amt-val">₹ {{ number_format($gstAmt, 0, '.', ',') }}</div>
-        </div>
-        <div class="inv-card-amt">
-          <div class="inv-card-amt-label">Bill Amount</div>
-          <div class="inv-card-amt-val">₹ {{ number_format($billAmt, 0, '.', ',') }}</div>
-        </div>
-      </div>
-
-      <div class="inv-card-deductions">
-        <div class="inv-card-ded">
-          <div class="inv-card-ded-label">Deposit</div>
-          <div class="inv-card-ded-val">− ₹ {{ number_format($inv->deposit ?? 0, 0, '.', ',') }}</div>
-        </div>
-        <div class="inv-card-ded">
-          <div class="inv-card-ded-label">TDS ({{ $inv->tds_rate ?? 5 }}%)</div>
-          <div class="inv-card-ded-val">− ₹ {{ number_format($tdsAmt, 0, '.', ',') }}</div>
-        </div>
-        <div class="inv-card-ded">
-          <div class="inv-card-ded-label">Total Deduction</div>
-          <div class="inv-card-ded-val">− ₹ {{ number_format($totalDed, 0, '.', ',') }}</div>
-        </div>
-      </div>
-
-      <div class="inv-card-grand">
-        <span class="inv-card-grand-label">Grand Total</span>
-        <span class="inv-card-grand-val">₹ {{ number_format($grand, 0, '.', ',') }}</span>
-      </div>
-
-      <div class="inv-card-actions">
-        <a href="{{ route('invoice.show', $inv->id) }}" class="inv-card-btn primary">
-          <i class="ti ti-eye" aria-hidden="true"></i> View
-        </a>
-        <a href="{{ route('invoice.edit', $inv->id) }}" class="inv-card-btn">
-          <i class="ti ti-edit" aria-hidden="true"></i> Edit
-        </a>
-        <button onclick="window.print()" class="inv-card-btn">
-          <i class="ti ti-printer" aria-hidden="true"></i> Print
-        </button>
-        <form action="{{ route('invoice.destroy', $inv->id) }}" method="POST" style="margin-left:auto;"
-              onsubmit="return confirm('Delete invoice #{{ $inv->bill_no }}?')">
-          @csrf @method('DELETE')
-          <button type="submit" class="inv-card-btn danger">
-            <i class="ti ti-trash" aria-hidden="true"></i>
-          </button>
-        </form>
-      </div>
-
-    </div>
-    @empty
-    <div class="drawer-empty">
-      <i class="ti ti-receipt-off" aria-hidden="true"></i>
-      <p>No invoices saved yet.<br>Create your first one!</p>
-    </div>
-    @endforelse
-  </div>
-</div>
-
 <!-- ─── TOPBAR ─── -->
 <header class="topbar">
   <div class="topbar-brand">
     <div class="topbar-logo">
-        <img src="/images/projects/logo.png" alt="AB Logo">
-   </div>
+      <img src="/images/projects/logo.png" alt="AB Logo">
+    </div>
     <div>
       <div class="topbar-name">Awadh Buildmate</div>
       <div class="topbar-sub">Made For Quality and Trust</div>
@@ -772,194 +444,219 @@ body {
   </div>
 
   <div class="topbar-actions">
+    <span class="edit-badge">
+      <i class="ti ti-edit" aria-hidden="true"></i>
+      Editing Invoice #{{ $invoice->bill_no }}
+    </span>
     <span class="status-pill"><span class="status-dot"></span>Live Preview</span>
-
-    <button class="btn-show" onclick="openDrawer()">
-      <i class="ti ti-layout-list" aria-hidden="true"></i>
-      Show Invoices
-      <span style="background:var(--accent);color:#fff;border-radius:20px;padding:1px 7px;font-size:10px;font-weight:700;margin-left:2px;">
-        {{ $invoices->count() }}
-      </span>
-    </button>
-
-    {{-- <a href="{{ route('invoice.show', $inv->id) }}?print=1" target="_blank" class="inv-card-btn">
+    <a href="{{ route('invoice.index') }}" class="btn-show">
+      <i class="ti ti-arrow-left" aria-hidden="true"></i> Back to Invoices
+    </a>
+    <button type="button" onclick="window.print()" class="btn-show">
       <i class="ti ti-printer" aria-hidden="true"></i> Print
-    </a> --}}
-
-    <form action="{{ route('invoice.store') }}" method="POST" style="display:contents">
-      @csrf
-      {{-- <button type="submit" class="btn btn-primary" style="flex:unset;">
-        <i class="ti ti-device-floppy"></i> Save Invoice
-      </button> --}}
-    </form>
+    </button>
   </div>
 </header>
 
 <div class="app-layout">
 
   <!-- ══ FORM PANEL ══ -->
-  <form action="{{ route('invoice.store') }}" method="POST" id="invoiceForm">
-  @csrf
-  <aside class="form-panel">
+  <form action="{{ route('invoice.update', $invoice->id) }}" method="POST" id="invoiceForm">
+    @csrf
+    @method('PUT')
+    <aside class="form-panel">
 
-    <!-- Bill Info -->
-    <div class="form-section">
-      <div class="section-header">
-        <span class="section-title"><i class="ti ti-receipt" aria-hidden="true"></i> &nbsp;Bill Info</span>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label>Bill No.</label>
-          <input type="text" id="bill_no" name="bill_no" placeholder="25-03-2026" oninput="updatePreview()">
+      <!-- Bill Info -->
+      <div class="form-section">
+        <div class="section-header">
+          <span class="section-title"><i class="ti ti-receipt" aria-hidden="true"></i> &nbsp;Bill Info</span>
         </div>
-        <div class="field">
-          <label>Bill Date</label>
-          <input type="date" id="bill_date" name="bill_date" oninput="updatePreview()">
-        </div>
-      </div>
-    </div>
-
-    <!-- Billed To -->
-    <div class="form-section">
-      <div class="section-header">
-        <span class="section-title"><i class="ti ti-building" aria-hidden="true"></i> &nbsp;Billed To</span>
-      </div>
-      <div class="field">
-        <label>Client / Company Name</label>
-        <input type="text" id="to_name" name="to_name" placeholder="e.g. Lakhani Engineering" oninput="updatePreview()">
-      </div>
-      <div class="field" style="margin-top:10px;">
-        <label>C/o or Sub-line</label>
-        <input type="text" id="to_co" name="to_co" placeholder="e.g. C/o L&T (Asian Paint)" oninput="updatePreview()">
-      </div>
-    </div>
-
-    <!-- Contact -->
-    <div class="form-section">
-      <div class="section-header">
-        <span class="section-title"><i class="ti ti-user" aria-hidden="true"></i> &nbsp;Contact</span>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label>Contact Person</label>
-          <input type="text" id="contact_person" name="contact_person" placeholder="Name" oninput="updatePreview()">
-        </div>
-        <div class="field">
-          <label>Contact Number</label>
-          <input type="text" id="contact_number" name="contact_number" placeholder="+91 XXXXX XXXXX" oninput="updatePreview()">
+        <div class="field-row">
+          <div class="field">
+            <label>Bill No.</label>
+            <input type="text" id="bill_no" name="bill_no"
+              value="{{ old('bill_no', $invoice->bill_no) }}"
+              placeholder="25-03-2026" oninput="updatePreview()">
+          </div>
+          <div class="field">
+            <label>Bill Date</label>
+            <input type="date" id="bill_date" name="bill_date"
+              value="{{ old('bill_date', \Carbon\Carbon::parse($invoice->bill_date)->format('Y-m-d')) }}"
+              oninput="updatePreview()">
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- From -->
-    <div class="form-section">
-      <div class="section-header">
-        <span class="section-title"><i class="ti ti-id-badge" aria-hidden="true"></i> &nbsp;From (Your Details)</span>
-      </div>
-      <div class="field">
-        <label>Firm Name</label>
-        <input type="text" id="from_name" name="from_name" value="Awadh Buildmate" oninput="updatePreview()">
-      </div>
-      <div class="field" style="margin-top:10px;">
-        <label>Address</label>
-        <textarea id="from_address" name="from_address" rows="2" oninput="updatePreview()">Floor No.: 1st, Building No.: C-101, Building: Nakshtra Heights, Subhanpura Road, Subhanpura, Vadodara, Gujarat - 390023.</textarea>
-      </div>
-      <div class="field-row" style="margin-top:10px;">
-        <div class="field">
-          <label>PAN</label>
-          <input type="text" id="from_pan" name="from_pan" value="GTBPM0457F" oninput="updatePreview()">
+      <!-- Billed To -->
+      <div class="form-section">
+        <div class="section-header">
+          <span class="section-title"><i class="ti ti-building" aria-hidden="true"></i> &nbsp;Billed To</span>
         </div>
         <div class="field">
-          <label>GST No.</label>
-          <input type="text" id="from_gst" name="from_gst" value="24GTBPM0457F1ZW" oninput="updatePreview()">
+          <label>Client / Company Name</label>
+          <input type="text" id="to_name" name="to_name"
+            value="{{ old('to_name', $invoice->to_name) }}"
+            placeholder="e.g. Lakhani Engineering" oninput="updatePreview()">
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label>C/o or Sub-line</label>
+          <input type="text" id="to_co" name="to_co"
+            value="{{ old('to_co', $invoice->to_co) }}"
+            placeholder="e.g. C/o L&T (Asian Paint)" oninput="updatePreview()">
         </div>
       </div>
-    </div>
 
-    <!-- Bank -->
-    <div class="form-section">
-      <div class="section-header">
-        <span class="section-title"><i class="ti ti-building-bank" aria-hidden="true"></i> &nbsp;Bank Details</span>
-      </div>
-      <div class="field">
-        <label>Bank Name</label>
-        <input type="text" id="bank_name" name="bank_name" value="Indian Overseas Bank" oninput="updatePreview()">
-      </div>
-      <div class="field-row" style="margin-top:10px;">
-        <div class="field">
-          <label>Account No.</label>
-          <input type="text" id="account_no" name="account_no" value="20800200004208" placeholder="Account number" oninput="updatePreview()">
+      <!-- Contact -->
+      <div class="form-section">
+        <div class="section-header">
+          <span class="section-title"><i class="ti ti-user" aria-hidden="true"></i> &nbsp;Contact</span>
         </div>
-        <div class="field">
-          <label>IFSC Code</label>
-          <input type="text" id="ifsc_code" name="ifsc_code" value="IOBA0002080" oninput="updatePreview()">
+        <div class="field-row">
+          <div class="field">
+            <label>Contact Person</label>
+            <input type="text" id="contact_person" name="contact_person"
+              value="{{ old('contact_person', $invoice->contact_person) }}"
+              placeholder="Name" oninput="updatePreview()">
+          </div>
+          <div class="field">
+            <label>Contact Number</label>
+            <input type="text" id="contact_number" name="contact_number"
+              value="{{ old('contact_number', $invoice->contact_number) }}"
+              placeholder="+91 XXXXX XXXXX" oninput="updatePreview()">
+          </div>
         </div>
       </div>
-      <div class="field" style="margin-top:10px;">
-        <label>Proprietor Name</label>
-        <input type="text" id="proprietor" name="proprietor" value="Harsh Raj Maurya" oninput="updatePreview()">
-      </div>
-    </div>
 
-    <!-- Work Items -->
-    <div class="form-section">
-      <div class="section-header">
-        <span class="section-title"><i class="ti ti-list-details" aria-hidden="true"></i> &nbsp;Work Items</span>
-      </div>
-      <div class="items-header">
-        <span>Particulars</span>
-        <span style="text-align:center">QTY</span>
-        <span style="text-align:right">Rate (₹)</span>
-        <span style="text-align:right">Amt (₹)</span>
-        <span></span>
-      </div>
-      <div id="itemsContainer"></div>
-      <button type="button" class="btn-add" onclick="addItem()">
-        <i class="ti ti-plus" aria-hidden="true"></i> Add Item
-      </button>
-    </div>
-
-    <!-- Tax & Deductions -->
-    <div class="form-section">
-      <div class="section-header">
-        <span class="section-title"><i class="ti ti-percentage" aria-hidden="true"></i> &nbsp;Tax &amp; Deductions</span>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label>GST Rate (%)</label>
-          <input type="number" id="gst_rate" name="gst_rate" value="18" min="0" oninput="updatePreview()">
+      <!-- From -->
+      <div class="form-section">
+        <div class="section-header">
+          <span class="section-title"><i class="ti ti-id-badge" aria-hidden="true"></i> &nbsp;From (Your Details)</span>
         </div>
         <div class="field">
-          <label>TDS Rate (%)</label>
-          <input type="number" id="tds_rate" name="tds_rate" value="5" min="0" oninput="updatePreview()">
+          <label>Firm Name</label>
+          <input type="text" id="from_name" name="from_name"
+            value="{{ old('from_name', $invoice->from_name ?? 'Awadh Buildmate') }}"
+            oninput="updatePreview()">
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label>Address</label>
+          <textarea id="from_address" name="from_address" rows="2" oninput="updatePreview()">{{ old('from_address', $invoice->from_address ?? 'Floor No.: 1st, Building No.: C-101, Building: Nakshtra Heights, Subhanpura Road, Subhanpura, Vadodara, Gujarat - 390023.') }}</textarea>
+        </div>
+        <div class="field-row" style="margin-top:10px;">
+          <div class="field">
+            <label>PAN</label>
+            <input type="text" id="from_pan" name="from_pan"
+              value="{{ old('from_pan', $invoice->from_pan ?? 'GTBPM0457F') }}"
+              oninput="updatePreview()">
+          </div>
+          <div class="field">
+            <label>GST No.</label>
+            <input type="text" id="from_gst" name="from_gst"
+              value="{{ old('from_gst', $invoice->from_gst ?? '24GTBPM0457F1ZW') }}"
+              oninput="updatePreview()">
+          </div>
         </div>
       </div>
-      <div class="field" style="margin-top:10px;">
-        <label>Deposit / Advance Deduction (₹)</label>
-        <input type="number" id="deposit" name="deposit" value="0" min="0" oninput="updatePreview()">
-      </div>
-    </div>
 
-    <!-- Note -->
-    <div class="form-section">
-      <div class="section-header">
-        <span class="section-title"><i class="ti ti-notes" aria-hidden="true"></i> &nbsp;Note (Optional)</span>
+      <!-- Bank -->
+      <div class="form-section">
+        <div class="section-header">
+          <span class="section-title"><i class="ti ti-building-bank" aria-hidden="true"></i> &nbsp;Bank Details</span>
+        </div>
+        <div class="field">
+          <label>Bank Name</label>
+          <input type="text" id="bank_name" name="bank_name"
+            value="{{ old('bank_name', $invoice->bank_name ?? 'Indian Overseas Bank') }}"
+            oninput="updatePreview()">
+        </div>
+        <div class="field-row" style="margin-top:10px;">
+          <div class="field">
+            <label>Account No.</label>
+            <input type="text" id="account_no" name="account_no"
+              value="{{ old('account_no', $invoice->account_no ?? '20800200004208') }}"
+              placeholder="Account number" oninput="updatePreview()">
+          </div>
+          <div class="field">
+            <label>IFSC Code</label>
+            <input type="text" id="ifsc_code" name="ifsc_code"
+              value="{{ old('ifsc_code', $invoice->ifsc_code ?? 'IOBA0002080') }}"
+              oninput="updatePreview()">
+          </div>
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label>Proprietor Name</label>
+          <input type="text" id="proprietor" name="proprietor"
+            value="{{ old('proprietor', $invoice->proprietor ?? 'Harsh Raj Maurya') }}"
+            oninput="updatePreview()">
+        </div>
       </div>
-      <div class="field">
-        <textarea id="note" name="note" rows="3" placeholder="Any additional notes…" oninput="updatePreview()"></textarea>
+
+      <!-- Work Items -->
+      <div class="form-section">
+        <div class="section-header">
+          <span class="section-title"><i class="ti ti-list-details" aria-hidden="true"></i> &nbsp;Work Items</span>
+        </div>
+        <div class="items-header">
+          <span>Particulars</span>
+          <span style="text-align:center">QTY</span>
+          <span style="text-align:right">Rate (₹)</span>
+          <span style="text-align:right">Amt (₹)</span>
+          <span></span>
+        </div>
+        <div id="itemsContainer"></div>
+        <button type="button" class="btn-add" onclick="addItem()">
+          <i class="ti ti-plus" aria-hidden="true"></i> Add Item
+        </button>
       </div>
-    </div>
 
-    <div class="form-actions">
-      <button type="button" class="btn btn-ghost" onclick="window.print()">
-        <i class="ti ti-printer" aria-hidden="true"></i> Print
-      </button>
-      <button type="submit" class="btn btn-primary">
-        <i class="ti ti-device-floppy"></i> Save Invoice
-      </button>
-    </div>
+      <!-- Tax & Deductions -->
+      <div class="form-section">
+        <div class="section-header">
+          <span class="section-title"><i class="ti ti-percentage" aria-hidden="true"></i> &nbsp;Tax &amp; Deductions</span>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>GST Rate (%)</label>
+            <input type="number" id="gst_rate" name="gst_rate"
+              value="{{ old('gst_rate', $invoice->gst_rate ?? 18) }}"
+              min="0" oninput="updatePreview()">
+          </div>
+          <div class="field">
+            <label>TDS Rate (%)</label>
+            <input type="number" id="tds_rate" name="tds_rate"
+              value="{{ old('tds_rate', $invoice->tds_rate ?? 5) }}"
+              min="0" oninput="updatePreview()">
+          </div>
+        </div>
+        <div class="field" style="margin-top:10px;">
+          <label>Deposit / Advance Deduction (₹)</label>
+          <input type="number" id="deposit" name="deposit"
+            value="{{ old('deposit', $invoice->deposit ?? 0) }}"
+            min="0" oninput="updatePreview()">
+        </div>
+      </div>
 
-  </aside>
+      <!-- Note -->
+      <div class="form-section">
+        <div class="section-header">
+          <span class="section-title"><i class="ti ti-notes" aria-hidden="true"></i> &nbsp;Note (Optional)</span>
+        </div>
+        <div class="field">
+          <textarea id="note" name="note" rows="3"
+            placeholder="Any additional notes…" oninput="updatePreview()">{{ old('note', $invoice->note) }}</textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-ghost" onclick="window.print()">
+          <i class="ti ti-printer" aria-hidden="true"></i> Print
+        </button>
+        <button type="submit" class="btn btn-primary">
+          <i class="ti ti-device-floppy"></i> Update Invoice
+        </button>
+      </div>
+
+    </aside>
   </form>
 
   <!-- ══ PREVIEW PANEL ══ -->
@@ -973,10 +670,10 @@ body {
           <div class="inv-co-name" id="prev_from_name">AWADH BUILDMATE</div>
           <div class="inv-co-tagline">Made For Quality and Trust</div>
           <div class="inv-co-tagline">Fabrication &nbsp;·&nbsp; Erection &nbsp;·&nbsp; Structural Work</div>
-          <div class="inv-co-addr" id="prev_from_address">Floor No.: 1st, Building No.: C-101, Building: Nakshtra Heights, Subhanpura Road, Subhanpura, Vadodara, Gujarat - 390023.</div>
+          <div class="inv-co-addr" id="prev_from_address"></div>
           <div class="inv-chips">
-            <span class="inv-chip">PAN: <strong id="prev_from_pan">GTBPM0457F</strong></span>
-            <span class="inv-chip">GST: <strong id="prev_from_gst">24GTBPM0457F1ZW</strong></span>
+            <span class="inv-chip">PAN: <strong id="prev_from_pan">—</strong></span>
+            <span class="inv-chip">GST: <strong id="prev_from_gst">—</strong></span>
           </div>
         </div>
         <div class="inv-badge-area">
@@ -993,7 +690,8 @@ body {
         <div class="inv-to-cell">
           <div class="inv-cell-label">Billed To</div>
           <div class="inv-to-name" id="prev_to_name">—</div>
-          <div class="inv-to-co" id="prev_to_co"></div>
+          {{-- <div class="inv-to-co" id="prev_to_co"></div> --}}
+          <div class="inv-to-co" id="prev_to_co" style="white-space: pre-line;"></div>
         </div>
         <div class="inv-to-cell">
           <div class="inv-cell-label">Contact</div>
@@ -1016,7 +714,7 @@ body {
           <tbody id="prev_items_body">
             <tr>
               <td colspan="5" style="text-align:center;color:var(--text-3);padding:24px;font-size:13px;">
-                Fill in the items on the left to preview…
+                Loading items…
               </td>
             </tr>
           </tbody>
@@ -1068,25 +766,13 @@ body {
             <strong>Note:</strong> <span id="prev_note"></span>
           </div>
         </div>
-        {{-- <div class="inv-sign-block">
+        <div class="inv-sign-block">
           <div class="inv-sign-for">For, <span id="prev_from_name2">Awadh Buildmate</span></div>
+          <div class="inv-sign-images">
+            <img src="{{ asset('images/projects/stamp.jpg') }}" alt="Company Stamp" class="stamp-img">
+          </div>
           <div class="inv-sign-line" id="prev_proprietor">Harsh Raj Maurya</div>
           <div class="inv-sign-role">Proprietor</div>
-        </div> --}}
-        <div class="inv-sign-block">
-            <div class="inv-sign-for">
-                For, <span id="prev_from_name2">Awadh Buildmate</span>
-            </div>
-
-            <div class="inv-sign-images">
-                <img src="{{ asset('images/projects/stamp.jpg') }}" alt="Company Stamp" class="stamp-img">
-            </div>
-
-            <div class="inv-sign-line" id="prev_proprietor">
-                Harsh Raj Maurya
-            </div>
-
-            <div class="inv-sign-role">Proprietor</div>
         </div>
       </div>
 
@@ -1100,33 +786,37 @@ body {
 
 </div>
 
+{{-- Success toast on redirect back with session flash --}}
+@if(session('success'))
+<div class="toast" id="successToast">
+  <div class="toast-icon"><i class="ti ti-check"></i></div>
+  <div>
+    <div class="toast-title">Invoice Updated!</div>
+    <div class="toast-sub">{{ session('success') }}</div>
+  </div>
+  <button class="toast-close" onclick="dismissToast()"><i class="ti ti-x"></i></button>
+  <div class="toast-progress"></div>
+</div>
+@endif
+
 @endsection
 
 @push('scripts')
+{{-- Pass existing items from PHP to JS --}}
+<script>
+  // Existing invoice items injected from controller
+  const existingItems = @json($invoice->items ?? []);
+</script>
+
 <script>
 let itemCount = 0;
 
-/* ─── Drawer ─── */
-function openDrawer() {
-  document.getElementById('invoicesDrawer').classList.add('open');
-  document.getElementById('drawerBackdrop').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  setTimeout(() => document.getElementById('drawerSearch').focus(), 350);
+/* ─── Toast ─── */
+function dismissToast() {
+  const t = document.getElementById('successToast');
+  if (t) { t.classList.add('hide'); setTimeout(() => t.remove(), 350); }
 }
-function closeDrawer() {
-  document.getElementById('invoicesDrawer').classList.remove('open');
-  document.getElementById('drawerBackdrop').classList.remove('open');
-  document.body.style.overflow = '';
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
-
-function filterCards(q) {
-  const term = q.toLowerCase().trim();
-  document.querySelectorAll('.inv-card').forEach(card => {
-    const search = card.dataset.search || '';
-    card.style.display = (!term || search.includes(term)) ? 'block' : 'none';
-  });
-}
+setTimeout(() => dismissToast(), 4500);
 
 /* ─── Invoice form ─── */
 function fmtINR(n) {
@@ -1139,20 +829,37 @@ function fmtDate(val) {
   return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
 }
 
-function addItem() {
+function addItem(data = {}) {
   const idx = itemCount++;
   const row = document.createElement('div');
   row.className = 'item-row';
   row.id = 'item_' + idx;
   row.innerHTML = `
-    <input type="text"   name="items[${idx}][particulars]" placeholder="Work description" oninput="updatePreview()">
-    <input type="number" name="items[${idx}][qty]"         placeholder="0" oninput="calcRow(${idx});updatePreview()">
-    <input type="number" name="items[${idx}][rate]"        placeholder="0" oninput="calcRow(${idx});updatePreview()">
-    <input type="number" name="items[${idx}][amount]"      id="amount_${idx}" placeholder="0" oninput="updatePreview()">
+    <input type="text"   name="items[${idx}][particulars]"
+      value="${escHtml(data.particulars ?? '')}"
+      placeholder="Work description" oninput="updatePreview()">
+    <input type="number" name="items[${idx}][qty]"
+      value="${data.qty ?? ''}"
+      placeholder="0" oninput="calcRow(${idx});updatePreview()">
+    <input type="number" name="items[${idx}][rate]"
+      value="${data.rate ?? ''}"
+      placeholder="0" oninput="calcRow(${idx});updatePreview()">
+    <input type="number" name="items[${idx}][amount]"
+      id="amount_${idx}"
+      value="${data.amount ?? ''}"
+      placeholder="0" oninput="updatePreview()">
     <button type="button" class="btn-remove" onclick="removeItem(${idx})" title="Remove">
       <i class="ti ti-x" aria-hidden="true"></i>
     </button>`;
   document.getElementById('itemsContainer').appendChild(row);
+}
+
+function escHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
 }
 
 function removeItem(idx) {
@@ -1241,8 +948,13 @@ function updatePreview() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('bill_date').value = new Date().toISOString().split('T')[0];
-  addItem();
+  // Load existing items from the invoice
+  if (existingItems && existingItems.length > 0) {
+    existingItems.forEach(item => addItem(item));
+  } else {
+    // Fallback: add one blank row
+    addItem();
+  }
   updatePreview();
 });
 </script>

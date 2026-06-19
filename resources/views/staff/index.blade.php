@@ -321,26 +321,120 @@
     .sr2-empty a { color: var(--blue-mid); text-decoration: underline; }
 
     /* ── Staff blue button — same as original ── */
-    .btn-staff {
-        background: #2563eb;
-        color: #fff;
-        border: none;
-        transition: 0.2s ease;
-        font-family: 'Barlow Condensed', sans-serif;
-        font-size: 12.5px;
-        font-weight: 700;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        border-radius: 7px;
-        padding: 0 18px;
-        height: 36px;
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        text-decoration: none;
-    }
-    .btn-staff:hover { background: #1d4ed8; color: #fff; transform: translateY(-1px); }
-    .btn-staff:focus { box-shadow: 0 0 0 3px rgba(37,99,235,.25); }
+/* ─── ADD STAFF BUTTON (Glossy Blue) ─── */
+.btn-staff {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 20px;
+    min-height: 38px;
+    width: max-content;
+    flex-shrink: 0;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff !important;
+    cursor: pointer;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    line-height: 1.3;
+
+    background: linear-gradient(180deg,
+        #6eb0ff 0%,
+        #3b82f6 30%,
+        #2563eb 60%,
+        #1d4ed8 100%
+    );
+
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.45) inset,
+        0 -1px 0 rgba(0,0,0,0.3) inset,
+        0 0 0 1px #1a40b8,
+        0 4px 14px rgba(37,99,235,0.55),
+        0 1px 3px rgba(0,0,0,0.3);
+
+    transition: box-shadow 0.15s, transform 0.15s, filter 0.15s;
+}
+
+/* Top glass dome */
+.btn-staff::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 52%;
+    background: linear-gradient(180deg,
+        rgba(255,255,255,0.40) 0%,
+        rgba(255,255,255,0.05) 100%
+    );
+    border-radius: 10px 10px 60% 60%;
+    pointer-events: none;
+}
+
+/* Sweep shimmer */
+.btn-staff::after {
+    content: '';
+    position: absolute;
+    top: -60%; left: -60%;
+    width: 40%; height: 200%;
+    background: linear-gradient(105deg,
+        transparent 35%,
+        rgba(255,255,255,0.26) 50%,
+        transparent 65%
+    );
+    transform: skewX(-15deg);
+    animation: gloss-sweep 2.8s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes gloss-sweep {
+    0%   { left: -60%; }
+    55%  { left: 130%; }
+    100% { left: 130%; }
+}
+
+.btn-staff i {
+    font-size: 15px;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+    position: relative;
+    z-index: 1;
+}
+
+.btn-staff span {
+    position: relative;
+    z-index: 1;
+}
+
+.btn-staff:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+    color: #fff !important;
+    text-decoration: none;
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.45) inset,
+        0 -1px 0 rgba(0,0,0,0.3) inset,
+        0 0 0 1px #1a40b8,
+        0 8px 24px rgba(37,99,235,0.65),
+        0 2px 6px rgba(0,0,0,0.25);
+}
+
+.btn-staff:active {
+    filter: brightness(0.95);
+    transform: translateY(1px);
+    background: linear-gradient(180deg,
+        #1d4ed8 0%,
+        #2563eb 50%,
+        #6eb0ff 100%
+    );
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.3) inset,
+        0 -1px 0 rgba(0,0,0,0.3) inset,
+        0 0 0 1px #1a40b8,
+        0 2px 8px rgba(37,99,235,0.4);
+}
 
     @media (max-width: 640px) {
         .sr2-header { flex-direction: column; align-items: flex-start; gap: 12px; }

@@ -16,4 +16,22 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+    
+});
+
+
+Route::get('/test', function () {
+    return response()->json([
+        'message' => 'API Working'
+    ]);
+});
+
+Route::get('/dashboard', function () {
+
+    return response()->json([
+        'labour_count' => 23,
+        'staff_count' => 6,
+        'advance_amount' => 0
+    ]);
+
 });

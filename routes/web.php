@@ -86,6 +86,7 @@ Route::put('/labours/{labour}/toggle-status',
 Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
 Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
 Route::get('/attendance/monthly', [AttendanceController::class, 'monthlyReport'])->name('attendance.monthly');
+Route::get('/attendance/export-monthly', [AttendanceController::class, 'exportMonthly'])->name('attendance.export.monthly');
 
 //-------------------------lABOUR SALARY MODULE---------------------------------------------------------------//
 
@@ -95,6 +96,7 @@ Route::post('/salary/generate', [SalaryController::class, 'generate'])->name('sa
 Route::get('/salary/{salary}', [SalaryController::class, 'show'])->name('salary.show');
 Route::get('/salary/{salary}/pdf', [SalaryController::class, 'pdf'])->name('salary.pdf');
 Route::delete('/salary/{salary}', [SalaryController::class, 'destroy'])->name('salary.destroy');
+Route::post('/salary/{salary}/mark-paid', [SalaryController::class, 'markPaid'])->name('salary.markPaid');
 
 //-----Laboour Salary Bulk PDF Generation Route------//
 Route::get('/bulkpdf', [SalaryController::class, 'bulkPdf'])->name('salary.bulkpdf');
@@ -110,6 +112,10 @@ Route::post('staff-salary/generate',[StaffSalaryController::class, 'generate'])-
 Route::get('staff-salary/{salary}/payslip',[StaffSalaryController::class, 'payslip'])->name('staff-salary.payslip');
 Route::delete('/staff-salary/{id}',[StaffSalaryController::class, 'destroy'])->name('staff-salary.destroy');
 Route::put('/staff-salary/{salary}/update-deductions', [StaffSalaryController::class, 'updateDeductions'])->name('staff-salary.updateDeductions');
+Route::post(
+    '/staff-salary/{salary}/mark-paid',
+    [SalaryController::class, 'markStaffPaid']
+);
 
 
 // -------------------------------ADVANCE----------------------------------------------------------------------------//
@@ -117,17 +123,6 @@ Route::post('/advances', [AdvanceController::class, 'store'])->name('advances.st
 Route::delete('/advances/{advance}', [AdvanceController::class, 'destroy'])->name('advances.destroy');
 Route::put('/advances/{advance}',[AdvanceController::class, 'update'])->name('advances.update');
 Route::delete('/advances/{advance}',[AdvanceController::class, 'destroy'])->name('advances.destroy');
-
-// Auth::routes();
-
-//Admin Login Route
-// Route::get('/admin/login', [App\Http\Controllers\Admin\LoginControllerController::class, 'index'])->name('admin.login');
-// Route::post('/admin/login', [LoginController::class, 'index1'])->name('admin.login.post');
-// Route::post('/admin/logout',[LoginController::class, 'logout'])->name('admin.logout');
-
-//Testing route
-
-// Route::get('/testdashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('admin.dashboard');
 
 // Testing route for dashboard links
 Route::get('/admin/labours/create', [LabourController::class, 'create'])->name('admin.labours.create');
@@ -138,12 +133,6 @@ Route::get('/admin  attendance/monthly', [AttendanceController::class, 'monthlyR
 Route::get('/admin/enquiries', function() {
     return "Enquiries Page";
 })->name('admin.enquiries');        
-
-
-//Mail Route for testing email notification
-// Route::post('/magic-link',          [LoginController::class, 'sendMagicLink'  ])->name('magic.login');
-// Route::get( '/magic-link/{token}',  [LoginController::class, 'verifyMagicLink'])->name('magic.login');
-
 
 Route::Resource('staff', App\Http\Controllers\StaffController::class);
 
@@ -162,11 +151,10 @@ Route::get('/salary/{salary}/payslip',
 Route::get('/testbankstatment', [SalaryController::class, 'test'])->name('salary.bankstatement');
 Route::get('/testwages',[SalaryController::class, 'testwages'])->name('salary.wages-sheet');
 Route::get('/wages-sheet/export', [SalaryController::class, 'exportReport'])->name('wages.export');
+
 Route::resource('sites', SiteController::class);
-Route::get(
-    '/sites/{site}',
-    [SiteController::class, 'show']
-)->name('sites.show');
+
+Route::get('/sites/{site}', [SiteController::class, 'show'])->name('sites.show');
 
 Route::get(
     '/bank-statement/export',
@@ -190,10 +178,12 @@ Route::post('/invoice/store', [InvoiceController::class, 'store'])->name('invoic
 
 Route::get('/invoice', [InvoiceController::class, 'index'])->name('invoice.index');
 
-Route::get('/invoices/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoices.edit');
+Route::get('/invoices/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoice.edit');
+Route::put('/invoices/{invoice}', [InvoiceController::class, 'update'])->name('invoice.update');
 Route::get('/invoice/{invoice}', [InvoiceController::class, 'show'])->name('invoice.show');
 Route::delete('/invoice/{invoice}', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
 Route::post('/invoice/{invoice}/payment', [InvoiceController::class, 'updatePayment'])->name('invoice.update-payment');
+
 });
 
 

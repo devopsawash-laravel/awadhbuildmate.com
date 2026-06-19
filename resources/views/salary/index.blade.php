@@ -71,7 +71,6 @@
                 <i class="fas fa-search"></i> View
             </button>
         </div>
-
     </form>
 
     @if($labours->isNotEmpty())
@@ -100,7 +99,7 @@
         {{-- GENERATE --}}
         <div class="ss-action-buttons">
 
-    <button type="submit" class="ss-bar-btn ss-bar-btn-generate">
+    <button type="submit" class="ss-bar-btn ss-bar-btn-generate ">
         <i class="fas fa-file-signature"></i>
         <span>Generate Salary Slip</span>
     </button>
@@ -115,8 +114,9 @@
         <i class="fas fa-file-pdf"></i>
         <span>Download All Payslips</span>
     </a>
+    </div>
+    </form>
 
-</div>
     @endif
 </div>
 
@@ -150,6 +150,7 @@
         <table class="ss-table">
             <thead>
                 <tr>
+                    <th class="col-center">SR.NO</th>
                     <th>LABOUR</th>
                     <th>SITE</th>
                     <th>CATEGORY</th>
@@ -164,6 +165,8 @@
             <tbody>
                 @forelse($salarySlips as $slip)
                 <tr>
+
+                    <td class="col-center ss-srno">{{ $loop->iteration }}</td>
 
                     <td>
                         <div class="ss-emp-name">{{ $slip->labour->name }}</div>
@@ -219,7 +222,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="9" class="ss-empty">
+                    <td colspan="10" class="ss-empty">
                         <i class="fas fa-file-invoice"></i>
                         No salary slips generated for this period.
                     </td>
@@ -232,8 +235,6 @@
 </div>
 
 @endsection
-
-
 @push('styles')
 <style>
 
@@ -511,6 +512,14 @@
 .col-num     { text-align: right; font-variant-numeric: tabular-nums; }
 .col-actions { text-align: center; width: 110px; }
 
+.ss-srno {
+    font-size: 12px;
+    font-weight: 700;
+    color: #94a3b8;
+    font-family: monospace;
+    width: 52px;
+}
+
 .ss-emp-name { font-weight: 600; color: #0f172a; }
 .ss-emp-id   { font-size: 11px; color: #94a3b8; margin-top: 3px; font-family: monospace; }
 
@@ -567,9 +576,175 @@
 .ss-empty i { font-size: 28px; margin-bottom: 10px; display: block; opacity: 0.4; }
 .ss-action-buttons{
     display:flex;
-    gap:12px; /* space between buttons */
+    gap:12px;
     align-items:center;
     flex-wrap:wrap;
+}
+/* ─── GLOSSY BUTTON BASE ─── */
+.ss-bar-btn-generate,
+.ss-bar-btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 20px;
+    min-height: 38px;
+    width: max-content;
+    flex-shrink: 0;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff !important;
+    cursor: pointer;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    line-height: 1.3;
+    transition: box-shadow 0.15s, transform 0.15s, filter 0.15s;
+}
+
+/* Top glass dome */
+.ss-bar-btn-generate::before,
+.ss-bar-btn-download::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 52%;
+    background: linear-gradient(180deg,
+        rgba(255,255,255,0.40) 0%,
+        rgba(255,255,255,0.05) 100%
+    );
+    border-radius: 10px 10px 60% 60%;
+    pointer-events: none;
+}
+
+/* Sweep shimmer */
+.ss-bar-btn-generate::after,
+.ss-bar-btn-download::after {
+    content: '';
+    position: absolute;
+    top: -60%; left: -60%;
+    width: 40%; height: 200%;
+    background: linear-gradient(105deg,
+        transparent 35%,
+        rgba(255,255,255,0.26) 50%,
+        transparent 65%
+    );
+    transform: skewX(-15deg);
+    animation: gloss-sweep 2.8s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes gloss-sweep {
+    0%   { left: -60%; }
+    55%  { left: 130%; }
+    100% { left: 130%; }
+}
+
+.ss-bar-btn-generate i,
+.ss-bar-btn-download i {
+    font-size: 15px;
+    filter: drop-shadow(0 1px 1px rgba(0,0,0,0.3));
+    position: relative;
+    z-index: 1;
+}
+
+.ss-bar-btn-generate span,
+.ss-bar-btn-download span {
+    position: relative;
+    z-index: 1;
+}
+
+.ss-bar-btn-generate:hover,
+.ss-bar-btn-download:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+    color: #fff !important;
+    text-decoration: none;
+}
+
+.ss-bar-btn-generate:active,
+.ss-bar-btn-download:active {
+    filter: brightness(0.95);
+    transform: translateY(1px);
+}
+
+/* ─── ORANGE variant (Generate) ─── */
+.ss-bar-btn-generate {
+    background: linear-gradient(180deg,
+        #fdba74 0%,
+        #f97316 30%,
+        #ea580c 60%,
+        #c2410c 100%
+    );
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.45) inset,
+        0 -1px 0 rgba(0,0,0,0.3) inset,
+        0 0 0 1px #9a3412,
+        0 4px 14px rgba(234,88,12,0.55),
+        0 1px 3px rgba(0,0,0,0.3);
+}
+
+.ss-bar-btn-generate:hover {
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.45) inset,
+        0 -1px 0 rgba(0,0,0,0.3) inset,
+        0 0 0 1px #9a3412,
+        0 8px 24px rgba(234,88,12,0.65),
+        0 2px 6px rgba(0,0,0,0.25);
+}
+
+.ss-bar-btn-generate:active {
+    background: linear-gradient(180deg,
+        #c2410c 0%,
+        #ea580c 50%,
+        #fdba74 100%
+    );
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.3) inset,
+        0 -1px 0 rgba(0,0,0,0.3) inset,
+        0 0 0 1px #9a3412,
+        0 2px 8px rgba(234,88,12,0.4);
+}
+
+/* ─── BLUE variant (Download) ─── */
+.ss-bar-btn-download {
+    background: linear-gradient(180deg,
+        #6eb0ff 0%,
+        #3b82f6 30%,
+        #2563eb 60%,
+        #1d4ed8 100%
+    );
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.45) inset,
+        0 -1px 0 rgba(0,0,0,0.3) inset,
+        0 0 0 1px #1a40b8,
+        0 4px 14px rgba(37,99,235,0.55),
+        0 1px 3px rgba(0,0,0,0.3);
+}
+
+.ss-bar-btn-download:hover {
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.45) inset,
+        0 -1px 0 rgba(0,0,0,0.3) inset,
+        0 0 0 1px #1a40b8,
+        0 8px 24px rgba(37,99,235,0.65),
+        0 2px 6px rgba(0,0,0,0.25);
+}
+
+.ss-bar-btn-download:active {
+    background: linear-gradient(180deg,
+        #1d4ed8 0%,
+        #2563eb 50%,
+        #6eb0ff 100%
+    );
+    box-shadow:
+        0 1px 0 rgba(255,255,255,0.3) inset,
+        0 -1px 0 rgba(0,0,0,0.3) inset,
+        0 0 0 1px #1a40b8,
+        0 2px 8px rgba(37,99,235,0.4);
 }
 
 </style>

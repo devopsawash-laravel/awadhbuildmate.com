@@ -7,6 +7,7 @@ use App\Models\Staff;
 use App\Models\Bank;
 use App\Models\Site;
 use App\Models\StaffSalarySlip as Salary;
+use App\Models\StaffSalarySlip;
 
 class StaffController extends Controller
 {
@@ -116,7 +117,11 @@ class StaffController extends Controller
         'site_id' => 'nullable|exists:sites,id',
     ]);
 
-    Staff::create($validated);
+    $monthly_salary = $request->salary;
+    Staff::create([
+        'total_salary' => $monthly_salary,
+        'daily_wage' => round($monthly_salary / 30, 2),
+    ]);
 
     return redirect()->route('staff.index')->with('success', 'Staff added successfully.');
         }
@@ -140,9 +145,11 @@ class StaffController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Staff $staff)
     {
-        //
+        $sites = Site::orderBy('name')->get();
+        $banks = Bank::orderBy('name')->get();
+        return view('staff.edit', compact('sites','banks','staff'));
     }
 
     /**
@@ -152,9 +159,41 @@ class StaffController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Staff $staff)
     {
-        //
+        // $staffs = Staff::orderby('name',compact('staffs'))->get();
+        $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'employee_id' => 'required|string',
+        'category' => 'required|in:Site Incharge,QC-Quality,Safety Supervisor,Planning,Execution,Admin,Supervisor',
+        'phone' => 'nullable|string|max:15',
+        'address' => 'nullable|string',
+        'total_salary' => 'nullable|numeric|min:0',
+        'working_days' => 'nullable|integer|min:0',
+        'daily_wage' => 'nullable|numeric|min:0',
+        'basic_salary' => 'nullable|numeric|min:0',
+        'hra' => 'nullable|numeric|min:0',
+        'other_allowance' => 'nullable|numeric|min:0',
+        'pf_percentage' => 'nullable|numeric|min:0|max:100',
+        'joining_date' => 'required|date',
+        'status' => 'required|in:active,inactive',
+        'Account_Number' => 'nullable|string|max:50',
+        'IFSC' => 'nullable|string|max:50',
+        'Pan_Card' => 'nullable|string|max:50',
+        'Aadhar_Number' => 'nullable|string|max:50',
+        'Nominee_details' => 'nullable|string|max:255',
+        // 'relation' => 'nullable|in:Father,Mother,Spouse,Son,Daughter,Brother,Sister,Guardian',
+        'relation' => 'nullable|in:Father,Mother,Wife,Husband,Son,Daughter,Brother,Sister,Guardian',
+        'ESIC_Number' => 'nullable|string|max:50',
+        'UAN' => 'nullable|string|max:50',
+        'bank_id' => 'nullable|exists:banks,id', 
+        'education' => 'nullable|string|max:255',
+        // 'experience' => 'nullable|string|max:255',
+        'experience' => 'nullable|numeric|min:0|max:50',
+        'site_id' => 'nullable|exists:sites,id',
+    ]);
+    $staff->update($validated);
+    return redirect()->route('staff.show', $staff)->with('success', 'Labour updated successfully.');
     }
 
     /**
@@ -178,5 +217,13 @@ class StaffController extends Controller
     public function salarydashboard()
     {
         return view('salary.salarydashboard');
+    }
+    public function markStaffPaid(StaffSalarySlip $salary, Request $request)
+    {
+        $salary->update([
+            'salary_paid' => $request->boolean('salary_paid')
+        ]);
+
+        return response()->json(['success' => true]);
     }
 }

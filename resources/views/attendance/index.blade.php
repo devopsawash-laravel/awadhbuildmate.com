@@ -46,8 +46,8 @@
     --blue-400: #60A5FA;
     --blue-600: #185FA5;
     --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 14px;
+    --radius-md: 8px;
+    --radius-lg: 8px;
     --font-ui: 'DM Sans', sans-serif;
     --font-display: 'Sora', sans-serif;
 }
@@ -60,7 +60,9 @@ body { font-family: var(--font-ui); }
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--gray-200);
 }
 .att-page-header .ph-title {
     font-family: var(--font-display);
@@ -71,7 +73,7 @@ body { font-family: var(--font-ui); }
 }
 .att-page-header .ph-sub {
     font-size: 13px;
-    color: var(--gray-400);
+    color: var(--gray-500);
     margin-top: 3px;
 }
 
@@ -97,18 +99,22 @@ body { font-family: var(--font-ui); }
     border-color: var(--gray-200);
 }
 .att-btn-outline:hover { background: var(--gray-100); color: var(--gray-800); }
+
+/* ─── Load button (flat) ─── */
 .att-btn-orange {
+    background: var(--org-500);
+    color: #fff;
+    border-color: var(--org-600);
+}
+.att-btn-orange:hover { background: var(--org-600); border-color: var(--org-700); color: #fff; }
+.att-btn-orange:active { background: var(--org-700); }
+
+.att-btn-primary {
     background: var(--org-600);
     color: #fff;
     border-color: var(--org-600);
 }
-.att-btn-orange:hover { background: var(--org-800); border-color: var(--org-800); }
-.att-btn-primary {
-    background: var(--org-900);
-    color: #fff;
-    border-color: var(--org-900);
-}
-.att-btn-primary:hover { background: var(--org-800); }
+.att-btn-primary:hover { background: var(--org-700); border-color: var(--org-700); }
 .att-btn-success {
     background: var(--green-600);
     color: #fff;
@@ -130,20 +136,21 @@ body { font-family: var(--font-ui); }
     overflow: hidden;
 }
 .filter-card-header {
-    background: var(--org-900);
+    background: var(--gray-50);
     padding: 13px 22px;
     display: flex;
     align-items: center;
     gap: 10px;
+    border-bottom: 1px solid var(--gray-200);
 }
 .filter-card-header .fch-title {
     font-family: var(--font-display);
     font-size: 13px;
     font-weight: 600;
-    color: #fff;
+    color: var(--gray-800);
     letter-spacing: .5px;
 }
-.filter-card-header i { color: var(--org-200); }
+.filter-card-header i { color: var(--org-600); }
 .filter-body {
     padding: 18px 22px;
     display: flex;
@@ -159,7 +166,7 @@ body { font-family: var(--font-ui); }
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: .8px;
-    color: var(--gray-400);
+    color: var(--gray-500);
 }
 .fc-group select,
 .fc-group input[type="date"] {
@@ -243,7 +250,8 @@ body { font-family: var(--font-ui); }
 }
 .att-card-header {
     padding: 14px 22px;
-    background: var(--org-900);
+    background: var(--gray-50);
+    border-bottom: 1px solid var(--gray-200);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -254,12 +262,12 @@ body { font-family: var(--font-ui); }
     font-family: var(--font-display);
     font-size: 14px;
     font-weight: 600;
-    color: #fff;
+    color: var(--gray-800);
     display: flex;
     align-items: center;
     gap: 8px;
 }
-.att-card-header .ach-date i { color: var(--org-200); }
+.att-card-header .ach-date i { color: var(--org-600); }
 .ach-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
 /* ── Table ────────────────────────────────── */
@@ -271,8 +279,8 @@ table.att-table {
     font-family: var(--font-ui);
 }
 .att-table thead tr {
-    background: var(--org-50);
-    border-bottom: 2px solid var(--org-100);
+    background: var(--gray-50);
+    border-bottom: 2px solid var(--gray-200);
 }
 .att-table thead th {
     padding: 11px 14px;
@@ -280,7 +288,7 @@ table.att-table {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: .8px;
-    color: var(--org-800);
+    color: var(--gray-700);
     text-align: left;
     white-space: nowrap;
 }
@@ -291,7 +299,7 @@ table.att-table {
     vertical-align: middle;
 }
 .att-table tbody tr:last-child td { border-bottom: none; }
-.att-table tbody tr:hover td { background: var(--org-50); }
+.att-table tbody tr:hover td { background: var(--gray-50); }
 
 .emp-name { font-weight: 600; font-size: 13px; color: var(--gray-800); }
 .emp-id   { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
@@ -300,7 +308,7 @@ table.att-table {
 .cat-badge {
     display: inline-block;
     padding: 3px 10px;
-    border-radius: 20px;
+    border-radius: 4px;
     font-size: 11px;
     font-weight: 600;
     background: var(--org-50);

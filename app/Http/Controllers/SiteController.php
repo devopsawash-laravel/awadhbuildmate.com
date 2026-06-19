@@ -9,6 +9,7 @@ use App\Models\Attendance;
 use App\Models\Labour;
 use App\Models\Staff;
 use App\Models\SalarySlip;
+use App\Models\StaffSalarySlip;
 
 class SiteController extends Controller
 {
@@ -16,15 +17,61 @@ class SiteController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        // $sites = Site::latest()->get();
-        $sites = Site::orderBy("name")->get();
+        */
+   public function index()
+{
+    $sites = Site::orderBy('name')->get();
 
-        return view("sites.index", compact("sites"));
+    foreach ($sites as $site) {
+
+        // Labour Count
+        $site->worked_labours = Attendance::whereHas('labour', function ($q) use ($site) {
+                $q->where('site_id', $site->id);
+            })
+            ->distinct('labour_id')
+            ->count('labour_id');
+
+        // Progress Calculation
+        if ($site->start_date && $site->expected_end_date) {
+
+            $start = \Carbon\Carbon::parse($site->start_date);
+            $end   = \Carbon\Carbon::parse($site->expected_end_date);
+            $today = now();
+
+            if ($site->status == 'Completed') {
+
+                $site->progress = 100;
+
+            } elseif ($today->lt($start)) {
+
+                $site->progress = 0;
+
+            } elseif ($today->gte($end)) {
+
+                $site->progress = 100;
+
+            } else {
+
+                $totalDays = max($start->diffInDays($end), 1);
+                $elapsedDays = $start->diffInDays($today);
+
+                $site->progress = round(($elapsedDays / $totalDays) * 100);
+            }
+
+        } else {
+
+            $site->progress = 0;
+        }
+
+        // Ongoing Projects
+        $site->ongoing_projects = strtolower($site->status) == 'active' ? 1 : 0;
+
+        // Total Projects
+        $site->projects_count = 1;
     }
 
+    return view('sites.index', compact('sites'));
+}
     /**
      * Show the form for creating a new resource.
      *
@@ -74,43 +121,62 @@ class SiteController extends Controller
             })
             ->pluck("labour_id")
             ->unique();
-
-        // Month-wise Active Labours
-        $labours = Labour::where("site_id", $site->id)
-            ->whereIn("id", $attendanceLabourIds)
+      
+           // Salary Slips Labour's
+            $salarySlips = SalarySlip::where('site_id', $site->id)
+            ->where('month', $selectedMonth)
+            ->where('year', $selectedYear)
             ->get();
 
-        // Staff
-        $staffs = Staff::where("site_id", $site->id)->get();
-
-        // Salary Slips
-        // $salarySlips = SalarySlip::whereHas("labour", function ($q) use (
-        //     $site
-        // ) {
-        //     $q->where("site_id", $site->id);
-        // })->get();
-        $selectedMonth = request("month", now()->month);
-
-        $selectedYear = request("year", now()->year);
-
-        // Salary Slips
-        $salarySlips = SalarySlip::whereHas("labour", function ($q) use (
-            $site
-        ) {
-            $q->where("site_id", $site->id);
-        })
-            ->where("month", $selectedMonth)
-            ->where("year", $selectedYear)
+        //-----Staff's----------//
+            $staffSalarySlips = StaffSalarySlip::where('site_id', $site->id)
+            ->where('month', $selectedMonth)
+            ->where('year', $selectedYear)
             ->get();
+
+        $labours = Labour::whereIn('id',$salarySlips->pluck('labour_id')->unique())->get()->map(function ($labour) {
+        $labour->type = 'Labour';
+        return $labour;
+    });
+              // Staff
+        $staffs = Staff::whereIn('id',$staffSalarySlips->pluck('staff_id')->unique())->get()->map(function ($staff) use ($staffSalarySlips) {
+
+            $staff->type = 'Staff';
+
+            $staff->daily_wage = $staffSalarySlips
+                ->firstWhere('staff_id', $staff->id)
+                ?->daily_wage ?? 0;
+
+            return $staff;
+        });
+        
+        // dd($staffs);
+        $countLS= $staffs->count() + $labours->count();
 
         // Advances
         $advances = Advance::whereHas("labour", function ($q) use ($site) {
             $q->where("site_id", $site->id);
         })->get();
+        
 
-        // $selectedMonth = request("month", now()->month);
-        //
-        // $selectedYear = request("year", now()->year);
+        $totalSalary = $salarySlips->sum('net_salary') + $staffSalarySlips->sum('net_salary');
+        // dd($totalSalary);
+        // $employees = $labours->concat($staffs);
+        $employees = $labours->concat($staffs)->map(function ($employee) use ($salarySlips, $staffSalarySlips) {
+
+            if ($employee->type === 'Labour') {
+
+                $employee->salarySlip = $salarySlips
+                    ->firstWhere('labour_id', $employee->id);
+
+            } else {
+
+                $employee->salarySlip = $staffSalarySlips
+                    ->firstWhere('staff_id', $employee->id);
+            }
+
+            return $employee;
+        });
 
         $attendanceRecords = Attendance::with("labour")
             ->whereHas("labour", function ($q) use ($site) {
@@ -129,11 +195,15 @@ class SiteController extends Controller
                 "labours",
                 "staffs",
                 "salarySlips",
+                "staffSalarySlips",
                 "advances",
                 "attendanceCount",
                 "attendanceRecords",
                 "selectedMonth",
-                "selectedYear","attendanceLabourIds"
+                "selectedYear","attendanceLabourIds",
+                "totalSalary",
+                "countLS",
+                "employees"
             )
         );
     }
@@ -144,9 +214,11 @@ class SiteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+        public function edit($id)
     {
-        //
+        $site = Site::findOrFail($id);
+
+        return view('sites.edit', compact('site'));
     }
 
     /**
@@ -156,10 +228,23 @@ class SiteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Site $site)
     {
-        //
-    }
+        $validated = $request->validate([
+            'name'              => 'required',
+            'slug'              => 'required|unique:sites,slug,' . $site->id,
+            'location'          => 'required',
+            'status'            => 'required',
+            'start_date'        => 'nullable',
+            'expected_end_date' => 'nullable',
+        ]);
+        
+        $site->update($validated);
+
+        return redirect()
+            ->route('sites.index')
+            ->with('success', 'Site updated successfully.');
+}
 
     /**
      * Remove the specified resource from storage.

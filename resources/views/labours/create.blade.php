@@ -37,6 +37,7 @@
                     </div> --}}
 
 {{-- New Section for getting employee id automatically when name is entered --}}
+<div class="labour-form">
             <div class="form-grid-2">
                 <!-- Full Name -->
                 <div class="form-group">
@@ -505,7 +506,10 @@ $(document).ready(function () {
 
     // Select2
     $('#category').select2({
-        placeholder: "Select Category"
+    placeholder: "Select Category",
+    width: '100%',
+    // dropdownParent: $('.staff-form')
+    dropdownParent: $('#category').parent()
     });
 
     $('#name').select2({

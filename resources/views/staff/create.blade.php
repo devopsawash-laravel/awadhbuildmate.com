@@ -33,7 +33,7 @@
         <form method="POST" action="{{ route('staff.store') }}">
 
             @csrf
-
+            <div class="staff-form">
             {{-- Name & Employee ID --}}
             <div class="form-grid-2">
 
@@ -89,7 +89,7 @@
                 <div class="form-group">
                     <label>Category *</label>
 
-                    <select name="category" id="category" required>
+                    <select name="category" id="categorys" required>
 
                         <option value="">Select Category</option>
 
@@ -473,7 +473,7 @@ $(document).ready(function () {
 
     // Category
 $('#category').select2({
-    placeholder: "Select Category",
+    placeholder: "Select Categorys",
     width: '100%',
     // dropdownParent: $('.staff-form')
     dropdownParent: $('#category').parent()

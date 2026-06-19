@@ -187,6 +187,7 @@
     $lastOT             = $finalOtHours * $salary->labour->ot_rate_multiplier;
     $totalDays          = $paidDays + $otDays;
 
+    $totalOTHours       = ($effectiveOtHours) * 2;
     // Clean OT Days display — remove trailing zeros
     $otDaysDisplay = rtrim(rtrim(number_format($otDays, 4, '.', ''), '0'), '.');
 @endphp
