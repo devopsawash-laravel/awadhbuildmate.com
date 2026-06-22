@@ -16,6 +16,7 @@ use App\Http\Controllers\Auth\GoogleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\Admin\EnquiryController;
 
 // Route::get('/login', function () {
 //     return view('auth.login');
@@ -28,6 +29,7 @@ Route::get('/testservices', [App\Http\Controllers\HomeController::class, 'test']
 Route::get('/testprojects', [App\Http\Controllers\HomeController::class, 'testproject'])->name('website.projects');
 Route::get('/testcontact', [App\Http\Controllers\HomeController::class, 'testcontact'])->name('website.contact');
 Route::get('/testabout', [App\Http\Controllers\HomeController::class, 'testabout'])->name('website.about');
+Route::post('/testabout', [App\Http\Controllers\HomeController::class, 'contactSubmit'])->name('website.submit');
 
 //-------------------ADMIN PANEL ROUTES WITH MIDDLEWARE-------------------------//
 Route::get('/admin/login', [App\Http\Controllers\Admin\LoginController::class, 'index'])->name('admin.login');
@@ -130,9 +132,7 @@ Route::get('/admin/labours', [LabourController::class, 'index'])->name('labours.
 Route::get('/admin/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
 Route::get('/admin/salary', [SalaryController::class, 'index'])->name('salary.index');
 Route::get('/admin  attendance/monthly', [AttendanceController::class, 'monthlyReport'])->name('attendance.monthly');
-Route::get('/admin/enquiries', function() {
-    return "Enquiries Page";
-})->name('admin.enquiries');        
+Route::get('/admin/enquiries', [EnquiryController::class, 'index'])->name('admin.enquiries');    
 
 Route::Resource('staff', App\Http\Controllers\StaffController::class);
 
@@ -184,7 +184,14 @@ Route::get('/invoice/{invoice}', [InvoiceController::class, 'show'])->name('invo
 Route::delete('/invoice/{invoice}', [InvoiceController::class, 'destroy'])->name('invoice.destroy');
 Route::post('/invoice/{invoice}/payment', [InvoiceController::class, 'updatePayment'])->name('invoice.update-payment');
 
+// Inquiries from users
+Route::post('/inquiry', [EnquiryController::class, 'store'])->name('website.store');
+Route::get('/enquiries', [App\Http\Controllers\HomeController::class, 'indexE'])->name('admin.index');
+
 });
+Route::prefix('admin')->middleware('auth')->group(function () {
 
+    Route::get('/enquiries/{enquiry}', [EnquiryController::class, 'show'])
+        ->name('admin.enquiries.show');
 
-// Route::get('/invoice', [InvoiceController::class, 'index'])->name('invoice.index');
+});

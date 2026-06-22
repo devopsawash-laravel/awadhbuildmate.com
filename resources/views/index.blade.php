@@ -24,7 +24,7 @@
     </div>
     <div class="stat-card">
         <div class="stat-icon blue"><i class="fas fa-envelope"></i></div>
-        {{-- <div><div class="stat-value">{{ $newEnquiries }}</div><div class="stat-label">New Enquiries</div></div> --}}
+        <div><div class="stat-value">{{ $newEnquiries }}</div><div class="stat-label">New Enquiries</div></div>
     </div>
 </div>
 

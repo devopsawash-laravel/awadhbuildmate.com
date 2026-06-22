@@ -1,21 +1,1251 @@
-<IfModule mod_rewrite.c>
-    <IfModule mod_negotiation.c>
-        Options -MultiViews -Indexes
-    </IfModule>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Awadh Buildmate — Expert Fabrication, Erection & Structural Construction across India">
+    <title>Awadh Buildmate | Expert Construction & Fabrication</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
 
-    RewriteEngine On
+/* ═══════════════════════════════════════════
+   ROOT — DARK (charcoal) THEME
+═══════════════════════════════════════════ */
+:root {
+    --orange:        #E8500A;
+    --orange-dark:   #B83D08;
+    --orange-light:  #FF6A1A;
+    --orange-glow:   rgba(232,80,10,0.18);
+}
 
-    # Handle Authorization Header
-    RewriteCond %{HTTP:Authorization} .
-    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+[data-theme="dark"] {
+    --bg:            #1C1C1C;   /* dark charcoal */
+    --bg2:           #242424;
+    --bg3:           #2C2C2C;
+    --bg4:           #333333;
+    --surface:       #282828;
+    --border:        rgba(255,255,255,0.08);
+    --border-o:      rgba(232,80,10,0.22);
+    --text:          #F0EDE8;
+    --text-muted:    #909090;
+    --nav-bg:        rgba(22,22,22,0.96);
+    --card-bg:       #242424;
+    --footer-bg:     #141414;
+    --shadow:        0 8px 40px rgba(0,0,0,0.5);
+    --noise-op:      0.35;
+}
 
-    # Redirect Trailing Slashes If Not A Folder...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} (.+)/$
-    RewriteRule ^ %1 [L,R=301]
+[data-theme="light"] {
+    --bg:            #F2EFE9;
+    --bg2:           #E8E4DD;
+    --bg3:           #DDD8CF;
+    --bg4:           #D0CAC0;
+    --surface:       #FFFFFF;
+    --border:        rgba(0,0,0,0.09);
+    --border-o:      rgba(232,80,10,0.25);
+    --text:          #1C1C1C;
+    --text-muted:    #666666;
+    --nav-bg:        rgba(242,239,233,0.96);
+    --card-bg:       #FFFFFF;
+    --footer-bg:     #1C1C1C;
+    --shadow:        0 8px 40px rgba(0,0,0,0.12);
+    --noise-op:      0.15;
+}
 
-    # Send Requests To Front Controller...
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [L]
-</IfModule>
+/* ═══════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+html, body { overflow-x: hidden; width: 100%; }
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: background 0.4s, color 0.4s;
+}
+main { flex: 1; }
+a { text-decoration: none; color: inherit; }
+
+/* Noise overlay */
+body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: var(--noise-op);
+    transition: opacity 0.4s;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--orange); border-radius: 2px; }
+
+/* ═══════════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════════ */
+.navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 0 5%;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.35s, border-bottom 0.35s, box-shadow 0.35s;
+}
+.navbar.scrolled {
+    background: var(--nav-bg);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+}
+
+/* Logo */
+.nav-logo { display: flex; align-items: center; gap: 14px; }
+.nav-logo-icon {
+    width: 48px; height: 48px;
+    background: var(--orange);
+    display: flex; align-items: center; justify-content: center;
+    transform: rotate(45deg);
+    border-radius: 4px;
+    flex-shrink: 0;
+    transition: background 0.3s;
+}
+.nav-logo-icon:hover { background: var(--orange-dark); }
+.nav-logo-icon span {
+    transform: rotate(-45deg);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 17px; color: #fff; letter-spacing: 1px;
+}
+.nav-logo-text { line-height: 1; }
+.nav-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px; letter-spacing: 2px; color: var(--orange);
+}
+.nav-tagline {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 10px; letter-spacing: 3px;
+    color: var(--orange); text-transform: uppercase; margin-top: 1px;
+}
+
+/* Nav links */
+.nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+.nav-links a {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--text-muted);
+    transition: color 0.2s;
+    position: relative;
+}
+.nav-links a::after {
+    content: ''; position: absolute;
+    bottom: -3px; left: 0; width: 0; height: 2px;
+    background: var(--orange); transition: width 0.25s;
+}
+.nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+.nav-links a:hover, .nav-links a.active { color: var(--orange); }
+
+/* Nav right */
+.nav-right { display: flex; align-items: center; gap: 12px; }
+
+/* Theme toggle */
+.theme-toggle {
+    width: 52px; height: 28px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    position: relative; cursor: pointer;
+    transition: background 0.4s;
+    flex-shrink: 0;
+}
+.theme-toggle::before {
+    content: '';
+    position: absolute;
+    width: 22px; height: 22px;
+    border-radius: 50%; top: 2px; left: 2px;
+    background: var(--orange);
+    box-shadow: 0 2px 8px var(--orange-glow);
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+}
+[data-theme="light"] .theme-toggle::before { transform: translateX(24px); }
+.t-icon {
+    position: absolute; font-size: 11px;
+    top: 50%; transform: translateY(-50%);
+    transition: opacity 0.3s; pointer-events: none;
+}
+.t-moon { left: 6px; opacity: 1; }
+.t-sun  { right: 6px; opacity: 0; }
+[data-theme="light"] .t-moon { opacity: 0; }
+[data-theme="light"] .t-sun  { opacity: 1; }
+
+.btn-nav-login {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 8px 16px;
+    border: 1px solid var(--border);
+    transition: all 0.2s; cursor: pointer;
+}
+.btn-nav-login:hover { color: var(--text); border-color: var(--border-o); }
+
+.btn-nav-contact {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: #fff; padding: 9px 22px;
+    background: var(--orange);
+    clip-path: polygon(0 0,94% 0,100% 20%,100% 100%,6% 100%,0 80%);
+    transition: background 0.2s;
+}
+.btn-nav-contact:hover { background: var(--orange-dark); }
+
+/* Mobile */
+.mobile-menu-btn {
+    display: none; width: 42px; height: 42px;
+    border: 1px solid var(--border);
+    align-items: center; justify-content: center;
+    cursor: pointer; color: var(--text); font-size: 18px;
+    background: transparent; transition: border-color 0.2s;
+}
+.mobile-menu-btn:hover { border-color: var(--orange); color: var(--orange); }
+
+.mobile-menu {
+    position: fixed; top: 72px; left: 0; width: 100%;
+    background: var(--nav-bg);
+    backdrop-filter: blur(18px);
+    padding: 24px;
+    display: flex; flex-direction: column; gap: 20px;
+    transform: translateY(-120%);
+    transition: transform 0.4s ease;
+    z-index: 999;
+    border-bottom: 1px solid var(--border);
+}
+.mobile-menu.active { transform: translateY(0); }
+.mobile-menu a {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 1px;
+    color: var(--text); border-bottom: 1px solid var(--border);
+    padding-bottom: 14px;
+}
+.mobile-menu a:last-of-type { border-bottom: none; }
+
+/* ═══════════════════════════════════════════
+   UTILITY
+═══════════════════════════════════════════ */
+.container { max-width: 1280px; margin: 0 auto; padding: 0 5%; }
+.orange { color: var(--orange); }
+
+.section-tag {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 4px; text-transform: uppercase;
+    color: var(--orange); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+}
+.section-tag::before { content: ''; width: 32px; height: 2px; background: var(--orange); }
+
+.section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px,6vw,80px);
+    letter-spacing: 2px; line-height: 0.95;
+    color: var(--text);
+}
+.section-subtitle {
+    font-size: 16px; line-height: 1.75;
+    color: var(--text-muted); max-width: 520px;
+}
+
+.btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: #fff; padding: 16px 36px;
+    background: var(--orange);
+    clip-path: polygon(0 0,94% 0,100% 20%,100% 100%,6% 100%,0 80%);
+    transition: background 0.2s, transform 0.2s;
+    border: none; cursor: pointer;
+}
+.btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); }
+
+.btn-outline {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--text); padding: 15px 35px;
+    border: 1px solid var(--border);
+    transition: all 0.2s; background: transparent; cursor: pointer;
+}
+.btn-outline:hover { border-color: var(--orange); color: var(--orange); }
+
+/* Reveal animation */
+.reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.7s, transform 0.7s; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.rd1 { transition-delay: 0.1s; }
+.rd2 { transition-delay: 0.2s; }
+.rd3 { transition-delay: 0.3s; }
+.rd4 { transition-delay: 0.4s; }
+
+/* ═══════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════ */
+.hero {
+    min-height: 100vh; padding-top: 72px;
+    display: flex; align-items: center;
+    position: relative; overflow: hidden;
+    background: var(--bg);
+}
+
+/* Diagonal right panel */
+.hero-slash {
+    position: absolute; right: 0; top: 0; bottom: 0; width: 50%;
+    background: var(--bg2);
+    clip-path: polygon(12% 0,100% 0,100% 100%,0% 100%);
+    overflow: hidden;
+    transition: background 0.4s;
+}
+.hero-slash::before {
+    content: ''; position: absolute; inset: -100%;
+    background: repeating-linear-gradient(
+        -55deg, transparent, transparent 28px,
+        rgba(232,80,10,0.04) 28px, rgba(232,80,10,0.04) 30px
+    );
+    animation: slashMove 22s linear infinite;
+}
+@keyframes slashMove { 0%{transform:translate(0,0)} 100%{transform:translate(60px,60px)} }
+
+/* Corner triangle */
+.hero-corner {
+    position: absolute; top: 72px; right: 0;
+    width: 0; height: 0;
+    border-top: 88px solid var(--orange);
+    border-left: 88px solid transparent;
+    opacity: 0.55;
+}
+
+.hero-content { position: relative; z-index: 2; padding: 5rem 5%; max-width: 700px; }
+
+.hero-eyebrow {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 4px; text-transform: uppercase;
+    color: var(--orange);
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 20px;
+    opacity: 0; transform: translateX(-20px);
+    animation: fadeRight 0.6s 0.3s forwards;
+}
+.hero-eyebrow::before { content: ''; width: 32px; height: 2px; background: var(--orange); }
+
+.hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem,8vw,7rem);
+    letter-spacing: 2px; line-height: 0.92; color: var(--text);
+    margin-bottom: 24px;
+    opacity: 0; transform: translateY(30px);
+    animation: fadeUp 0.8s 0.5s forwards;
+}
+.hero h1 .h-outline {
+    -webkit-text-stroke: 2px var(--orange);
+    color: transparent;
+}
+
+.hero-bar {
+    width: 60px; height: 4px; background: var(--orange);
+    margin-bottom: 20px;
+    opacity: 0; animation: fadeUp 0.6s 0.7s forwards;
+}
+
+.hero p {
+    font-size: 16px; line-height: 1.8; color: var(--text-muted);
+    max-width: 480px; margin-bottom: 36px;
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp 0.8s 0.8s forwards;
+}
+
+.hero-actions {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    opacity: 0; transform: translateY(20px);
+    animation: fadeUp 0.8s 1s forwards;
+}
+
+.hero-stats {
+    display: flex; gap: 0;
+    margin-top: 52px; padding-top: 36px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.8s 1.2s forwards;
+}
+.stat { padding: 0 28px 0 0; margin-right: 28px; border-right: 1px solid var(--border); }
+.stat:last-child { border-right: none; margin-right: 0; padding-right: 0; }
+.stat .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem; color: var(--orange); line-height: 1;
+}
+.stat .lbl {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--text-muted); margin-top: 4px;
+}
+
+/* Scroll hint */
+.scroll-hint {
+    position: absolute; bottom: 2rem; left: 5%;
+    display: flex; align-items: center; gap: 12px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--text-muted);
+    animation: scrollPulse 2.5s ease-in-out infinite;
+}
+.scroll-hint::before { content: ''; width: 40px; height: 1px; background: var(--orange); }
+@keyframes scrollPulse { 0%,100%{opacity:0.4;transform:translateX(0)} 50%{opacity:0.9;transform:translateX(8px)} }
+
+/* ═══════════════════════════════════════════
+   ORANGE TICKER STRIP
+═══════════════════════════════════════════ */
+.ticker-strip {
+    background: var(--orange); overflow: hidden;
+    height: 46px; display: flex; align-items: center;
+}
+.ticker-track {
+    display: flex; width: max-content;
+    animation: ticker 22s linear infinite;
+}
+.ticker-track span {
+    display: inline-flex; align-items: center;
+    padding: 0 28px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: #fff; white-space: nowrap;
+}
+.ticker-track span::after { content: '◆'; margin-left: 28px; opacity: 0.45; font-size: 7px; }
+@keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ═══════════════════════════════════════════
+   SERVICES
+═══════════════════════════════════════════ */
+.services-section { padding: 120px 5%; background: var(--bg2); transition: background 0.4s; }
+
+.services-grid {
+    display: grid; grid-template-columns: repeat(3,1fr);
+    gap: 1px; margin-top: 52px;
+    background: var(--border); border: 1px solid var(--border);
+}
+.service-card {
+    background: var(--card-bg); padding: 40px 32px;
+    position: relative; overflow: hidden; cursor: pointer;
+    transition: background 0.3s;
+}
+.service-card::before {
+    content: ''; position: absolute;
+    left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--orange);
+    transform: scaleY(0); transform-origin: bottom;
+    transition: transform 0.4s;
+}
+.service-card:hover::before { transform: scaleY(1); }
+.service-card:hover { background: var(--bg3); }
+.svc-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3.5rem; line-height: 1;
+    color: var(--border-o); margin-bottom: 8px;
+    transition: color 0.3s;
+}
+.service-card:hover .svc-num { color: rgba(232,80,10,0.25); }
+.svc-icon { font-size: 1.6rem; color: var(--orange); margin-bottom: 16px; }
+.service-card h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem; letter-spacing: 1px;
+    color: var(--text); margin-bottom: 12px;
+}
+.service-card p { font-size: 14px; color: var(--text-muted); line-height: 1.75; }
+.svc-more {
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-top: 20px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--orange); transition: gap 0.2s;
+}
+.service-card:hover .svc-more { gap: 14px; }
+
+/* ═══════════════════════════════════════════
+   PROJECT MARQUEE (exact from your blade)
+═══════════════════════════════════════════ */
+/* ═══ PROJECTS GRID ═══ */
+.projects-section { padding: 120px 5%; background: var(--bg); transition: background 0.4s; }
+
+.projects-header {
+    display: flex; justify-content: space-between;
+    align-items: flex-end; flex-wrap: wrap; gap: 1rem;
+    margin-bottom: 48px;
+}
+.filter-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.filter-tab {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 7px 18px;
+    border: 1px solid var(--border);
+    background: transparent; color: var(--text-muted);
+    cursor: pointer; transition: all 0.25s;
+}
+.filter-tab.active, .filter-tab:hover {
+    background: var(--orange); border-color: var(--orange); color: #fff;
+}
+
+/* Mosaic grid — same layout as original first version */
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: 280px;
+    gap: 4px;
+}
+.project-card {
+    position: relative; overflow: hidden; cursor: pointer;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    transition: border-color 0.3s;
+}
+.project-card:hover { border-color: var(--border-o); }
+.project-card:nth-child(1) { grid-column: span 7; grid-row: span 2; }
+.project-card:nth-child(2) { grid-column: span 5; }
+.project-card:nth-child(3) { grid-column: span 5; }
+.project-card:nth-child(4) { grid-column: span 4; }
+.project-card:nth-child(5) { grid-column: span 4; }
+.project-card:nth-child(6) { grid-column: span 4; }
+
+.pc-bg {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 5rem; opacity: 0.1;
+    transition: transform 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+.project-card:hover .pc-bg { transform: scale(1.07); }
+
+.pc-bg1 { background: linear-gradient(135deg,#2a2318,#3d2f14); }
+.pc-bg2 { background: linear-gradient(135deg,#1c2030,#242a3d); }
+.pc-bg3 { background: linear-gradient(135deg,#1c2820,#24352a); }
+.pc-bg4 { background: linear-gradient(135deg,#2d1c14,#3d2418); }
+.pc-bg5 { background: linear-gradient(135deg,#202828,#2a3535); }
+.pc-bg6 { background: linear-gradient(135deg,#221c2a,#2e2438); }
+
+.pc-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.35) 50%, transparent 80%);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 2rem;
+    transform: translateY(6px); transition: transform 0.4s;
+}
+.project-card:hover .pc-overlay { transform: translateY(0); }
+
+.pc-type {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 3px; color: var(--orange);
+    text-transform: uppercase; margin-bottom: 6px;
+}
+.pc-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem; letter-spacing: 1px; color: #fff; margin-bottom: 4px;
+}
+.project-card:nth-child(1) .pc-name { font-size: 2rem; }
+.pc-loc { font-size: 12px; color: rgba(255,255,255,0.5); }
+
+.pc-tag {
+    position: absolute; top: 1rem; left: 1rem;
+    padding: 4px 12px; background: var(--orange);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase; color: #fff;
+}
+
+/* ═══════════════════════════════════════════
+   ABOUT
+═══════════════════════════════════════════ */
+.about-section { padding: 120px 5%; background: var(--bg2); transition: background 0.4s; }
+.about-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+
+.about-visual { position: relative; }
+.about-img-box {
+    aspect-ratio: 4/3; background: var(--bg3);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 7rem; opacity: 0.13;
+    position: relative; overflow: hidden;
+    transition: background 0.4s;
+}
+.about-img-box::before {
+    content: ''; position: absolute; top: 0; right: 0;
+    width: 0; height: 0;
+    border-top: 100px solid var(--orange);
+    border-left: 100px solid transparent; opacity: 0.35;
+}
+.about-badge {
+    position: absolute; bottom: -2rem; right: -2rem;
+    width: 140px; height: 140px;
+    background: var(--orange);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    border: 4px solid var(--bg2);
+    transition: border-color 0.4s;
+}
+.about-badge .big { font-family: 'Bebas Neue', sans-serif; font-size: 3rem; color: #fff; line-height: 1; }
+.about-badge .sm {
+    font-family: 'Rajdhani', sans-serif; font-size: 10px; font-weight: 700;
+    color: rgba(255,255,255,0.8); letter-spacing: 1px;
+    text-transform: uppercase; text-align: center; margin-top: 4px;
+}
+
+.about-text { font-size: 15px; color: var(--text-muted); line-height: 1.85; margin: 16px 0 28px; }
+
+.values-list { display: flex; flex-direction: column; gap: 12px; }
+.value-item {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 16px; background: var(--bg3);
+    border: 1px solid var(--border); border-left: 3px solid var(--orange);
+    transition: background 0.3s, border-left-width 0.3s;
+}
+.value-item:hover { background: var(--bg4); border-left-width: 5px; }
+.vi-icon { font-size: 1.1rem; color: var(--orange); flex-shrink: 0; }
+.vi-text h4 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 1px;
+    color: var(--text); margin-bottom: 2px;
+}
+.vi-text p { font-size: 13px; color: var(--text-muted); }
+
+/* ═══════════════════════════════════════════
+   TRUST BAND
+═══════════════════════════════════════════ */
+.trust-band {
+    background: var(--bg3); padding: 48px 5%;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    text-align: center; transition: background 0.4s;
+}
+.trust-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 4px; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 28px;
+}
+.trust-logos { display: flex; justify-content: center; align-items: center; gap: 48px; flex-wrap: wrap; }
+.trust-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem; letter-spacing: 2px;
+    color: var(--text-muted); opacity: 0.45;
+    transition: opacity 0.3s, color 0.3s; cursor: default;
+}
+.trust-logo:hover { opacity: 1; color: var(--orange); }
+
+/* ═══════════════════════════════════════════
+   CONTACT
+═══════════════════════════════════════════ */
+.contact-section { padding: 120px 5%; background: var(--bg); transition: background 0.4s; }
+.contact-inner { display: grid; grid-template-columns: 1fr 1.6fr; gap: 72px; }
+
+.contact-h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem,4vw,3.5rem);
+    letter-spacing: 2px; line-height: 1;
+    color: var(--text); margin-bottom: 16px;
+}
+.contact-sub { font-size: 14px; color: var(--text-muted); line-height: 1.8; margin-bottom: 32px; }
+.contact-details { display: flex; flex-direction: column; gap: 12px; }
+.contact-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px; background: var(--bg2);
+    border: 1px solid var(--border); border-left: 3px solid var(--orange);
+    transition: background 0.3s;
+}
+.contact-item:hover { background: var(--bg3); }
+.ci-icon {
+    width: 36px; height: 36px;
+    background: rgba(232,80,10,0.12);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--orange); flex-shrink: 0;
+}
+.ci-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 2px; color: var(--orange); text-transform: uppercase;
+}
+.ci-val { font-size: 14px; color: var(--text); margin-top: 2px; }
+
+/* Form */
+.contact-form { display: flex; flex-direction: column; gap: 16px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted);
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 12px 14px; background: var(--bg2);
+    border: 1px solid var(--border); color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 14px;
+    outline: none; resize: vertical;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: var(--text-muted); }
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--orange);
+    box-shadow: 0 0 0 3px rgba(232,80,10,0.1);
+}
+.form-group select option { background: var(--bg2); color: var(--text); }
+.form-group textarea { min-height: 120px; }
+
+/* ═══════════════════════════════════════════
+   FOOTER (exact from your blade code)
+═══════════════════════════════════════════ */
+.footer {
+    background: var(--footer-bg);
+    border-top: 1px solid var(--border);
+    padding: 60px 5% 30px;
+    transition: background 0.4s;
+}
+.footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px; margin-bottom: 48px;
+}
+.footer-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px; letter-spacing: 2px;
+    color: #F0EDE8; margin-bottom: 12px;
+}
+[data-theme="light"] .footer-brand { color: #F0EDE8; }
+.footer-desc { font-size: 14px; color: #909090; line-height: 1.7; max-width: 280px; }
+.footer-heading {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--orange); margin-bottom: 20px;
+}
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 10px; }
+.footer-links a,
+.footer-links .address {
+    display: flex; align-items: flex-start; gap: 8px;
+    color: #909090; font-size: 14px; line-height: 1.6;
+    transition: color 0.2s;
+}
+.footer-links a:hover { color: #fff; }
+.footer-links i { color: var(--orange); font-size: 12px; margin-top: 5px; flex-shrink: 0; }
+.email-link { word-break: break-word; overflow-wrap: anywhere; }
+.footer-social { display: flex; gap: 12px; margin-top: 20px; }
+.social-btn {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    color: #909090; font-size: 14px; cursor: pointer;
+    transition: all 0.2s;
+}
+.social-btn:hover { border-color: var(--orange); color: var(--orange); }
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; color: #444; flex-wrap: wrap; gap: 10px;
+}
+
+/* ═══════════════════════════════════════════
+   KEYFRAMES
+═══════════════════════════════════════════ */
+@keyframes fadeUp   { to { opacity:1; transform:translateY(0); } }
+@keyframes fadeRight{ to { opacity:1; transform:translateX(0); } }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE (exact from your blade)
+═══════════════════════════════════════════ */
+@media (max-width: 1024px) {
+    .navbar { padding: 0 20px; }
+    .nav-links { gap: 20px; }
+    .services-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 900px) {
+    .nav-links, .nav-right > .btn-nav-login, .nav-right > .btn-nav-contact { display: none; }
+    .mobile-menu-btn { display: flex; }
+    .about-inner { grid-template-columns: 1fr; gap: 4rem; }
+    .about-badge { right: 0; bottom: -1rem; width: 110px; height: 110px; }
+    .about-badge .big { font-size: 2.3rem; }
+    .contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .services-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+    .navbar { height: 75px; }
+    .nav-brand { font-size: 22px; }
+    .nav-tagline { font-size: 8px; letter-spacing: 2px; }
+    .projects-grid { grid-template-columns: repeat(6,1fr); grid-auto-rows: 220px; }
+    .project-card:nth-child(1) { grid-column: span 6; grid-row: span 1; }
+    .project-card:nth-child(n) { grid-column: span 3; }
+    .projects-section, .services-section, .about-section, .contact-section { padding: 80px 5%; }
+    .form-row { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+}
+@media (max-width: 480px) {
+    .section-title { font-size: 34px; }
+    .projects-grid { grid-template-columns: 1fr; grid-auto-rows: 240px; }
+    .project-card:nth-child(n) { grid-column: span 1; grid-row: span 1; }
+    .hero-stats { gap: 1rem; }
+    .stat { margin-right: 1rem; padding-right: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
+    </style>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="navbar" id="navbar">
+    <a href="#home" class="nav-logo">
+        <div class="nav-logo-icon"><span>AB</span></div>
+        <div class="nav-logo-text">
+            <div class="nav-brand">Awadh Buildmate</div>
+            <div class="nav-tagline">Made for Quality and Trust</div>
+            <div class="nav-tagline">Fabrication · Erection · Structural Works</div>
+        </div>
+    </a>
+
+    <ul class="nav-links">
+        <li><a href="#home"     class="nav-link active">Home</a></li>
+        <li><a href="#services" class="nav-link">Services</a></li>
+        <li><a href="#projects" class="nav-link">Projects</a></li>
+        <li><a href="#about"    class="nav-link">About</a></li>
+        <li><a href="#contact"  class="nav-link">Contact</a></li>
+    </ul>
+
+    <div class="nav-right">
+        <!-- THEME TOGGLE -->
+        <div class="theme-toggle" id="themeToggle" title="Toggle light / dark">
+            <span class="t-icon t-moon">🌙</span>
+            <span class="t-icon t-sun">☀️</span>
+        </div>
+        <a href="#" class="btn-nav-login"><i class="fas fa-lock"></i> Admin Login</a>
+        <a href="#contact" class="btn-nav-contact">Get Quote</a>
+        <div class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></div>
+    </div>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+    <a href="#home">Home</a>
+    <a href="#services">Services</a>
+    <a href="#projects">Projects</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    <div style="margin-top:8px">
+        <a href="#contact" class="btn-nav-contact">Get Quote</a>
+    </div>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section id="home" class="hero">
+    <div class="hero-slash"></div>
+    <div class="hero-corner"></div>
+    <div class="hero-content">
+        <div class="hero-eyebrow">Est. 2005 · Uttar Pradesh, India</div>
+        <h1>
+            Building<br>
+            <span style="color:var(--orange)">Steel</span><br>
+            <span class="h-outline">Structures</span>
+        </h1>
+        <div class="hero-bar"></div>
+        <p>Specialists in structural fabrication, piping erection, and civil construction. Delivering industrial-grade projects across India with precision, safety, and speed.</p>
+        <div class="hero-actions">
+            <a href="#projects" class="btn-primary"><i class="fas fa-hard-hat"></i> Our Projects</a>
+            <a href="#contact"  class="btn-outline"><i class="fas fa-envelope"></i> Get a Quote</a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat"><div class="num" data-count="18">0</div><div class="lbl">Years Active</div></div>
+            <div class="stat"><div class="num" data-count="240">0</div><div class="lbl">Projects Done</div></div>
+            <div class="stat"><div class="num" data-count="50">0</div><div class="lbl">Expert Team</div></div>
+            <div class="stat"><div class="num" data-count="98">0</div><div class="lbl">% Satisfaction</div></div>
+        </div>
+    </div>
+    <div class="scroll-hint">Scroll Down</div>
+</section>
+
+<!-- ═══ TICKER ═══ -->
+<div class="ticker-strip">
+    <div class="ticker-track">
+        <span>Structural Fabrication</span><span>Piping Erection</span>
+        <span>UG Piping Works</span><span>Civil Construction</span>
+        <span>Boiler Fabrication</span><span>Industrial Projects</span>
+        <span>Steel Structures</span><span>Plant Maintenance</span>
+        <span>Structural Fabrication</span><span>Piping Erection</span>
+        <span>UG Piping Works</span><span>Civil Construction</span>
+        <span>Boiler Fabrication</span><span>Industrial Projects</span>
+        <span>Steel Structures</span><span>Plant Maintenance</span>
+    </div>
+</div>
+
+<!-- ═══ SERVICES ═══ -->
+<section id="services" class="services-section">
+    <div class="reveal"><span class="section-tag">What We Do</span></div>
+    <div class="reveal rd1"><h2 class="section-title">Our Core <span class="orange">Services</span></h2></div>
+    <div class="reveal rd2"><p class="section-subtitle" style="margin-bottom:0">From structural steel fabrication to underground piping — we handle every phase of industrial construction with unmatched precision and safety.</p></div>
+    <div class="services-grid reveal rd3">
+        <div class="service-card">
+            <div class="svc-num">01</div>
+            <div class="svc-icon"><i class="fas fa-industry"></i></div>
+            <h3>Structural Fabrication &amp; Erection</h3>
+            <p>Custom steel structure design, fabrication and on-site erection for industrial plants, warehouses, and complexes to exact specifications.</p>
+            <div class="svc-more">Learn More <i class="fas fa-arrow-right"></i></div>
+        </div>
+        <div class="service-card">
+            <div class="svc-num">02</div>
+            <div class="svc-icon"><i class="fas fa-tools"></i></div>
+            <h3>Piping Fabrication &amp; Erection</h3>
+            <p>Complete above-ground piping systems for oil, gas, water, and process industries. Precision fabrication with certified welders.</p>
+            <div class="svc-more">Learn More <i class="fas fa-arrow-right"></i></div>
+        </div>
+        <div class="service-card">
+            <div class="svc-num">03</div>
+            <div class="svc-icon"><i class="fas fa-hard-hat"></i></div>
+            <h3>UG Piping Works</h3>
+            <p>Underground pipeline installation including trenching, laying, backfilling and testing for water supply, sewage, and industrial fluid systems.</p>
+            <div class="svc-more">Learn More <i class="fas fa-arrow-right"></i></div>
+        </div>
+        <div class="service-card">
+            <div class="svc-num">04</div>
+            <div class="svc-icon"><i class="fas fa-fire"></i></div>
+            <h3>Boiler Fabrication &amp; Erection</h3>
+            <p>High-pressure boiler fabrication, assembly and erection with full compliance to ASME, IBR, and national safety standards.</p>
+            <div class="svc-more">Learn More <i class="fas fa-arrow-right"></i></div>
+        </div>
+        <div class="service-card">
+            <div class="svc-num">05</div>
+            <div class="svc-icon"><i class="fas fa-building"></i></div>
+            <h3>Civil &amp; RCC Works</h3>
+            <p>Foundation work, reinforced concrete structures, piling and civil infrastructure for heavy industrial and commercial projects.</p>
+            <div class="svc-more">Learn More <i class="fas fa-arrow-right"></i></div>
+        </div>
+        <div class="service-card">
+            <div class="svc-num">06</div>
+            <div class="svc-icon"><i class="fas fa-wrench"></i></div>
+            <h3>Shutdown &amp; Maintenance</h3>
+            <p>Scheduled plant shutdowns, emergency repairs and routine maintenance to minimize downtime and keep operations at peak efficiency.</p>
+            <div class="svc-more">Learn More <i class="fas fa-arrow-right"></i></div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ PROJECTS GRID ═══ -->
+<section id="projects" class="projects-section">
+    <div class="projects-header">
+        <div>
+            <div class="reveal"><span class="section-tag">Our Projects</span></div>
+            <div class="reveal rd1"><h2 class="section-title">Construction <span class="orange">In Motion</span></h2></div>
+        </div>
+        <div class="filter-tabs reveal rd2">
+            <button class="filter-tab active" onclick="setFilter(this)">All</button>
+            <button class="filter-tab" onclick="setFilter(this)">Structural</button>
+            <button class="filter-tab" onclick="setFilter(this)">Piping</button>
+            <button class="filter-tab" onclick="setFilter(this)">Civil</button>
+        </div>
+    </div>
+
+    <div class="projects-grid reveal rd3">
+        <div class="project-card">
+            <div class="pc-bg pc-bg1">🏗️</div>
+            <div class="pc-tag">Featured</div>
+            <div class="pc-overlay">
+                <div class="pc-type">Structural · 2024</div>
+                <div class="pc-name">Structural Fabrication &amp; Erection</div>
+                <div class="pc-loc"><i class="fas fa-map-marker-alt" style="color:var(--orange);margin-right:5px"></i>Lucknow Industrial Area, UP</div>
+            </div>
+        </div>
+        <div class="project-card">
+            <div class="pc-bg pc-bg2">🔩</div>
+            <div class="pc-overlay">
+                <div class="pc-type">Piping · 2023</div>
+                <div class="pc-name">Piping Fabrication &amp; Erection</div>
+                <div class="pc-loc"><i class="fas fa-map-marker-alt" style="color:var(--orange);margin-right:5px"></i>Kanpur, UP</div>
+            </div>
+        </div>
+        <div class="project-card">
+            <div class="pc-bg pc-bg3">⛏️</div>
+            <div class="pc-overlay">
+                <div class="pc-type">Civil · 2023</div>
+                <div class="pc-name">UG Piping Works</div>
+                <div class="pc-loc"><i class="fas fa-map-marker-alt" style="color:var(--orange);margin-right:5px"></i>Agra, UP</div>
+            </div>
+        </div>
+        <div class="project-card">
+            <div class="pc-bg pc-bg4">🔥</div>
+            <div class="pc-overlay">
+                <div class="pc-type">Boiler · 2022</div>
+                <div class="pc-name">Boiler Fabrication &amp; Erection</div>
+                <div class="pc-loc"><i class="fas fa-map-marker-alt" style="color:var(--orange);margin-right:5px"></i>Varanasi, UP</div>
+            </div>
+        </div>
+        <div class="project-card">
+            <div class="pc-bg pc-bg5">🏭</div>
+            <div class="pc-overlay">
+                <div class="pc-type">Industrial · 2022</div>
+                <div class="pc-name">Plant Construction</div>
+                <div class="pc-loc"><i class="fas fa-map-marker-alt" style="color:var(--orange);margin-right:5px"></i>Gorakhpur, UP</div>
+            </div>
+        </div>
+        <div class="project-card">
+            <div class="pc-bg pc-bg6">🔧</div>
+            <div class="pc-overlay">
+                <div class="pc-type">Maintenance · 2023</div>
+                <div class="pc-name">Shutdown &amp; Revamp</div>
+                <div class="pc-loc"><i class="fas fa-map-marker-alt" style="color:var(--orange);margin-right:5px"></i>Prayagraj, UP</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ ABOUT ═══ -->
+<section id="about" class="about-section">
+    <div class="about-inner">
+        <div class="about-visual reveal">
+            <div class="about-img-box">🏗️</div>
+            <div class="about-badge">
+                <div class="big">18+</div>
+                <div class="sm">Years of<br>Excellence</div>
+            </div>
+        </div>
+        <div>
+            <div class="reveal"><span class="section-tag">About Us</span></div>
+            <div class="reveal rd1"><h2 class="section-title">Built on <span class="orange">Quality</span> &amp; Trust</h2></div>
+            <div class="reveal rd2"><p class="about-text">Founded in Uttar Pradesh, Awadh Buildmate has grown into one of India's trusted names in industrial construction. From steel fabrication to piping systems and civil works — we deliver projects that last decades. Our certified engineers, welders, and project managers bring uncompromising precision to every job.</p></div>
+            <div class="values-list reveal rd3">
+                <div class="value-item"><div class="vi-icon"><i class="fas fa-certificate"></i></div><div class="vi-text"><h4>ISO Certified Quality</h4><p>All works comply with national and international quality standards.</p></div></div>
+                <div class="value-item"><div class="vi-icon"><i class="fas fa-hard-hat"></i></div><div class="vi-text"><h4>Zero Compromise on Safety</h4><p>Rigorous HSE protocols across every site, every single day.</p></div></div>
+                <div class="value-item"><div class="vi-icon"><i class="fas fa-clock"></i></div><div class="vi-text"><h4>On-Time Every Time</h4><p>97% of our projects delivered on or before the committed date.</p></div></div>
+                <div class="value-item"><div class="vi-icon"><i class="fas fa-tools"></i></div><div class="vi-text"><h4>In-House Fabrication</h4><p>Fully equipped fabrication yard for faster turnaround and cost savings.</p></div></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ TRUST BAND ═══ -->
+<div class="trust-band reveal">
+    <div class="trust-label">Trusted by leading industries across India</div>
+    <div class="trust-logos">
+        <div class="trust-logo">ONGC</div>
+        <div class="trust-logo">NTPC</div>
+        <div class="trust-logo">BPCL</div>
+        <div class="trust-logo">L&amp;T</div>
+        <div class="trust-logo">TATA Projects</div>
+        <div class="trust-logo">HPCL</div>
+    </div>
+</div>
+
+<!-- ═══ CONTACT ═══ -->
+<section id="contact" class="contact-section">
+    <div class="contact-inner">
+        <div class="reveal">
+            <span class="section-tag">Get In Touch</span>
+            <h2 class="contact-h2">Start Your <span class="orange">Project</span> With Us</h2>
+            <p class="contact-sub">Our experienced team is ready to assess your requirements and deliver a cost-effective, time-bound solution tailored to your industry.</p>
+            <div class="contact-details">
+                <div class="contact-item"><div class="ci-icon"><i class="fas fa-phone"></i></div><div><div class="ci-label">Phone</div><div class="ci-val">+91 7275502405</div></div></div>
+                <div class="contact-item"><div class="ci-icon"><i class="fas fa-envelope"></i></div><div><div class="ci-label">Email</div><div class="ci-val">awadhbuildmate@gmail.com</div></div></div>
+                <div class="contact-item"><div class="ci-icon"><i class="fas fa-map-marker-alt"></i></div><div><div class="ci-label">Location</div><div class="ci-val">Vadodara, Gujarat, India</div></div></div>
+                <div class="contact-item"><div class="ci-icon"><i class="fas fa-clock"></i></div><div><div class="ci-label">Working Hours</div><div class="ci-val">Mon–Sat: 9:00 AM – 6:00 PM</div></div></div>
+            </div>
+        </div>
+        <div class="reveal rd2">
+            <div class="contact-form">
+                <div class="form-row">
+                    <div class="form-group"><label>First Name</label><input type="text" placeholder="Your first name"></div>
+                    <div class="form-group"><label>Last Name</label><input type="text" placeholder="Your last name"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com"></div>
+                    <div class="form-group"><label>Phone</label><input type="tel" placeholder="+91 9XXXXXXXXX"></div>
+                </div>
+                <div class="form-group">
+                    <label>Service Required</label>
+                    <select>
+                        <option value="">Select a service...</option>
+                        <option>Piping Fabrication and Erection</option>
+                        <option>UG Piping Works</option>
+                        <option>Structural Fabrication and Erection</option>
+                        <option>Boiler Fabrication and Erection</option>
+                        <option>Civil &amp; RCC Works</option>
+                        <option>Shutdown &amp; Maintenance</option>
+                    </select>
+                </div>
+                <div class="form-group"><label>Project Details</label><textarea placeholder="Describe your project — location, scope, timeline, budget range..."></textarea></div>
+                <button class="btn-primary" style="width:100%;padding:18px;justify-content:center;" onclick="handleSubmit(this)">
+                    <i class="fas fa-paper-plane"></i> Send Message
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══ FOOTER (exact from your blade) ═══ -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">Awadh <span class="orange">Buildmate</span></div>
+                <p class="footer-desc">Made for Quality and Trust.</p>
+                <div class="footer-social">
+                    <a class="social-btn" href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a class="social-btn" href="#"><i class="fab fa-instagram"></i></a>
+                    <a class="social-btn" href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div>
+                <div class="footer-heading">Services</div>
+                <ul class="footer-links">
+                    <li><a href="#services">Piping Fabrication and Erection</a></li>
+                    <li><a href="#services">UG Piping Works</a></li>
+                    <li><a href="#services">Structural Fabrication and Erection</a></li>
+                    <li><a href="#services">Boiler Fabrication and Erection</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="footer-heading">Company</div>
+                <ul class="footer-links">
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#projects">Our Projects</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="footer-heading">Contact</div>
+                <ul class="footer-links">
+                    <li><a href="tel:+917275502405"><i class="fas fa-phone"></i>+91 7275502405</a></li>
+                    <li><a href="mailto:awadhbuildmate@gmail.com" class="email-link"><i class="fas fa-envelope"></i>awadhbuildmate@gmail.com</a></li>
+                    <li class="address" style="display:flex;align-items:flex-start;gap:8px">
+                        <i class="fas fa-map-marker-alt" style="color:var(--orange);font-size:12px;margin-top:5px;flex-shrink:0"></i>
+                        <span style="color:#909090;font-size:14px">Vadodara, Gujarat, India</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2024 Awadh Buildmate. All rights reserved.</span>
+            <span>Fabrication · Erection · Structural Works</span>
+        </div>
+    </div>
+</footer>
+
+<script>
+/* ─── NAVBAR SCROLL (exact from your blade) ─── */
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+}, { passive: true });
+
+/* ─── THEME TOGGLE ─── */
+const html = document.documentElement;
+const themeToggle = document.getElementById('themeToggle');
+const saved = localStorage.getItem('ab-theme') || 'dark';
+html.setAttribute('data-theme', saved);
+
+themeToggle.addEventListener('click', () => {
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    localStorage.setItem('ab-theme', next);
+});
+
+/* ─── MOBILE MENU (exact from your blade) ─── */
+const mobileBtn  = document.getElementById('mobileMenuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+mobileBtn.addEventListener('click', () => {
+    mobileMenu.classList.toggle('active');
+    mobileBtn.innerHTML = mobileMenu.classList.contains('active')
+        ? '<i class="fas fa-times"></i>'
+        : '<i class="fas fa-bars"></i>';
+});
+mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    mobileMenu.classList.remove('active');
+    mobileBtn.innerHTML = '<i class="fas fa-bars"></i>';
+}));
+
+/* ─── SCROLL REVEAL ─── */
+const revObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revObs.observe(el));
+
+/* ─── COUNTER ANIMATION ─── */
+function animCounter(el) {
+    const target = parseInt(el.dataset.count);
+    const isPercent = target === 98;
+    const dur = 2200, start = performance.now();
+    function upd(now) {
+        const p = Math.min((now - start) / dur, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.floor(ease * target) + (p >= 1 ? (isPercent ? '' : '+') : '');
+        if (p < 1) requestAnimationFrame(upd);
+        else el.textContent = target + (isPercent ? '' : '+');
+    }
+    requestAnimationFrame(upd);
+}
+const cntObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+        if (e.isIntersecting && !e.target.classList.contains('counted')) {
+            e.target.classList.add('counted'); animCounter(e.target);
+        }
+    });
+}, { threshold: 0.5 });
+document.querySelectorAll('[data-count]').forEach(el => cntObs.observe(el));
+
+/* ─── ACTIVE NAV ─── */
+const secs  = document.querySelectorAll('section[id]');
+const navAs = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', () => {
+    let cur = '';
+    secs.forEach(s => { if (window.scrollY >= s.offsetTop - 120) cur = s.id; });
+    navAs.forEach(a => {
+        a.classList.remove('active');
+        if (a.getAttribute('href') === '#' + cur) a.classList.add('active');
+    });
+}, { passive: true });
+
+/* ─── FILTER TABS ─── */
+function setFilter(el) {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+}
+
+
+function handleSubmit(btn) {
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    btn.style.opacity = '0.7';
+    setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+        btn.style.background = '#22c55e'; btn.style.opacity = '1';
+        setTimeout(() => { btn.innerHTML = orig; btn.style.background = ''; }, 3500);
+    }, 1600);
+}
+</script>
+</body>
+</html>

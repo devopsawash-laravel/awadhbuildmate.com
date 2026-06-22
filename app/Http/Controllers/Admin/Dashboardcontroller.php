@@ -6,6 +6,7 @@ use App\Models\Labour;
 use App\Models\Attendance;
 use App\Models\SalarySlip;
 use App\Models\Advance;
+use App\Models\Enquiry;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -33,9 +34,23 @@ class DashboardController extends Controller
             ->orderBy('created_at', 'desc')
             ->take(10)->get();
 
+        $newEnquiries = Enquiry::count();
+        
+        $recentEnquiries = Enquiry::latest()
+            ->take(5)
+            ->get();
+        
         return view('admin.dashboard', compact(
-            'totalLabours', 'presentToday', 'absentToday',
-            'pendingAdvances', 'categoryStats', 'currentMonthSalary', 'recentAttendance'
+            'totalLabours',
+            'totalStaff',
+            'presentToday',
+            'absentToday',
+            'pendingAdvances',
+            'categoryStats',
+            'staffCategoryStats',
+            'recentAttendance',
+            'newEnquiries',
+            'recentEnquiries'
         ));
     }
 }

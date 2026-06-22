@@ -111,7 +111,7 @@ textarea.form-control { resize: vertical; min-height: 120px; }
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('website.contact') }}">
+                <form method="POST" action="{{ route('website.submit') }}">
                     @csrf
                     <div class="form-row">
                         <div class="form-group">

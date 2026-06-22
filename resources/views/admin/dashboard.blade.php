@@ -419,7 +419,7 @@
                     <div class="db-stat-icon db-stat-icon-blue"><i class="fas fa-envelope"></i></div>
                     <span class="db-stat-badge db-stat-badge-muted">Inbox</span>
                 </div>
-                <div class="db-stat-val">—</div>
+                <div class="db-stat-val">{{ $newEnquiries = \App\Models\Enquiry::count(); }}</div>
                 <div class="db-stat-label">New Enquiries</div>
             </div>
 
@@ -494,7 +494,7 @@
                         </div>
                         <span class="db-card-head-title">Recent Enquiries</span>
                     </div>
-                    <a href="{{ route('admin.enquiries') }}" style="font-size:11.5px;font-weight:600;color:var(--orange);text-decoration:none;">
+                    <a href="{{ route('admin.index') }}" style="font-size:11.5px;font-weight:600;color:var(--orange);text-decoration:none;">
                         View All <i class="fas fa-arrow-right" style="font-size:10px;"></i>
                     </a>
                 </div>
@@ -508,7 +508,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- @foreach($recentEnquiries as $enq) ... @endforeach --}}
+                            @php
+                            $recentEnquiries = \App\Models\Enquiry::latest()->take(5)->get();
+                            @endphp
+                            @forelse($recentEnquiries as $enq)
+                            <tr>
+                                <td>{{ $enq->name }}</td>
+                                <td>{{ $enq->service_type }}</td>
+                                <td>{{ $enq->created_at->format('d M Y') }}</td>
+                            </tr>
+                            @empty
                             <tr>
                                 <td colspan="3">
                                     <div class="db-empty">
@@ -517,6 +526,7 @@
                                     </div>
                                 </td>
                             </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>

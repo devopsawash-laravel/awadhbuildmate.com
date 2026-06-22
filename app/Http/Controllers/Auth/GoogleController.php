@@ -13,9 +13,9 @@ class GoogleController extends Controller
     {
         // return Socialite::driver('google')->redirect();
         // return Socialite::driver('google')->stateless()->redirect();
-{
-    return Socialite::driver('google')->with(['prompt' => 'consent select_account'])->redirect();
-}   
+        {
+            return Socialite::driver('google')->with(['prompt' => 'consent select_account'])->redirect();
+        }   
     }
 
     public function callback()
